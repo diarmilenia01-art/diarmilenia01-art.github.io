@@ -79,8 +79,8 @@
     <div class="topbar">
       <div class="brand">DIAR AZARI</div>
       <div class="toggle">
-        <button id="bID" class="active" onclick="setLang('id')">ID</button>
-        <button id="bEN" onclick="setLang('en')">EN</button>
+        <button id="bID" class="active" type="button">ID</button>
+        <button id="bEN" type="button">EN</button>
       </div>
     </div>
     <h1><span data-id>Data Analyst <span class="role">yang membangun sistem, bukan sekadar laporan</span></span><span data-en>Data Analyst <span class="role">who builds systems, not just reports</span></span></h1>
@@ -202,6 +202,8 @@ function setLang(l){
   document.getElementById('bEN').classList.toggle('active', l==='en');
   document.documentElement.lang = l;
 }
+document.getElementById('bID').addEventListener('click',function(){setLang('id');});
+document.getElementById('bEN').addEventListener('click',function(){setLang('en');});
 </script>
 </body>
 </html>
