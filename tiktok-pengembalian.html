@@ -281,6 +281,27 @@ input[type=text]:focus{outline:none;border-color:var(--purple)}
     </div>
   </section>
 
+  <!-- data contoh untuk mencoba -->
+  <section class="card" id="demoBox" style="background:var(--purple-soft);border:1px dashed var(--purple)">
+    <div class="step-head">
+      <div class="step-no" style="background:var(--purple)">&#9733;</div>
+      <h2>Belum punya file? Coba dengan data contoh</h2>
+      <div class="sub">Data dummy, 100 baris. Unduh keduanya, lalu unggah di langkah 2 untuk melihat alat ini bekerja.</div>
+    </div>
+    <div class="drops">
+      <a class="drop" href="Data-Pesanan-Contoh.xlsx" download style="text-decoration:none;color:inherit">
+        <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></div>
+        <div class="t">Data pesanan (contoh)</div>
+        <div class="d">OrderSKUList, 100 baris</div>
+      </a>
+      <a class="drop" href="Paket-Kembali-Contoh.xlsx" download style="text-decoration:none;color:inherit">
+        <div class="ic"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></div>
+        <div class="t">Paket kembali (contoh)</div>
+        <div class="d">Pencatatan</div>
+      </a>
+    </div>
+  </section>
+
   <!-- step 3 -->
   <section class="card">
     <div class="step-head">
@@ -527,7 +548,7 @@ function runPipeline(){
 $('goBtn').addEventListener('click',()=>{
   const btn=$('goBtn'); btn.disabled=true; btn.innerHTML='<span class="spin"></span>Memproses';
   $('note').classList.remove('err');
-  $('note').textContent='Membaca dokumen. File besar bisa perlu 10–30 detik.';
+  $('note').textContent='Membaca dokumen. File besar bisa perlu 10-30 detik.';
   setTimeout(()=>{
     try{
       const r=runPipeline(); S.result=r; render(r);
@@ -550,7 +571,7 @@ function render(r){
 
   $('heroLbl').textContent='Nilai pengembalian · '+S.toko;
   $('heroVal').textContent=rp(total);
-  $('heroMeta').textContent=fmt(r.min)+' — '+fmt(r.max);
+  $('heroMeta').textContent=fmt(r.min)+' s/d '+fmt(r.max);
   $('cOrder').textContent=r.rows.length; $('cSudah').textContent=sudah;
   $('cBelum').textContent=belum; $('cJual').textContent=jual;
 
