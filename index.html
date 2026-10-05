@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diar Azari - Data Analyst</title>
+<style>
+  :root{
+    --navy:#0E2A47; --navy2:#13385E; --blue:#3B82F6; --blue-soft:#60A5FA;
+    --ink:#1A2B3C; --muted:#5B6B7B; --line:#E3E9F0; --bg:#F6F8FB; --card:#FFFFFF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
+
+  /* HERO (dark) */
+  .hero{background:linear-gradient(160deg,var(--navy),var(--navy2));color:#EAF2FB;padding:72px 0 56px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-120px;top:-120px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.35),transparent 70%)}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px}
+  .brand{font-weight:700;letter-spacing:.5px}
+  .toggle{display:flex;gap:6px;background:rgba(255,255,255,.08);padding:4px;border-radius:999px;border:1px solid rgba(255,255,255,.15)}
+  .toggle button{background:none;border:none;color:#cfe0f5;padding:6px 14px;border-radius:999px;cursor:pointer;font-size:13px;font-weight:600}
+  .toggle button.active{background:var(--blue);color:#fff}
+  .hero h1{font-size:40px;line-height:1.15;margin-bottom:14px;font-weight:800}
+  .hero .role{color:var(--blue-soft);font-weight:700}
+  .hero p.lead{max-width:620px;color:#C6D6EA;font-size:17px;margin-bottom:36px}
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:relative;z-index:2}
+  .metric{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px}
+  .metric .num{font-size:26px;font-weight:800;color:#fff}
+  .metric .lbl{font-size:12px;color:#A9C1DC;margin-top:4px}
+
+  /* SECTIONS (light) */
+  section.block{padding:56px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:24px;margin-bottom:8px}
+  .sub{color:var(--muted);margin-bottom:28px;font-size:14px}
+  .exp{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px;box-shadow:0 1px 2px rgba(16,42,71,.04)}
+  .exp .h{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:4px}
+  .exp .title{font-weight:700;font-size:17px}
+  .exp .co{color:var(--blue);font-weight:600;font-size:14px}
+  .exp .meta{color:var(--muted);font-size:13px}
+  .exp ul{margin:12px 0 0 18px}
+  .exp li{margin-bottom:6px;font-size:14px;color:#33475B}
+  .edu{background:linear-gradient(160deg,#F0F6FF,#FFFFFF);border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+
+  /* CONTACT */
+  .contact{background:var(--navy);color:#EAF2FB;padding:48px 0;text-align:center}
+  .contact a{color:var(--blue-soft);text-decoration:none;font-weight:600}
+  .btns{display:flex;gap:12px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+  .btns a{background:var(--blue);color:#fff;padding:10px 20px;border-radius:999px;font-size:14px}
+  .btns a.ghost{background:transparent;border:1px solid rgba(255,255,255,.3)}
+
+  [data-en]{display:none}
+  body.en [data-id]{display:none}
+  body.en [data-en]{display:block}
+  li[data-en]{display:none}
+  body.en li[data-id]{display:none}
+  body.en li[data-en]{display:list-item}
+
+  /* PROYEK */
+  .proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .proj-card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:0 1px 2px rgba(16,42,71,.04);transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
+  .proj-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(16,42,71,.10);border-color:#C9D9EC}
+  .proj-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--blue);background:#EAF2FF;padding:4px 10px;border-radius:999px;margin-bottom:12px}
+  .proj-card .title{font-weight:700;font-size:17px;margin-bottom:6px}
+  .proj-card .desc{font-size:14px;color:#33475B;margin-bottom:12px}
+  .proj-card .open{font-size:13px;font-weight:700;color:var(--blue)}
+
+  @media(max-width:680px){
+    .hero h1{font-size:30px}
+    .metrics{grid-template-columns:repeat(2,1fr)}
+    .proj-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">DIAR AZARI</div>
+      <div class="toggle">
+        <button id="bID" class="active" onclick="setLang('id')">ID</button>
+        <button id="bEN" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+    <h1><span data-id>Data Analyst <span class="role">yang membangun sistem, bukan sekadar laporan</span></span><span data-en>Data Analyst <span class="role">who builds systems, not just reports</span></span></h1>
+    <p class="lead">
+      <span data-id>Saya merancang model forecasting, otomasi procurement, dan dashboard yang mengubah data mentah menjadi keputusan. Metodologi saya rancang sendiri; implementasinya cepat lewat Python.</span>
+      <span data-en>I design forecasting models, procurement automation, and dashboards that turn raw data into decisions. The methodology is mine; implementation ships fast via Python.</span>
+    </p>
+    <div class="metrics">
+      <div class="metric"><div class="num">9%</div><div class="lbl">MAPE forecasting GMV</div></div>
+      <div class="metric"><div class="num">5.916</div><div class="lbl"><span data-id>produk di dashboard</span><span data-en>products tracked</span></div></div>
+      <div class="metric"><div class="num">3</div><div class="lbl">marketplace</div></div>
+      <div class="metric"><div class="num">194</div><div class="lbl"><span data-id>PO lintas 3 mata uang</span><span data-en>POs, 3 currencies</span></div></div>
+    </div>
+  </div>
+</header>
+
+<section class="block">
+  <div class="wrap">
+    <h2><span data-id>Tentang</span><span data-en>About</span></h2>
+    <p class="sub"><span data-id>Latar Matematika, minor Statistika.</span><span data-en>Mathematics degree, minor in Statistics.</span></p>
+    <p data-id>Saya membangun sistem data yang dipakai perusahaan sehari-hari. Di Rockbros Cycling Indonesia, saya merancang dan kini memiliki sebagian besar sistem analitik internal dari nol: forecasting GMV lintas tiga marketplace, pipeline procurement 8 tahap, hingga klasifikasi performa ribuan SKU dan dashboard harga serta kompetitor. Saya tidak sekadar menjalankan analisis. Saya yang menentukan metodologinya, memvalidasi angkanya, dan memastikan setiap hasil tetap kokoh saat dipertanyakan.</p>
+    <p data-en>I build the internal systems a company runs on day to day. At Rockbros Cycling Indonesia, I designed and now own most of the internal analytics from the ground up: GMV forecasting across three marketplaces, an 8-stage procurement pipeline, SKU performance classification, and pricing and competitor dashboards. I don't just run the analysis. I decide the methodology, validate the numbers, and make sure every result holds up when questioned.</p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2><span data-id>Pengalaman</span><span data-en>Experience</span></h2>
+    <p class="sub"><span data-id>Empat peran, dari internship statistik hingga memiliki sistem data satu perusahaan.</span><span data-en>Four roles, from a statistics internship to owning a company's data systems.</span></p>
+
+    <div class="exp">
+      <div class="h"><span class="title">Data Analyst <span class="co">Rockbros Cycling Indonesia</span></span><span class="meta">Apr 2026 - <span data-id>sekarang</span><span data-en>present</span></span></div>
+      <ul>
+        <li data-id>Sistem forecasting GMV tiga marketplace, MAPE serendah 9%, rolling-origin CV pada 12 kandidat model dengan koreksi bias.</li>
+        <li data-en>GMV forecasting system across three marketplaces, MAPE as low as 9%, rolling-origin CV over 12 candidate models with bias correction.</li>
+        <li data-id>Pipeline procurement "Lifetime Monitoring" 8 tahap yang menghasilkan rekomendasi reorder per SKU dan PO siap kirim.</li>
+        <li data-en>8-stage "Lifetime Monitoring" procurement pipeline producing per-SKU reorder recommendations and ready-to-send POs.</li>
+        <li data-id>Memperbaiki bias ranking yang membuat produk murah 20x lebih mungkin salah dinilai sebagai top performer.</li>
+        <li data-en>Fixed a ranking bias that made low-price products 20x more likely to be misranked as top performers.</li>
+        <li data-id>Tracker 10 kompetitor dan dashboard harga serta COGS mencakup 5.916 produk, plus tracker 194 PO lintas tiga mata uang.</li>
+        <li data-en>10-competitor tracker and a pricing and COGS dashboard covering 5,916 products, plus a 194-PO tracker across three currencies.</li>
+      </ul>
+    </div>
+
+    <div class="exp">
+      <div class="h"><span class="title">Data Analyst <span class="co">PT Technovelle Karya Digital</span></span><span class="meta">Jan 2025 - Feb 2026</span></div>
+      <ul>
+        <li data-id>Merekonstruksi lima tahun catatan keuangan tak terdokumentasi menjadi basis analisis yang andal.</li>
+        <li data-en>Reconstructed five years of undocumented financial records into a reliable base for analysis.</li>
+        <li data-id>Demand forecasting dan penyesuaian inventori untuk sekitar 10.000 SKU, menekan overstock dan stockout.</li>
+        <li data-en>Demand forecasting and inventory adjustment across roughly 10,000 SKUs, reducing overstock and stockout.</li>
+        <li data-id>Melacak akar penyebab turunnya rating marketplace dan menaikkannya dari 4,4 ke 4,6.</li>
+        <li data-en>Traced root causes of falling marketplace ratings and raised them from 4.4 to 4.6.</li>
+      </ul>
+    </div>
+
+    <div class="exp">
+      <div class="h"><span class="title">Sales & Finance Administrator <span class="co">PT Terbit Sinar Gemilang</span></span><span class="meta">Feb 2024 - Jan 2025</span></div>
+      <ul>
+        <li data-id>Mengelola dan memvalidasi database penjualan, pemakaian material, dan payroll; merekonsiliasi setoran kolektor.</li>
+        <li data-en>Managed and validated sales, material-usage, and payroll databases; reconciled collector deposits.</li>
+      </ul>
+    </div>
+
+    <div class="exp">
+      <div class="h"><span class="title">Data Analyst (Internship) <span class="co">Dinas Bina Marga Lampung</span></span><span class="meta">Jun - Jul 2022</span></div>
+      <ul>
+        <li data-id>Regresi linear berganda dengan uji asumsi klasik lengkap untuk mengevaluasi faktor hasil proyek.</li>
+        <li data-en>Multiple linear regression with full classical assumption tests to evaluate project outcome factors.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2><span data-id>Proyek</span><span data-en>Projects</span></h2>
+    <p class="sub"><span data-id>Alat dan dashboard yang saya bangun untuk pekerjaan nyata. Klik untuk membuka.</span><span data-en>Tools and dashboards I built for real work. Click to open.</span></p>
+    <div class="proj-grid">
+      <a class="proj-card" href="tiktok-pengembalian.html" target="_blank" rel="noopener">
+        <span class="proj-tag">TikTok Shop</span>
+        <div class="title"><span data-id>Kalkulator Pengembalian TikTok</span><span data-en>TikTok Returns Calculator</span></div>
+        <p class="desc"><span data-id>Menghitung nilai barang retur dari ekspor TikTok Shop secara manual itu lambat dan rawan salah.</span><span data-en>Calculating returned-item value from TikTok Shop exports by hand is slow and error-prone.</span></p>
+        <p class="desc" style="color:var(--muted)"><span data-id>Dua file Excel diolah langsung di browser menjadi laporan retur siap unduh: nilai pengembalian, jumlah order, barang yang sudah kembali, dan yang masih bisa dijual lagi.</span><span data-en>Two Excel files processed in-browser into a ready-to-download returns report: return value, order count, items received, and items still resalable.</span></p>
+        <span class="open"><span data-id>Buka alat &rarr;</span><span data-en>Open tool &rarr;</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2><span data-id>Pendidikan & Skripsi</span><span data-en>Education & Thesis</span></h2>
+    <div class="edu">
+      <div class="exp" style="border:none;box-shadow:none;padding:0;margin:0">
+        <div class="h"><span class="title">Universitas Lampung <span class="co">S1 Matematika</span></span><span class="meta">2019 - 2024 | IPK 3,35</span></div>
+      </div>
+      <p style="margin-top:10px;font-size:14px;color:#33475B" data-id>Skripsi: perbandingan Holt-Winters additive vs multiplicative untuk peramalan penumpang kereta Jabodetabek, data BPS 2006-2023, model terbaik dipilih via RMSE dan MAPE (serendah ~7,9%).</p>
+      <p style="margin-top:10px;font-size:14px;color:#33475B" data-en>Thesis: comparing additive vs multiplicative Holt-Winters for forecasting Jabodetabek railway passengers, BPS data 2006-2023, best model selected via RMSE and MAPE (as low as ~7.9%).</p>
+    </div>
+  </div>
+</section>
+
+<footer class="contact">
+  <div class="wrap">
+    <h2 style="color:#fff"><span data-id>Mari terhubung</span><span data-en>Let's connect</span></h2>
+    <p style="color:#B9CDE6;margin-top:8px"><span data-id>Terbuka untuk obrolan soal data, forecasting, atau Excel.</span><span data-en>Open to a conversation about data, forecasting, or Excel.</span></p>
+    <div class="btns">
+      <a href="https://linkedin.com/in/diarazari">LinkedIn</a>
+      <a class="ghost" href="https://github.com/diarmilenia01-art">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function setLang(l){
+  document.body.classList.toggle('en', l==='en');
+  document.getElementById('bID').classList.toggle('active', l==='id');
+  document.getElementById('bEN').classList.toggle('active', l==='en');
+  document.documentElement.lang = l;
+}
+</script>
+</body>
+</html>
