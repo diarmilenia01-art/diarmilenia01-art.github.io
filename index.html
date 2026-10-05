@@ -78,6 +78,9 @@
   .pv-stat{background:rgba(255,255,255,.12);border-radius:10px;padding:9px 4px;text-align:center}
   .pv-stat b{display:block;color:#fff;font-size:16px;font-weight:800}
   .pv-stat span{color:#E0DAFB;font-size:9px;letter-spacing:.2px}
+  .pv-chart{width:100%;height:auto;display:block;margin:2px 0 4px}
+  .pv-tags{display:flex;flex-wrap:wrap;gap:6px}
+  .pv-tags span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);color:#EAF2FB;font-size:10px;font-weight:600;padding:4px 9px;border-radius:999px}
   .proj-body{padding:26px}
   .proj-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--blue);background:#EAF2FF;padding:4px 10px;border-radius:999px;margin-bottom:12px}
   .proj-body .title{font-weight:800;font-size:18px;margin-bottom:8px}
@@ -241,6 +244,31 @@
           <p class="desc"><span data-id>Ekspor Shopee bisa terpecah jadi banyak part dan punya dua format (DS dan Non-DS), jadi rekap retur manualnya rumit.</span><span data-en>Shopee exports split into many parts and come in two formats (DS and Non-DS), making manual returns recaps messy.</span></p>
           <p class="desc" style="color:var(--muted)"><span data-id>Alat ini menyatukan part, mengenali kedua format, lalu menghasilkan laporan retur siap unduh. Ada data contoh, bisa langsung dicoba.</span><span data-en>It merges the parts, handles both formats, then produces a ready-to-download returns report. Sample data included, so you can try it right away.</span></p>
           <span class="open"><span data-id>Buka alat &rarr;</span><span data-en>Open tool &rarr;</span></span>
+        </div>
+      </a>
+
+      <a class="proj-card feature" href="https://github.com/diarmilenia01-art/claude-skills/tree/main/defensible-forecasting" target="_blank" rel="noopener">
+        <div class="proj-preview" aria-hidden="true">
+          <div class="pv-top"><span class="pv-dot"></span><span class="pv-dot"></span><span class="pv-dot"></span></div>
+          <svg class="pv-chart" viewBox="0 0 320 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M190,62 L230,50 L270,43 L310,32 L310,58 L270,58 L230,60 Z" fill="rgba(255,255,255,.18)"/>
+            <line x1="190" y1="16" x2="190" y2="110" stroke="rgba(255,255,255,.35)" stroke-width="1" stroke-dasharray="3 3"/>
+            <path d="M10,96 L40,82 L70,88 L100,69 L130,74 L160,57 L190,62" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M190,62 L230,54 L270,49 L310,45" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4"/>
+            <circle cx="190" cy="62" r="3.6" fill="#fff"/>
+          </svg>
+          <div class="pv-tags">
+            <span><span data-id>20+ model dibacktest</span><span data-en>20+ models backtested</span></span>
+            <span>Rolling-origin CV</span>
+            <span><span data-id>3 pengaman anti-overfit</span><span data-en>3 anti-overfit safeguards</span></span>
+          </div>
+        </div>
+        <div class="proj-body">
+          <span class="proj-tag">Open source &middot; Claude Skill</span>
+          <div class="title">Defensible Forecasting</div>
+          <p class="desc"><span data-id>Forecasting sering dipertanyakan saat sidang atau rapat: kenapa model ini, bukan yang lain? Skill ini membuat pilihannya bisa dipertanggungjawabkan.</span><span data-en>Forecasts get challenged in meetings and defenses: why this model, not another? This skill makes the choice defensible.</span></p>
+          <p class="desc" style="color:var(--muted)"><span data-id>Membacktest sekitar 20 model dengan rolling-origin cross-validation, memilih 3 terbaik lewat MAPE, dengan tiga pengaman anti-overfitting. Metodologi yang saya rancang, dikemas jadi skill Claude open-source.</span><span data-en>Backtests around 20 models with rolling-origin cross-validation, picks the top 3 by MAPE, with three anti-overfitting safeguards. A methodology I designed, packaged as an open-source Claude skill.</span></p>
+          <span class="open"><span data-id>Lihat di GitHub &rarr;</span><span data-en>View on GitHub &rarr;</span></span>
         </div>
       </a>
     </div>
