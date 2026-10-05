@@ -11,25 +11,25 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 <style>
 :root{
-  --lav-bg:#EAECFB;
-  --lav-bg-2:#DFE2F9;
+  --lav-bg:#F6F8FB;
+  --lav-bg-2:#E8F0FB;
   --card:#FFFFFF;
-  --ink:#232346;
-  --ink-soft:#5A5A80;
-  --muted:#8A8AAC;
-  --line:#E6E6F4;
-  --purple:#6C5CE7;
-  --purple-deep:#5646CE;
-  --purple-soft:#EFECFE;
-  --grad-a:#7B6CF6;
-  --grad-b:#A08CFB;
+  --ink:#17304A;
+  --ink-soft:#4A5B6E;
+  --muted:#6E8098;
+  --line:#E3E9F0;
+  --purple:#3B82F6;
+  --purple-deep:#2563EB;
+  --purple-soft:#EAF2FF;
+  --grad-a:#2563EB;
+  --grad-b:#4F97F5;
   --yellow:#FFF3BF;
   --yellow-line:#F0DC8A;
   --green:#18A97B;
   --green-soft:#E3F7F0;
   --red:#E5484D;
-  --shadow:0 10px 30px rgba(84,74,180,.13);
-  --shadow-sm:0 4px 14px rgba(84,74,180,.10);
+  --shadow:0 10px 30px rgba(16,42,71,.13);
+  --shadow-sm:0 4px 14px rgba(16,42,71,.10);
   --r-lg:26px;
   --r-md:18px;
   --r-sm:12px;
@@ -39,16 +39,16 @@
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --lav-bg:#15152B;
-    --lav-bg-2:#1B1B36;
-    --card:#22223F;
-    --ink:#ECECFA;
-    --ink-soft:#B6B6D6;
-    --muted:#8F8FB4;
-    --line:#32325A;
-    --purple:#8C7DFA;
-    --purple-deep:#6C5CE7;
-    --purple-soft:#2B2B52;
+    --lav-bg:#0E1E30;
+    --lav-bg-2:#13263B;
+    --card:#16293D;
+    --ink:#EAF2FB;
+    --ink-soft:#AFC2D6;
+    --muted:#8198B0;
+    --line:#284056;
+    --purple:#60A5FA;
+    --purple-deep:#3B82F6;
+    --purple-soft:#16314E;
     --yellow:#514A22;
     --yellow-line:#7A6E2E;
     --green:#3FD2A4;
@@ -58,9 +58,9 @@
   }
 }
 :root[data-theme="dark"]{
-  --lav-bg:#15152B; --lav-bg-2:#1B1B36; --card:#22223F; --ink:#ECECFA;
-  --ink-soft:#B6B6D6; --muted:#8F8FB4; --line:#32325A; --purple:#8C7DFA;
-  --purple-deep:#6C5CE7; --purple-soft:#2B2B52; --yellow:#514A22;
+  --lav-bg:#0E1E30; --lav-bg-2:#13263B; --card:#16293D; --ink:#EAF2FB;
+  --ink-soft:#AFC2D6; --muted:#8198B0; --line:#284056; --purple:#60A5FA;
+  --purple-deep:#3B82F6; --purple-soft:#16314E; --yellow:#514A22;
   --yellow-line:#7A6E2E; --green:#3FD2A4; --green-soft:#1E3B33;
   --shadow:0 10px 30px rgba(0,0,0,.35); --shadow-sm:0 4px 14px rgba(0,0,0,.28);
 }
@@ -162,7 +162,7 @@ input[type=text]:focus{outline:none;border-color:var(--purple)}
 .go{
   width:100%;border:0;border-radius:var(--r-md);padding:15px;cursor:pointer;
   background:linear-gradient(135deg,var(--grad-a),var(--grad-b));color:#fff;
-  font:inherit;font-size:15px;font-weight:700;box-shadow:0 8px 20px rgba(108,92,231,.32);
+  font:inherit;font-size:15px;font-weight:700;box-shadow:0 8px 20px rgba(37,99,235,.30);
 }
 .go:disabled{background:var(--line);color:var(--muted);box-shadow:none;cursor:not-allowed}
 .note{margin:10px 2px 0;font-size:12.5px;color:var(--muted);font-weight:500;min-height:17px}
@@ -172,7 +172,7 @@ input[type=text]:focus{outline:none;border-color:var(--purple)}
 .hero{
   background:linear-gradient(135deg,var(--grad-a),var(--grad-b));
   border-radius:var(--r-lg);padding:24px;color:#fff;margin-bottom:16px;
-  box-shadow:0 14px 34px rgba(108,92,231,.32);
+  box-shadow:0 14px 34px rgba(37,99,235,.30);
 }
 .hero .lbl{font-size:12.5px;opacity:.85;font-weight:600}
 .hero .big{font-size:34px;font-weight:800;letter-spacing:-1px;margin:5px 0 2px;line-height:1.1}
