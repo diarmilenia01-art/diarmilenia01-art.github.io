@@ -609,11 +609,19 @@ $('dlBtn').addEventListener('click',async()=>{
     const d1=S.result.min,d2=S.result.max;
     const pad=n=>String(n).padStart(2,'0');
     const name=`Laporan_COD___Non_COD_Tiktok_${S.toko.replace(/[^\w.-]+/g,'')}_${pad(d1.getDate())}_${BULAN[d1.getMonth()]}_-_${pad(d2.getDate())}_${BULAN[d2.getMonth()]}_${d2.getFullYear()}.xlsx`;
-    const dl = window.claude && claude.use ? await claude.use('downloads') : null;
-    if(!dl){ $('dlNote').textContent='Unduhan tidak tersedia di tampilan ini. Buka artifact yang sudah dipublikasikan.'; }
-    else{
+    let dl=null;
+    try{ dl = (window.claude && claude.use) ? await claude.use('downloads') : null; }catch(e){ dl=null; }
+    if(dl){
       await dl.save({filename:name,data:new Blob([buf])});
       $('dlNote').textContent='Tersimpan: '+name;
+    }else{
+      // cara unduh browser biasa (Vercel, GitHub Pages, atau file lokal)
+      const blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url; a.download=name; document.body.appendChild(a); a.click();
+      setTimeout(()=>{document.body.removeChild(a); URL.revokeObjectURL(url);},1500);
+      $('dlNote').textContent='Terunduh: '+name;
     }
   }catch(err){
     const c=err&&err.code;
