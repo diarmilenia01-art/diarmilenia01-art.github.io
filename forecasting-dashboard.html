@@ -1136,8 +1136,8 @@ function renderHero(){
     ? '<div class="mark" style="left:calc('+P(p[1])+'% - 2px)"></div>'
     : '<div class="tick" style="left:calc('+P(p[1])+'% - 1px)"></div>'; });
   h+='</div><div class="labels">';
-  pts.forEach(function(p){ h+='<div class="'+(p[2]?'hi':'')+'" style="left:'+
-    Math.min(94,Math.max(6,P(p[1])))+'%">'+p[0]+'<b>'+M(p[1])+'</b></div>'; });
+  pts.forEach(function(p,i){ h+='<div class="'+(p[2]?'hi':'')+'" style="left:'+
+    (12.5+i*25)+'%">'+p[0]+'<b>'+M(p[1])+'</b></div>'; });
   el("gauge").innerHTML=h+'</div>';
   el("gaugeList").innerHTML=pts.map(function(p){
     return '<div class="'+(p[2]?'hi':'')+'"><span>'+p[0]+'</span><b>'+M(p[1])+'</b></div>'; }).join("");
@@ -1423,7 +1423,7 @@ function renderDaily(){
         :(x.dow>=5?'<span class="tag">akhir pekan</span>':''))+'</td></tr>'; });
   rows+='<tr class="total"><td>Total</td><td>'+jt(tot)+'</td><td>'+jt(c)+'</td><td>100,0%</td>'+
     '<td>'+(ct?nf(Math.round(ct)):'-')+'</td><td>'+(aov>0?nf(Math.round(tot/aov)):'-')+'</td><td></td></tr>';
-  el("tblDaily").innerHTML='<thead><tr><th>Tanggal</th><th>GMV harian</th><th>GMV kumulatif</th>'+
+  el("tblDaily").innerHTML='<thead><tr><th>Tanggal</th><th>GMV harian (Rp juta)</th><th>GMV kumulatif (Rp juta)</th>'+
     '<th>% bulan</th><th>Traffic</th><th>Orders</th><th>Catatan</th></tr></thead><tbody>'+rows+'</tbody>';
 }
 
