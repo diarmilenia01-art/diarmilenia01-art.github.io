@@ -1604,6 +1604,7 @@ function vLemburLive(host){
   '<datalist id="lvNama">'+namaOpsi.map(function(n){return '<option value="'+esc(n)+'">';}).join('')+'</datalist>';
 
   function gambar(){
+    if(!document.getElementById('lvTbl')) return;   /* tabel sudah tidak di layar */
     rows=barisLive(); warn=cekLive(rows);
     T=hitungTot(rows); totJam=T.j; totRp=T.rp;
     var sum=$('#lvSum'); if(sum) sum.innerHTML=T.n+' baris · '+fmtJam(T.j)+' jam · <b>'+rp(T.rp)+'</b>';
@@ -1821,6 +1822,29 @@ function vLemburCatatan(host){
 }
 
 var TIM_DEPT={Cycling:'Gudang A',Apparel:'Gudang B',Aksesori:'Gudang C',LIVE:'Studio'};
+/* Jumlah orang satu tim yang benar-benar masuk kerja pada satu tanggal.
+   Dipakai sebagai acuan target resi saat memproses lembur. */
+/* Menit pulang lewat jadwal untuk tiap orang yang dipilih pada satu tanggal.
+   Dipakai usulJamLembur sebagai dasar median. */
+function menitLewat(tgl, namaList){
+  var res = S.res && S.res.hari ? S.res.hari : [];
+  return (namaList || []).map(function(n){
+    var h = res.filter(function(x){ return x.nama === n && x.tgl === tgl; })[0];
+    return h ? A.menitLembur(h, 'sore') : null;
+  }).filter(function(m){ return m != null; });
+}
+function orangMasuk(tgl, tim){
+  var dept = TIM_DEPT[tim] || '';
+  var res = S.res && S.res.hari ? S.res.hari : [];
+  var set = {};
+  res.forEach(function(h){
+    if(h.tgl !== tgl) return;
+    if(dept && h.dept !== dept) return;
+    if(!h.scanIn) return;
+    set[h.nama] = true;
+  });
+  return Object.keys(set).length;
+}
 
 function vLemburRek(host){
   if(!S.res||!S.rows.length) return noData(host);

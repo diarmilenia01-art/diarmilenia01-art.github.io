@@ -382,7 +382,7 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;font-si
               <tr><td colspan="8" style="text-align:center;padding:36px;color:var(--ink-3);font-family:'IBM Plex Mono',monospace;font-size:12px">Tidak ada produk yang cocok.</td></tr>
             </template>
             <template x-for="p in pageItems" :key="p.id">
-              <tr @click="openDetail(p,$event)" :class="selected&&selected.id===p.id?'selected':''">
+              <tr @click="openDetail(p,$event)" :class="selected&&sel.id===p.id?'selected':''">
                 <td>
                   <div class="pname"><span x-text="p.name"></span><span x-show="p.is_bundle" class="pill bundle">BUNDLE</span><span x-show="dashboard==='hpp' && !isComplete(p)" class="pill" style="background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn)">LEAD TIME KOSONG</span></div>
                   <div class="psku">
@@ -440,23 +440,23 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;font-si
           <div class="dhead">
             <div style="min-width:0">
               <div class="eyebrow">Detail produk</div>
-              <h3 x-text="selected.name" style="margin-top:5px"></h3>
+              <h3 x-text="sel.name" style="margin-top:5px"></h3>
               <div class="meta">
-                <template x-if="selected.msku_rci"><span x-text="selected.msku_rci"></span></template>
-                <template x-if="selected.msku_rci&&selected.msku_maxxie"><span> · </span></template>
-                <template x-if="selected.msku_maxxie"><span x-text="selected.msku_maxxie"></span></template>
+                <template x-if="sel.msku_rci"><span x-text="sel.msku_rci"></span></template>
+                <template x-if="sel.msku_rci&&sel.msku_maxxie"><span> · </span></template>
+                <template x-if="sel.msku_maxxie"><span x-text="sel.msku_maxxie"></span></template>
               </div>
               <div style="margin-top:8px;display:flex;gap:5px;flex-wrap:wrap">
-                <span class="pill tag" x-text="selected.brand"></span>
-                <span x-show="selected.category" class="pill tag" x-text="selected.category"></span>
-                <span x-show="selected.is_bundle" class="pill bundle">BUNDLE</span>
-                <span x-show="selected._managed" class="pill managed">DITAMBAHKAN</span>
+                <span class="pill tag" x-text="sel.brand"></span>
+                <span x-show="sel.category" class="pill tag" x-text="sel.category"></span>
+                <span x-show="sel.is_bundle" class="pill bundle">BUNDLE</span>
+                <span x-show="sel._managed" class="pill managed">DITAMBAHKAN</span>
               </div>
             </div>
             <template x-if="isAdmin">
               <div style="display:flex;gap:6px;flex-shrink:0;margin-left:auto;align-items:flex-start">
                 <button class="btn-mini" @click="openEditForm(selected)">Edit</button>
-                <button class="btn-mini danger" @click="confirmDel===selected.id ? removeProduct(selected) : (confirmDel=selected.id)" x-text="confirmDel===selected.id?'Yakin? Hapus':'Hapus'"></button>
+                <button class="btn-mini danger" @click="confirmDel===sel.id ? removeProduct(selected) : (confirmDel=sel.id)" x-text="confirmDel===sel.id?'Yakin? Hapus':'Hapus'"></button>
               </div>
             </template>
             <button @click="closeDetail()" class="iconbtn" style="width:28px;height:28px;flex-shrink:0;margin-left:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -465,12 +465,12 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;font-si
           <div class="dbody">
             <div class="dblock price-toggle" :class="breakdownOpen?'open':''" role="button" tabindex="0" :aria-expanded="breakdownOpen ? 'true' : 'false'" @click="togglePrice()" @keydown.enter.prevent="togglePrice()" @keydown.space.prevent="togglePrice()">
               <div class="price-lead">
-                <span class="big" x-text="fmtIDR(selected.hpp)"></span>
+                <span class="big" x-text="fmtIDR(sel.hpp)"></span>
                 <span class="eyebrow" style="color:var(--ink-3)">HPP</span>
                 <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
               </div>
-              <div style="font-size:11px;color:var(--ink-3);font-family:'IBM Plex Mono',monospace;margin-top:5px">Efektif sejak <span x-text="fmtDate(selected.hpp_date)"></span></div>
-              <div x-show="selected._enteredAt" style="font-size:10px;color:var(--ink-3);font-family:'IBM Plex Mono',monospace;margin-top:2px">Diinput ke sistem: <span x-text="fmtDate(selected._enteredAt)"></span></div>
+              <div style="font-size:11px;color:var(--ink-3);font-family:'IBM Plex Mono',monospace;margin-top:5px">Efektif sejak <span x-text="fmtDate(sel.hpp_date)"></span></div>
+              <div x-show="sel._enteredAt" style="font-size:10px;color:var(--ink-3);font-family:'IBM Plex Mono',monospace;margin-top:2px">Diinput ke sistem: <span x-text="fmtDate(sel._enteredAt)"></span></div>
               <div class="price-hint" x-text="breakdownOpen&&!viewIsOld?'▲ Sembunyikan rincian':'▼ Klik harga untuk lihat rincian'"></div>
             </div>
 
@@ -551,16 +551,16 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;font-si
                   <template x-if="scope==='rockbros'">
                     <div class="metric">
                       <div class="lab">Toko RCI</div>
-                      <div class="val" x-text="fmtIDR(selected.jual_rci)"></div>
-                      <div x-show="selected.jual_rci!=null" class="sub" :class="marginPct(selected.jual_rci,selected.hpp)<0?'warn':'good'" x-text="'Margin '+marginText(selected.jual_rci,selected.hpp)"></div>
-                      <div x-show="selected.jual_rci==null" class="sub">belum ada data</div>
+                      <div class="val" x-text="fmtIDR(sel.jual_rci)"></div>
+                      <div x-show="sel.jual_rci!=null" class="sub" :class="marginPct(sel.jual_rci,sel.hpp)<0?'warn':'good'" x-text="'Margin '+marginText(sel.jual_rci,sel.hpp)"></div>
+                      <div x-show="sel.jual_rci==null" class="sub">belum ada data</div>
                     </div>
                   </template>
                   <div class="metric">
                     <div class="lab">Toko Maxxie</div>
-                    <div class="val" x-text="fmtIDR(selected.jual_maxxie)"></div>
-                    <div x-show="selected.jual_maxxie!=null" class="sub" :class="marginPct(selected.jual_maxxie,selected.hpp)<0?'warn':'good'" x-text="'Margin '+marginText(selected.jual_maxxie,selected.hpp)"></div>
-                    <div x-show="selected.jual_maxxie==null" class="sub">belum ada data</div>
+                    <div class="val" x-text="fmtIDR(sel.jual_maxxie)"></div>
+                    <div x-show="sel.jual_maxxie!=null" class="sub" :class="marginPct(sel.jual_maxxie,sel.hpp)<0?'warn':'good'" x-text="'Margin '+marginText(sel.jual_maxxie,sel.hpp)"></div>
+                    <div x-show="sel.jual_maxxie==null" class="sub">belum ada data</div>
                   </div>
                 </div>
                 <div class="rec-block" x-show="jualRecs.length>0" style="margin-top:16px">
@@ -739,6 +739,9 @@ function app(){
     },
     logout(){ /* demo publik: tidak ada sesi untuk ditutup */ },
     get isAdmin(){return this.role==='admin';},
+    /* objek aman: dipakai template detail supaya ekspresi tidak meledak
+       pada tick saat 'selected' baru dikosongkan (ganti dashboard/scope). */
+    get sel(){ return this.selected || {}; },
     computeMerged(){
       const ov=this.overrides||{}; const del=ov.deleted||{}; const ed=ov.edited||{}; const add=ov.added||{}; const hist=ov.hist||{};
       const out=[];
