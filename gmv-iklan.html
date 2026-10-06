@@ -1,0 +1,1759 @@
+<!doctype html><html><head>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px 'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:#F6F8FB;color:#122A43}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>GMV & Iklan · demo oleh Diar Azari</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root{
+    --ink:#122A43; --sub:#6E8098; --line:#E3E9F0; --bg:#F6F8FB; --card:#ffffff;
+    --indigo:#2563EB; --indigo-soft:#BFD4FE; --emerald:#1CA672; --rose:#D0011B; --amber:#D97706;
+    --shopee:#2563EB; --tiktok:#0EA5E9; --tokped:#6366F1; --lazada:#94A3B8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:'Plus Jakarta Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;font-size:14px}
+  .wrap{max-width:1080px;margin:0 auto;padding:18px}
+  .row{display:flex;flex-wrap:wrap;gap:12px}
+  .between{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+  h1{font-size:24px;font-weight:650;letter-spacing:-.02em;margin:0}
+  .muted{color:var(--sub)}
+  .sub{font-size:13px;color:var(--sub);margin:2px 0 0}
+  button{font:inherit;cursor:pointer;border-radius:9px;padding:8px 13px;font-weight:550;border:1px solid transparent}
+  button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
+  .btn-primary{background:var(--indigo);color:#fff}
+  .btn-primary:hover{background:#4338ca}
+  .btn-ghost{background:#fff;border-color:var(--line);color:var(--ink)}
+  .btn-ghost:hover{background:#f1f5f9}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+  .chip{border-radius:999px;padding:6px 15px;font-weight:550;background:#fff;border:1px solid var(--line);color:var(--sub)}
+  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .grid{display:grid;gap:12px}
+  .k4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:640px){.k4{grid-template-columns:repeat(2,1fr)}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:14px}
+  .kpi .lab{font-size:11px;font-weight:600;letter-spacing:.04em;color:#94a3b8}
+  .kpi .val{font-size:21px;font-weight:640;margin-top:4px;font-variant-numeric:tabular-nums}
+  .kpi .vsub{font-size:13.5px;color:#6E8098;margin-top:3px;font-variant-numeric:tabular-nums}
+  .up{color:var(--emerald)} .down{color:var(--rose)} .warn{color:var(--amber)}
+  .sec-title{font-size:14px;font-weight:620;margin:0 0 10px}
+  .two{display:grid;gap:14px;grid-template-columns:1fr 1fr}
+  @media(max-width:820px){.two{grid-template-columns:1fr}}
+  .mp-row{margin-bottom:12px}
+  .mp-head{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}
+  .mp-head .name{display:flex;align-items:center;gap:6px;font-weight:600}
+  .swatch{width:10px;height:10px;border-radius:3px;display:inline-block}
+  .bar{height:8px;border-radius:999px;background:#eef1f5;overflow:hidden}
+  .bar>span{display:block;height:100%;border-radius:999px}
+  table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+  th{color:#94a3b8;font-weight:600;text-align:right;padding:4px 4px 8px}
+  th.l,td.l{text-align:left}
+  th.sortable{cursor:pointer;user-select:none}
+  th.sortable:hover{color:var(--indigo)}
+  td{padding:7px 4px;border-top:1px solid #f1f5f9;text-align:right;color:#475569}
+  td.tot{font-weight:600;color:var(--ink)}
+  tr.selrow td{background:#eef2ff}
+  .pname{font-weight:600;color:var(--ink);display:block;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .psku{font-size:11px;color:#94a3b8}
+  .tag{font-size:10px;font-weight:600;border-radius:999px;padding:2px 7px;display:inline-block}
+  .tag-low{background:#fff7ed;color:#c2410c}
+  .tag-out{background:#fff1f2;color:#be123c}
+  .foot{text-align:center;color:#94a3b8;font-size:12px;margin:18px 0 6px}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.32);display:none;justify-content:flex-end;z-index:30}
+  .overlay.open{display:flex}
+  .drawer{width:100%;max-width:460px;height:100%;background:#fff;overflow-y:auto;padding:20px;box-shadow:-8px 0 30px rgba(0,0,0,.12)}
+  .drawer h3{margin:0;font-size:16px;font-weight:640}
+  .dhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+  .x{border:none;background:none;color:#94a3b8;font-size:18px;padding:4px 8px}
+  select,input[type=number],input[type=text],input.num{font:inherit;border:1px solid var(--line);border-radius:7px;padding:7px 8px;color:var(--ink);width:100%;background:#fff}
+  input.num{text-align:right;padding:5px 7px}
+  label.fld{display:block;font-size:12px;color:var(--sub)}
+  label.fld select,label.fld input{margin-top:4px}
+  .drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    border:2px dashed #cbd5e1;border-radius:13px;padding:30px;text-align:center;cursor:pointer}
+  .drop:hover{border-color:#818cf8}
+  .drop .big{color:var(--indigo);font-weight:600}
+  .drop .sm{font-size:12px;color:#94a3b8}
+  .err{background:#fff1f2;color:#be123c;border-radius:9px;padding:9px 11px;font-size:13px}
+  .ok{background:#ecfdf5;color:#047857;border-radius:9px;padding:9px 11px;font-size:13px}
+  .confirm{border:1px solid var(--line);border-radius:13px;padding:12px;margin-top:14px}
+  .fname{font-size:12px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:10px}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .scroll{max-height:58vh;overflow-y:auto;border:1px solid var(--line);border-radius:9px;margin-top:10px}
+  .scroll table th{position:sticky;top:0;background:#f8fafc;padding:8px;z-index:1}
+  .scroll td{padding:4px 6px}
+  .reset{display:flex;gap:8px;border-top:1px solid #f1f5f9;padding-top:14px;margin-top:16px}
+  .reset button{flex:1;font-size:12px;font-weight:550}
+  .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:#fff;
+    padding:10px 16px;border-radius:9px;font-size:13px;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.2);max-width:90vw}
+  .busy{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:var(--indigo);color:#fff;
+    padding:9px 16px;border-radius:999px;font-size:13px;font-weight:550;z-index:60;
+    box-shadow:0 8px 24px rgba(79,70,229,.35);display:flex;align-items:center;gap:9px}
+  .spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);
+    border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .btn-busy{position:relative;color:transparent!important}
+  .btn-busy::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;
+    border:2px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+  .btn-ghost.btn-busy::after{border-color:rgba(79,70,229,.35);border-top-color:var(--indigo)}
+  @media(prefers-reduced-motion:reduce){.spin,.btn-busy::after{animation:none}}
+  code{background:#f1f5f9;border-radius:4px;padding:1px 5px;font-size:12px}
+  .adsgrid{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:6px;align-items:center;margin-bottom:6px}
+  .adsgrid .h{font-size:11px;color:#94a3b8;font-weight:600}
+  .mini{font-size:11px;color:#94a3b8}
+  .tabline{display:flex;gap:6px;margin:0 0 12px}
+</style>
+
+<div class="wrap" id="app"><p class="muted" style="padding:40px 0;display:flex;align-items:center;gap:10px"><span class="spin" style="border-color:rgba(79,70,229,.35);border-top-color:var(--indigo)"></span>Memuat database…</p></div>
+<div class="overlay" id="overlay"><div class="drawer" id="drawer"></div></div>
+
+<script>
+/* ============================ Konstanta ============================ */
+const STORE="Demo Store"; // ← nama toko = kunci database, jangan diubah setelah ada data
+const MPS=["Shopee","TikTok","Tokopedia","Lazada"];
+const MP_COLOR={Shopee:"#2563EB",TikTok:"#0EA5E9",Tokopedia:"#6366F1",Lazada:"#94A3B8"};
+const MP_GROUPS=[
+  {label:"Shopee",             short:"Shop",   color:MP_COLOR.Shopee, mps:["Shopee"]},
+  {label:"TikTok + Tokopedia", short:"TT+Tok", color:MP_COLOR.TikTok, mps:["TikTok","Tokopedia"]},
+  {label:"Lazada",             short:"Laza",   color:MP_COLOR.Lazada, mps:["Lazada"]}
+];
+const KEY="gmv-demo:v1", HKEY="gmv-demo-hist:v1", MEKEY="gmv-demo-me:v1", PKEY="gmv-demo-prod:v1";
+// Iklan hanya ada di Shopee dan di TikTok+Tokopedia (satu akun iklan gabungan). Lazada tanpa iklan.
+const AD_CHANNELS=[
+  {k:"Shopee",           label:"Shopee",            mps:["Shopee"],              color:MP_COLOR.Shopee},
+  {k:"TikTok+Tokopedia", label:"TikTok + Tokopedia",mps:["TikTok","Tokopedia"],  color:MP_COLOR.TikTok}
+];
+const AD_KEYS=AD_CHANNELS.map(c=>c.k);
+const NO_AD_MPS=MPS.filter(m=>!AD_CHANNELS.some(c=>c.mps.includes(m)));
+const DEFAULT_TARGET=0;
+const STOK_KRITIS=10;
+
+/* ============================ Util ============================ */
+function parseNum(v){
+  if(v==null) return 0;
+  if(typeof v==="number") return v;
+  let s=String(v).trim().replace(/%/g,"").replace(/\s/g,"").replace(/^Rp/i,"").replace(/[^\d.,-]/g,"");
+  if(s===""||s==="-") return 0;
+  const hasC=s.includes(","), hasD=s.includes(".");
+  if(hasC&&hasD){
+    // pemisah desimal = tanda yang muncul paling akhir
+    if(s.lastIndexOf(",")>s.lastIndexOf(".")) s=s.replace(/\./g,"").replace(",",".");
+    else s=s.replace(/,/g,"");
+  }else if(hasC){
+    s=/^-?\d{1,3}(,\d{3})+$/.test(s)?s.replace(/,/g,""):s.replace(",",".");
+  }else if(hasD){
+    if(/^-?\d{1,3}(\.\d{3})+$/.test(s)) s=s.replace(/\./g,"");
+  }
+  const n=parseFloat(s); return isNaN(n)?0:n;
+}
+function parseRp(v){ const s=String(v==null?"":v).replace(/[^\d.,-]/g,""); return Math.round(parseNum(s)); }
+function acosTxt(cost,rev){ return cost?(rev?pct(cost/rev):"∞"):"–"; }
+function acosTone(cost,rev){ return cost?((rev&&cost/rev<=1)?"up":"down"):""; }
+const rp=n=>"Rp"+Math.round(n||0).toLocaleString("id-ID");
+function rpShort(n){n=n||0;const a=Math.abs(n);
+  if(a>=1e9) return "Rp"+(n/1e9).toFixed(2)+" M";
+  if(a>=1e6) return "Rp"+(n/1e6).toFixed(1)+" jt";
+  if(a>=1e3) return "Rp"+(n/1e3).toFixed(0)+" rb";
+  return rp(n);}
+const pct=x=>isFinite(x)?(x*100).toFixed(1)+"%":"–";
+const num=n=>Math.round(n||0).toLocaleString("id-ID");
+const dim=p=>{const[y,m]=p.split("-").map(Number);return new Date(y,m,0).getDate();};
+const emptyDay=()=>({gmv:0,pesanan:0,pengunjung:0,retQty:0,retVal:0,cancelQty:0,cancelVal:0});
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function mName(p){return new Date(p+"-01").toLocaleDateString("id-ID",{month:"long",year:"numeric"});}
+function defaultMonth(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");}
+// Minggu mengikuti kalender Senin–Minggu, dipotong di awal dan akhir bulan.
+// Contoh September 2026 (tgl 1 jatuh hari Selasa): 1–6, 7–13, 14–20, 21–27, 28–30.
+function weekRanges(pk){
+  const [y,m]=pk.split("-").map(Number), D=new Date(y,m,0).getDate();
+  const out=[]; let st=1;
+  while(st<=D){
+    const dow=new Date(y,m-1,st).getDay();   // 0 = Minggu, 1 = Senin
+    const en=Math.min(st+(7-dow)%7,D);        // maju sampai hari Minggu
+    out.push({st,en}); st=en+1;
+  }
+  return out;
+}
+function weekIndex(pk,d){ return weekRanges(pk).findIndex(r=>d>=r.st&&d<=r.en); }
+
+/* ============================ Parser laporan harian ============================ */
+function detectMarketplace(wb){
+  if(wb.SheetNames.some(n=>/siap dikirim/i.test(n))) return "Shopee";
+  const ws=wb.Sheets[wb.SheetNames[0]];
+  const rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false});
+  const blob=rows.slice(0,16).flat().map(x=>String(x).toLowerCase()).join(" | ");
+  if(blob.includes("total penjualan")&&blob.includes("dikembalikan")) return "Shopee";
+  if(blob.includes("lazada")) return "Lazada";
+  if(blob.includes("aov")||blob.includes("live kreator")||blob.includes("impresi produk")||blob.includes("gmv video")) return "TikTok";
+  if(blob.includes("pendapatan bruto")) return "Tokopedia";
+  return "Tokopedia";
+}
+function parseDate(s){
+  s=String(s).trim();let m;
+  if(m=s.match(/^(\d{4})-(\d{2})-(\d{2})$/)) return {y:+m[1],mo:+m[2],d:+m[3]};
+  if(m=s.match(/^(\d{2})[\/-](\d{2})[\/-](\d{4})$/)) return {y:+m[3],mo:+m[2],d:+m[1]};
+  return null;
+}
+function pkey(dt){return dt.y+"-"+String(dt.mo).padStart(2,"0");}
+function parseWorkbook(wb,mp){
+  const byMonth={};
+  const put=(dt,o)=>{const k=pkey(dt);(byMonth[k]=byMonth[k]||{})[dt.d]=o;};
+  if(mp==="Shopee"){
+    const nm=wb.SheetNames.find(n=>/siap dikirim/i.test(n))||"Pesanan Siap Dikirim";
+    const ws=wb.Sheets[nm];
+    if(!ws) throw new Error("Sheet 'Pesanan Siap Dikirim' tidak ada di file ini. Pilih file laporan penjualan Shopee.");
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false});
+    for(const r of rows){const dt=parseDate(r[0]);
+      if(dt) put(dt,{gmv:parseNum(r[1]),pesanan:parseNum(r[2]),pengunjung:parseNum(r[5]),
+        cancelQty:parseNum(r[7]),cancelVal:parseNum(r[8]),retQty:parseNum(r[9]),retVal:parseNum(r[10])});}
+  }else{
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false});
+    const hi=rows.findIndex(r=>String(r[0]).trim()==="Tanggal");
+    if(hi<0) throw new Error("Baris header 'Tanggal' tidak ketemu. Pastikan ini laporan harian per tanggal.");
+    const hdr=rows[hi].map(x=>String(x||"").toLowerCase().trim());
+    const find=pred=>{for(let i=1;i<hdr.length;i++){if(pred(hdr[i]))return i;}return -1;};
+    let gi=find(h=>h==="gmv"); if(gi<0) gi=find(h=>h==="pendapatan");
+    const pi=find(h=>h==="pesanan"),
+          ri=find(h=>h.includes("pengembalian")||h.includes("retur")),
+          ci=find(h=>h.includes("pembatalan")),
+          vi=find(h=>h==="pengunjung");
+    for(let r=hi+1;r<rows.length;r++){const dt=parseDate(rows[r][0]);
+      if(dt) put(dt,{gmv:gi>=0?parseNum(rows[r][gi]):0,pesanan:pi>=0?parseNum(rows[r][pi]):0,
+        retVal:ri>=0?parseNum(rows[r][ri]):0,retQty:0,cancelVal:ci>=0?parseNum(rows[r][ci]):0,cancelQty:0,
+        pengunjung:vi>=0?parseNum(rows[r][vi]):0});}
+  }
+  const total=Object.values(byMonth).reduce((a,o)=>a+Object.keys(o).length,0);
+  if(!total) throw new Error("Tidak ada baris tanggal yang terbaca dari file ini.");
+  return byMonth;
+}
+
+/* ============================ Parser laporan produk ============================ */
+const PROD_FIELDS=[
+  {k:"sku",  lab:"Kode / SKU produk", req:true,  kw:["sku","kode produk","kode variasi","product id","id produk","seller sku","kode"]},
+  {k:"name", lab:"Nama produk",       req:true,  kw:["nama produk","product name","judul produk","nama barang","produk","nama"]},
+  {k:"gmv",  lab:"GMV / penjualan",   req:true,  kw:["penjualan (","total penjualan","penjualan","gmv","omzet","pendapatan","sales","revenue"]},
+  {k:"unit", lab:"Unit terjual",      req:false, kw:["produk terjual","item terjual","unit terjual","terjual","qty","kuantitas","jumlah terjual","units sold"]},
+  {k:"peng", lab:"Pengunjung produk", req:false, kw:["pengunjung produk","pengunjung","dilihat","kunjungan","visitor","page view","impresi"]},
+  {k:"ord",  lab:"Pesanan",           req:false, kw:["pesanan dibayar","pesanan","order","transaksi"]},
+  {k:"price",lab:"Harga jual",        req:false, kw:["harga satuan","harga jual","harga","price"]},
+  {k:"stok", lab:"Stok tersisa",      req:false, kw:["stok tersedia","sisa stok","stok","stock","inventory","persediaan"]}
+];
+const ADS_FIELDS=[
+  {k:"date",lab:"Tanggal",          req:false, kw:["tanggal","date","waktu","hari"]},
+  {k:"cost",lab:"Biaya iklan",      req:true,  kw:["biaya iklan","total biaya","biaya","pengeluaran","dana terpakai","cost","spend"]},
+  {k:"rev", lab:"Omzet dari iklan", req:true,  kw:["penjualan dari iklan","omzet iklan","gmv iklan","penghasilan bruto","penghasilan","penjualan","omzet","gmv","revenue","pendapatan"]}
+];
+function sheetMatrix(wb,sheetName){
+  const ws=wb.Sheets[sheetName];
+  if(!ws) throw new Error("Sheet tidak terbaca.");
+  return XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false,defval:""});
+}
+// Tanggal bisa berupa teks, objek Date, atau angka serial Excel.
+function toDate(v){
+  if(v instanceof Date) return {y:v.getFullYear(),mo:v.getMonth()+1,d:v.getDate()};
+  if(typeof v==="number"&&v>20000&&v<60000){
+    const d=new Date(Math.round((v-25569)*86400000));
+    return {y:d.getUTCFullYear(),mo:d.getUTCMonth()+1,d:d.getUTCDate()};}
+  // Buang bagian jam bila ada: "2026-08-01 00:00:00" → "2026-08-01".
+  return parseDate(String(v==null?"":v).trim().split(/[ T]/)[0]);
+}
+/* ---- Preset per marketplace: kolom dikenali dari nama header, bukan posisi ---- */
+const lowRow=r=>(r||[]).map(x=>String(x==null?"":x).toLowerCase().trim());
+const iExact=(h,s)=>h.findIndex(x=>x===s);
+function iLike(h,s,n){let c=0;for(let i=0;i<h.length;i++){if(h[i].includes(s)){if(c===(n||0))return i;c++;}}return -1;}
+const cell=(row,i)=>String((i>=0&&row[i]!=null)?row[i]:"").trim();
+const isBlank=v=>!v||v==="-";
+
+const PRESETS=[{
+  id:"shopee-produk",
+  mp:"Shopee",
+  title:"Shopee · Performa Produk",
+  pickSheet:names=>names.find(n=>/performa terbaik/i.test(n)),
+  headerRow:rows=>rows.findIndex(r=>lowRow(r).includes("kode produk")),
+  detect:h=>iExact(h,"kode produk")>=0&&iLike(h,"penjualan (pesanan siap dikirim)")>=0,
+  levels:[{k:"induk",label:"Per produk induk - lengkap dengan pengunjung & konversi"},
+          {k:"variasi",label:"Per variasi - rinci per warna/tipe, tanpa pengunjung"}],
+  resolve:(h,rows,hi,level)=>{
+    const iKode=iExact(h,"kode produk"), iProduk=iExact(h,"produk"),
+      iVarId=iLike(h,"kode variasi",0), iVarSku=iLike(h,"kode variasi",1),
+      iVarNama=iExact(h,"nama variasi"), iInduk=iExact(h,"sku induk"),
+      iGmv=iLike(h,"penjualan (pesanan siap dikirim)"),
+      iUnit=iExact(h,"produk (pesanan siap dikirim)"),
+      iOrd=iExact(h,"pesanan siap dikirim"),
+      iPeng=iExact(h,"pengunjung produk (kunjungan)");
+    const isVar=row=>!isBlank(cell(row,iVarId));
+    const indukSku=row=>{const s=cell(row,iInduk);return isBlank(s)?cell(row,iKode):s;};
+    if(level==="variasi"){
+      // Produk tanpa variasi tetap ikut, diambil dari baris induknya, supaya total tidak bocor.
+      const punyaVar=new Set();
+      for(let r=hi+1;r<rows.length;r++){const row=rows[r]||[];if(isVar(row))punyaVar.add(cell(row,iKode));}
+      return {cols:{"Nama":iProduk,"GMV":iGmv,"Unit":iUnit,"Pesanan":iOrd},
+        keep:row=>isVar(row)||!punyaVar.has(cell(row,iKode)),
+        skuOf:row=>{if(!isVar(row))return indukSku(row);
+          const v=cell(row,iVarSku);return isBlank(v)?cell(row,iVarId):v;},
+        nameOf:row=>{const p=cell(row,iProduk),v=cell(row,iVarNama);
+          return (isVar(row)&&!isBlank(v))?p+" · "+v:p;},
+        map:{sku:-1,name:iProduk,gmv:iGmv,unit:iUnit,peng:-1,ord:iOrd,price:-1,stok:-1},
+        note:"Pengunjung dan konversi tidak ada di level variasi - kolom itu akan kosong."};
+    }
+    return {cols:{"Kode":iInduk,"Nama":iProduk,"GMV":iGmv,"Unit":iUnit,"Pengunjung":iPeng,"Pesanan":iOrd},
+      keep:row=>!isVar(row),
+      skuOf:indukSku,
+      nameOf:row=>cell(row,iProduk),
+      map:{sku:iInduk,name:iProduk,gmv:iGmv,unit:iUnit,peng:iPeng,ord:iOrd,price:-1,stok:-1},
+      note:"Angka diambil dari Pesanan Siap Dikirim, sama dasarnya dengan GMV harian. File ini tidak memuat stok."};
+  }
+},{
+  id:"tiktok-produk",
+  mp:"TikTok",
+  title:"TikTok Shop · Daftar Produk",
+  pickSheet:names=>names[0],
+  headerRow:rows=>rows.findIndex(r=>{const h=lowRow(r);return h.includes("id produk")&&h.includes("nama");}),
+  detect:h=>iExact(h,"id produk")>=0&&iExact(h,"nama")>=0&&iExact(h,"gmv")>=0,
+  levels:[{k:"klik",label:"Traffic dihitung dari klik produk - paling mirip pengunjung"},
+          {k:"impresi",label:"Traffic dihitung dari impresi produk"}],
+  resolve:(h,rows,hi,level)=>{
+    // Header bertingkat: baris di atasnya menandai kanal (Semua / LIVE / Video / Afiliasi).
+    // Hanya kolom kanal "Semua" yang dipakai, supaya tidak tertukar dengan kolom senama.
+    const band=hi>0?lowRow(rows[hi-1]):[];
+    const ok=i=>{const b=(band[i]||"").trim();return b===""||b==="semua";};
+    const ex=s=>{for(let i=0;i<h.length;i++) if(ok(i)&&h[i]===s) return i; return -1;};
+    const iNama=ex("nama"), iId=ex("id produk"), iGmv=ex("gmv"),
+      iUnit=ex("produk terjual"), iOrd=ex("pesanan"),
+      iKlik=ex("klik produk"), iImp=ex("impresi produk");
+    const iTraf=level==="impresi"?iImp:iKlik;
+    return {cols:{"Nama":iNama,"ID":iId,"GMV":iGmv,"Unit":iUnit,"Pesanan":iOrd,
+        [level==="impresi"?"Impresi":"Klik"]:iTraf},
+      map:{sku:iId,name:iNama,gmv:iGmv,unit:iUnit,peng:iTraf,ord:iOrd,price:-1,stok:-1},
+      note:"TikTok tidak punya angka pengunjung, jadi kolom Pengunjung diisi "+
+        (level==="impresi"?"impresi produk":"klik produk")+". File ini juga tidak memuat stok."};
+  }
+},{
+  id:"tokopedia-produk",
+  mp:"Tokopedia",
+  title:"Tokopedia · Daftar Produk",
+  pickSheet:names=>names[0],
+  headerRow:rows=>rows.findIndex(r=>{const h=lowRow(r);
+    return h.includes("id")&&h.includes("produk")&&h.includes("produk terjual");}),
+  detect:h=>iExact(h,"id")>=0&&iExact(h,"produk")>=0&&iExact(h,"gmv")>=0&&iExact(h,"produk terjual")>=0,
+  levels:[{k:"unik",label:"Traffic dari tayangan halaman unik - dasar konversi Tokopedia"},
+          {k:"total",label:"Traffic dari seluruh tayangan halaman"}],
+  resolve:(h,rows,hi,level)=>{
+    // Tokopedia tidak punya kolom traffic total; angkanya dipecah per kanal
+    // (tab Toko, LIVE, video, kartu produk) sehingga harus dijumlahkan.
+    const uniq=level==="unik";
+    const traf=[];
+    for(let i=0;i<h.length;i++){
+      if(!h[i].startsWith("tayangan halaman")) continue;
+      if(h[i].includes("unik")===uniq) traf.push(i);
+    }
+    const iId=iExact(h,"id"), iNama=iExact(h,"produk"), iGmv=iExact(h,"gmv"),
+      iUnit=iExact(h,"produk terjual"), iOrd=iExact(h,"pesanan");
+    return {cols:{"ID":iId,"Nama":iNama,"GMV":iGmv,"Unit":iUnit,"Pesanan":iOrd,"Traffic":traf},
+      map:{sku:iId,name:iNama,gmv:iGmv,unit:iUnit,peng:traf,ord:iOrd,price:-1,stok:-1},
+      note:"Kolom Pengunjung dijumlah dari "+traf.length+" kanal (tab Toko, LIVE, video, kartu produk). File ini tidak memuat stok."};
+  }
+}];
+function detectPreset(wb){
+  for(const p of PRESETS){
+    const sheet=p.pickSheet(wb.SheetNames);
+    if(!sheet) continue;
+    let rows; try{ rows=sheetMatrix(wb,sheet); }catch(e){ continue; }
+    const hi=p.headerRow(rows);
+    if(hi<0) continue;
+    if(p.detect(lowRow(rows[hi]))) return {preset:p,sheet,rows,hi};
+  }
+  return null;
+}
+
+/* ---- Preset laporan iklan ---- */
+const ADS_PRESETS=[{
+  id:"shopee-iklan-cpc",
+  ch:"Shopee",
+  title:"Shopee · Laporan Iklan CPC",
+  pickSheet:names=>names[0],
+  headerRow:rows=>rows.findIndex(r=>{const h=lowRow(r);return h.includes("nama iklan")&&h.includes("biaya");}),
+  detect:h=>iExact(h,"biaya")>=0&&iExact(h,"omzet penjualan")>=0,
+  // Bulan diambil dari baris "Periode" di kepala laporan.
+  periodOf:rows=>{
+    for(let i=0;i<Math.min(rows.length,12);i++){
+      const r=rows[i]||[];
+      if(String(r[0]||"").toLowerCase().trim()!=="periode") continue;
+      const m=String(r.join(" ")).match(/(\d{2})\/(\d{2})\/(\d{4})/);
+      if(m) return m[3]+"-"+m[2];
+    }
+    return null;
+  },
+  levels:[{k:"total",label:"Omzet penjualan - termasuk penjualan tidak langsung"},
+          {k:"langsung",label:"Penjualan langsung saja (GMV langsung)"}],
+  resolve:(h,rows,hi,level)=>{
+    const iBiaya=iExact(h,"biaya");
+    const iOmzet=level==="langsung"?iLike(h,"penjualan langsung"):iExact(h,"omzet penjualan");
+    return {cols:{"Biaya":iBiaya,"Omzet":iOmzet},
+      map:{date:-1,cost:iBiaya,rev:iOmzet},
+      mode:"bulan",
+      note:"Laporan ini dirinci per iklan, bukan per tanggal, jadi masuk sebagai total bulanan. Kolom Tanggal Mulai dan Selesai itu jadwal tayang iklan, bukan tanggal belanja - sengaja tidak dipakai."};
+  }
+},{
+  id:"tiktok-campaign-harian",
+  ch:"TikTok+Tokopedia",
+  title:"TikTok Ads · Campaign Overview harian",
+  pickSheet:names=>names[0],
+  headerRow:rows=>rows.findIndex(r=>{const h=lowRow(r);
+    return h.includes("per hari")&&h.includes("biaya");}),
+  detect:h=>iExact(h,"per hari")>=0&&iExact(h,"biaya")>=0&&iLike(h,"penghasilan bruto")>=0,
+  periodOf:()=>null,   // bulannya diambil dari tanggal tiap baris
+  levels:[{k:"bruto",label:"Penghasilan bruto - angka omzet iklan dari TikTok"}],
+  resolve:(h,rows,hi)=>{
+    const iTgl=iExact(h,"per hari"), iBiaya=iExact(h,"biaya"), iBruto=iLike(h,"penghasilan bruto");
+    return {cols:{"Tanggal":iTgl,"Biaya":iBiaya,"Omzet":iBruto},
+      map:{date:iTgl,cost:iBiaya,rev:iBruto},
+      mode:"minggu",
+      note:"Ada tanggal harian, jadi langsung dipecah ke minggu yang benar. Baris total di kaki file diabaikan."};
+  }
+}];
+function detectAdsPreset(wb){
+  for(const p of ADS_PRESETS){
+    const sheet=p.pickSheet(wb.SheetNames);
+    if(!sheet) continue;
+    let rows; try{ rows=sheetMatrix(wb,sheet); }catch(e){ continue; }
+    const hi=p.headerRow(rows);
+    if(hi<0) continue;
+    if(p.detect(lowRow(rows[hi]))) return {preset:p,sheet,rows,hi,pk:p.periodOf?p.periodOf(rows):null};
+  }
+  return null;
+}
+function guessHeaderRow(rows,fields){
+  const F=fields||PROD_FIELDS;
+  const allKw=F.flatMap(f=>f.kw);
+  let best=0,bestScore=-1;
+  for(let i=0;i<Math.min(rows.length,20);i++){
+    const cells=(rows[i]||[]).map(c=>String(c).toLowerCase().trim()).filter(Boolean);
+    if(cells.length<2) continue;
+    let score=cells.filter(c=>allKw.some(k=>c.includes(k))).length*2+Math.min(cells.length,12)*0.1;
+    if(score>bestScore){bestScore=score;best=i;}
+  }
+  return best;
+}
+function guessMapping(hdr,fields){
+  const F=fields||PROD_FIELDS;
+  const low=hdr.map(h=>String(h).toLowerCase().trim());
+  const used=new Set(), map={};
+  for(const f of F){
+    let found=-1;
+    for(const k of f.kw){
+      for(let i=0;i<low.length;i++){
+        if(used.has(i)||!low[i]) continue;
+        if(low[i]===k){found=i;break;}
+      }
+      if(found>=0) break;
+      for(let i=0;i<low.length;i++){
+        if(used.has(i)||!low[i]) continue;
+        if(low[i].includes(k)){found=i;break;}
+      }
+      if(found>=0) break;
+    }
+    if(found>=0){map[f.k]=found;used.add(found);}
+  }
+  return map;
+}
+function buildProducts(rows,hi,map,opts){
+  opts=opts||{};
+  const out={};
+  const g=(row,k)=>{const i=map[k];
+    if(Array.isArray(i)) return i.reduce((a,x)=>a+(x>=0?parseNum(row[x]):0),0);
+    return (i==null||i<0)?null:row[i];};
+  for(let r=hi+1;r<rows.length;r++){
+    const row=rows[r]||[];
+    if(opts.keep&&!opts.keep(row)) continue;
+    const sku=String((opts.skuOf?opts.skuOf(row):g(row,"sku"))||"").trim();
+    const name=String((opts.nameOf?opts.nameOf(row):g(row,"name"))||"").trim();
+    if(!sku&&!name) continue;
+    const id=sku||name;
+    if(/^(total|jumlah|grand total|-)$/i.test(id)) continue;
+    const gmv=parseNum(g(row,"gmv")), unit=parseNum(g(row,"unit"));
+    const rec={n:name||sku, g:gmv, u:unit,
+      v:parseNum(g(row,"peng")), o:parseNum(g(row,"ord")),
+      p:parseNum(g(row,"price"))||(unit?Math.round(gmv/unit):0),
+      s:parseNum(g(row,"stok"))};
+    if(!rec.g&&!rec.u&&!rec.v&&!rec.s) continue;
+    const prev=out[id];
+    out[id]=prev?{n:rec.n||prev.n,g:prev.g+rec.g,u:prev.u+rec.u,v:prev.v+rec.v,o:prev.o+rec.o,
+      p:rec.p||prev.p,s:Math.max(prev.s,rec.s)}:rec;
+  }
+  return out;
+}
+
+/* ============================ Storage ============================ */
+let DB=null, PROD={}, HIST=[], ME="", DBCAP=null, DLCAP=null;
+let VIEW="bulan", WEEK_IDX=null, PWEEK=null, MP_SEL="Semua", PSORT="g", PDIR=-1, PQ="", PLIMIT=25;
+
+async function initCaps(){
+  try{ if(window.claude&&typeof window.claude.use==="function") DBCAP=await window.claude.use("db"); }catch(e){ DBCAP=null; }
+  try{ if(window.claude&&typeof window.claude.use==="function") DLCAP=await window.claude.use("downloads"); }catch(e){ DLCAP=null; }
+}
+function localGet(k){ try{ const s=localStorage.getItem(k); return s?JSON.parse(s):null; }catch(e){ return null; } }
+function localSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+const clone=o=>JSON.parse(JSON.stringify(o));
+
+function emptyData(){const d={};for(const m of MPS)d[m]={};return d;}
+function emptyAds(){const a={};for(const k of AD_KEYS)a[k]={m:{cost:0,rev:0},w:{},d:{}};return a;}
+const DEMO_DB={"active": "2026-09", "periods": {"2026-09": {"data": {"Shopee": {"1": {"gmv": 99394217, "retVal": 3354188, "cancelVal": 4754852, "pesanan": 1274, "retQty": 51, "cancelQty": 38, "pengunjung": 57909}, "2": {"gmv": 102695604, "retVal": 4476894, "cancelVal": 3754560, "pesanan": 1317, "retQty": 53, "cancelQty": 40, "pengunjung": 59864}, "3": {"gmv": 102143645, "retVal": 4115127, "cancelVal": 3528155, "pesanan": 1310, "retQty": 52, "cancelQty": 39, "pengunjung": 59545}, "4": {"gmv": 104677440, "retVal": 3727277, "cancelVal": 2210179, "pesanan": 1342, "retQty": 54, "cancelQty": 40, "pengunjung": 61000}, "5": {"gmv": 104915335, "retVal": 5872800, "cancelVal": 2837538, "pesanan": 1345, "retQty": 54, "cancelQty": 40, "pengunjung": 61136}, "6": {"gmv": 97381365, "retVal": 5200923, "cancelVal": 2556929, "pesanan": 1248, "retQty": 50, "cancelQty": 37, "pengunjung": 56727}, "7": {"gmv": 111306134, "retVal": 6574082, "cancelVal": 5211239, "pesanan": 1427, "retQty": 57, "cancelQty": 43, "pengunjung": 64864}, "8": {"gmv": 102967972, "retVal": 5420623, "cancelVal": 4415656, "pesanan": 1320, "retQty": 53, "cancelQty": 40, "pengunjung": 60000}, "9": {"gmv": 166376618, "retVal": 7890074, "cancelVal": 6969969, "pesanan": 2133, "retQty": 85, "cancelQty": 64, "pengunjung": 96955}, "10": {"gmv": 98122969, "retVal": 3304226, "cancelVal": 3364613, "pesanan": 1258, "retQty": 50, "cancelQty": 38, "pengunjung": 57182}, "11": {"gmv": 99685200, "retVal": 5463800, "cancelVal": 2595043, "pesanan": 1278, "retQty": 51, "cancelQty": 38, "pengunjung": 58091}, "12": {"gmv": 106589403, "retVal": 6149678, "cancelVal": 4969922, "pesanan": 1367, "retQty": 55, "cancelQty": 41, "pengunjung": 62136}, "13": {"gmv": 95420320, "retVal": 4035139, "cancelVal": 2953890, "pesanan": 1223, "retQty": 49, "cancelQty": 37, "pengunjung": 55591}, "14": {"gmv": 103330706, "retVal": 4498983, "cancelVal": 3262495, "pesanan": 1325, "retQty": 53, "cancelQty": 40, "pengunjung": 60227}, "15": {"gmv": 105860804, "retVal": 6335270, "cancelVal": 3344968, "pesanan": 1357, "retQty": 54, "cancelQty": 41, "pengunjung": 61682}, "16": {"gmv": 98084635, "retVal": 3021504, "cancelVal": 2236121, "pesanan": 1257, "retQty": 50, "cancelQty": 38, "pengunjung": 57136}, "17": {"gmv": 98089092, "retVal": 5055784, "cancelVal": 4883336, "pesanan": 1258, "retQty": 50, "cancelQty": 38, "pengunjung": 57182}, "18": {"gmv": 100095920, "retVal": 4492337, "cancelVal": 3477952, "pesanan": 1283, "retQty": 51, "cancelQty": 38, "pengunjung": 58318}, "19": {"gmv": 113354624, "retVal": 5272455, "cancelVal": 4811369, "pesanan": 1453, "retQty": 58, "cancelQty": 44, "pengunjung": 66045}, "20": {"gmv": 96870971, "retVal": 3551386, "cancelVal": 3706965, "pesanan": 1242, "retQty": 50, "cancelQty": 37, "pengunjung": 56455}, "21": {"gmv": 112031612, "retVal": 5231272, "cancelVal": 4333235, "pesanan": 1436, "retQty": 57, "cancelQty": 43, "pengunjung": 65273}, "22": {"gmv": 104031684, "retVal": 3684836, "cancelVal": 2611482, "pesanan": 1334, "retQty": 53, "cancelQty": 40, "pengunjung": 60636}, "23": {"gmv": 96087289, "retVal": 3886367, "cancelVal": 4594145, "pesanan": 1232, "retQty": 49, "cancelQty": 37, "pengunjung": 56000}, "24": {"gmv": 99058972, "retVal": 4001824, "cancelVal": 3756029, "pesanan": 1270, "retQty": 51, "cancelQty": 38, "pengunjung": 57727}, "25": {"gmv": 104870994, "retVal": 4110777, "cancelVal": 2422331, "pesanan": 1344, "retQty": 54, "cancelQty": 40, "pengunjung": 61091}, "26": {"gmv": 103833308, "retVal": 3319480, "cancelVal": 4611328, "pesanan": 1331, "retQty": 53, "cancelQty": 40, "pengunjung": 60500}, "27": {"gmv": 98888836, "retVal": 5271819, "cancelVal": 3089907, "pesanan": 1268, "retQty": 51, "cancelQty": 38, "pengunjung": 57636}, "28": {"gmv": 106561328, "retVal": 5381406, "cancelVal": 4291976, "pesanan": 1366, "retQty": 55, "cancelQty": 41, "pengunjung": 62091}, "29": {"gmv": 99289974, "retVal": 5655649, "cancelVal": 4840228, "pesanan": 1273, "retQty": 51, "cancelQty": 38, "pengunjung": 57864}, "30": {"gmv": 103983032, "retVal": 4389170, "cancelVal": 5165179, "pesanan": 1333, "retQty": 53, "cancelQty": 40, "pengunjung": 60591}}, "TikTok": {"1": {"gmv": 30643911, "retVal": 1689948, "cancelVal": 1343936, "pesanan": 528, "retQty": 21, "cancelQty": 16, "pengunjung": 15086}, "2": {"gmv": 28966280, "retVal": 1634961, "cancelVal": 1101897, "pesanan": 499, "retQty": 20, "cancelQty": 15, "pengunjung": 14257}, "3": {"gmv": 29806376, "retVal": 1275191, "cancelVal": 1115777, "pesanan": 514, "retQty": 21, "cancelQty": 15, "pengunjung": 14686}, "4": {"gmv": 29850970, "retVal": 1656140, "cancelVal": 872822, "pesanan": 515, "retQty": 21, "cancelQty": 15, "pengunjung": 14714}, "5": {"gmv": 30374154, "retVal": 1398124, "cancelVal": 858964, "pesanan": 524, "retQty": 21, "cancelQty": 16, "pengunjung": 14971}, "6": {"gmv": 26267649, "retVal": 1393438, "cancelVal": 533417, "pesanan": 453, "retQty": 18, "cancelQty": 14, "pengunjung": 12943}, "7": {"gmv": 31913796, "retVal": 1613528, "cancelVal": 1551624, "pesanan": 550, "retQty": 22, "cancelQty": 16, "pengunjung": 15714}, "8": {"gmv": 28303056, "retVal": 869046, "cancelVal": 1070155, "pesanan": 488, "retQty": 20, "cancelQty": 15, "pengunjung": 13943}, "9": {"gmv": 45325743, "retVal": 2235274, "cancelVal": 2064609, "pesanan": 781, "retQty": 31, "cancelQty": 23, "pengunjung": 22314}, "10": {"gmv": 29582787, "retVal": 1406076, "cancelVal": 819914, "pesanan": 510, "retQty": 20, "cancelQty": 15, "pengunjung": 14571}, "11": {"gmv": 30696535, "retVal": 1294417, "cancelVal": 1496806, "pesanan": 529, "retQty": 21, "cancelQty": 16, "pengunjung": 15114}, "12": {"gmv": 30705137, "retVal": 1755358, "cancelVal": 737112, "pesanan": 529, "retQty": 21, "cancelQty": 16, "pengunjung": 15114}, "13": {"gmv": 27857070, "retVal": 914970, "cancelVal": 635647, "pesanan": 480, "retQty": 19, "cancelQty": 14, "pengunjung": 13714}, "14": {"gmv": 29379517, "retVal": 903700, "cancelVal": 981442, "pesanan": 507, "retQty": 20, "cancelQty": 15, "pengunjung": 14486}, "15": {"gmv": 28583336, "retVal": 978258, "cancelVal": 1315408, "pesanan": 493, "retQty": 20, "cancelQty": 15, "pengunjung": 14086}, "16": {"gmv": 28103238, "retVal": 1395598, "cancelVal": 668740, "pesanan": 485, "retQty": 19, "cancelQty": 15, "pengunjung": 13857}, "17": {"gmv": 28475493, "retVal": 1314422, "cancelVal": 846528, "pesanan": 491, "retQty": 20, "cancelQty": 15, "pengunjung": 14029}, "18": {"gmv": 28894027, "retVal": 1294915, "cancelVal": 768241, "pesanan": 498, "retQty": 20, "cancelQty": 15, "pengunjung": 14229}, "19": {"gmv": 29432658, "retVal": 1029625, "cancelVal": 751071, "pesanan": 507, "retQty": 20, "cancelQty": 15, "pengunjung": 14486}, "20": {"gmv": 26512546, "retVal": 1095878, "cancelVal": 1094948, "pesanan": 457, "retQty": 18, "cancelQty": 14, "pengunjung": 13057}, "21": {"gmv": 31984538, "retVal": 1487316, "cancelVal": 684004, "pesanan": 551, "retQty": 22, "cancelQty": 17, "pengunjung": 15743}, "22": {"gmv": 30708405, "retVal": 1576148, "cancelVal": 1419222, "pesanan": 529, "retQty": 21, "cancelQty": 16, "pengunjung": 15114}, "23": {"gmv": 29412174, "retVal": 1565535, "cancelVal": 1285952, "pesanan": 507, "retQty": 20, "cancelQty": 15, "pengunjung": 14486}, "24": {"gmv": 28646072, "retVal": 866105, "cancelVal": 971571, "pesanan": 494, "retQty": 20, "cancelQty": 15, "pengunjung": 14114}, "25": {"gmv": 29137788, "retVal": 929634, "cancelVal": 1250524, "pesanan": 502, "retQty": 20, "cancelQty": 15, "pengunjung": 14343}, "26": {"gmv": 32168257, "retVal": 1134218, "cancelVal": 1329985, "pesanan": 555, "retQty": 22, "cancelQty": 17, "pengunjung": 15857}, "27": {"gmv": 27017960, "retVal": 1015529, "cancelVal": 1105088, "pesanan": 466, "retQty": 19, "cancelQty": 14, "pengunjung": 13314}, "28": {"gmv": 31460021, "retVal": 1239793, "cancelVal": 668756, "pesanan": 542, "retQty": 22, "cancelQty": 16, "pengunjung": 15486}, "29": {"gmv": 27910560, "retVal": 1162925, "cancelVal": 817287, "pesanan": 481, "retQty": 19, "cancelQty": 14, "pengunjung": 13743}, "30": {"gmv": 27879950, "retVal": 1589788, "cancelVal": 804359, "pesanan": 481, "retQty": 19, "cancelQty": 14, "pengunjung": 13743}}, "Tokopedia": {"1": {"gmv": 19006607, "retVal": 799141, "cancelVal": 508704, "pesanan": 152, "retQty": 6, "cancelQty": 5, "pengunjung": 1520}, "2": {"gmv": 18712523, "retVal": 588782, "cancelVal": 617840, "pesanan": 150, "retQty": 6, "cancelQty": 4, "pengunjung": 1500}, "3": {"gmv": 19455272, "retVal": 727855, "cancelVal": 800105, "pesanan": 156, "retQty": 6, "cancelQty": 5, "pengunjung": 1560}, "4": {"gmv": 18602678, "retVal": 1014197, "cancelVal": 775970, "pesanan": 149, "retQty": 6, "cancelQty": 4, "pengunjung": 1490}, "5": {"gmv": 20152570, "retVal": 880260, "cancelVal": 545996, "pesanan": 161, "retQty": 6, "cancelQty": 5, "pengunjung": 1610}, "6": {"gmv": 17494978, "retVal": 727130, "cancelVal": 605388, "pesanan": 140, "retQty": 6, "cancelQty": 4, "pengunjung": 1400}, "7": {"gmv": 20418699, "retVal": 999591, "cancelVal": 998347, "pesanan": 163, "retQty": 7, "cancelQty": 5, "pengunjung": 1630}, "8": {"gmv": 19888219, "retVal": 647604, "cancelVal": 683980, "pesanan": 159, "retQty": 6, "cancelQty": 5, "pengunjung": 1590}, "9": {"gmv": 30140818, "retVal": 1348999, "cancelVal": 1251302, "pesanan": 241, "retQty": 10, "cancelQty": 7, "pengunjung": 2410}, "10": {"gmv": 18992046, "retVal": 1077126, "cancelVal": 823979, "pesanan": 152, "retQty": 6, "cancelQty": 5, "pengunjung": 1520}, "11": {"gmv": 19430666, "retVal": 948299, "cancelVal": 830773, "pesanan": 155, "retQty": 6, "cancelQty": 5, "pengunjung": 1550}, "12": {"gmv": 20071764, "retVal": 1004408, "cancelVal": 918628, "pesanan": 161, "retQty": 6, "cancelQty": 5, "pengunjung": 1610}, "13": {"gmv": 16717984, "retVal": 852129, "cancelVal": 676899, "pesanan": 134, "retQty": 5, "cancelQty": 4, "pengunjung": 1340}, "14": {"gmv": 20578535, "retVal": 768797, "cancelVal": 977488, "pesanan": 165, "retQty": 7, "cancelQty": 5, "pengunjung": 1650}, "15": {"gmv": 19906719, "retVal": 827693, "cancelVal": 765240, "pesanan": 159, "retQty": 6, "cancelQty": 5, "pengunjung": 1590}, "16": {"gmv": 18351084, "retVal": 1004631, "cancelVal": 897572, "pesanan": 147, "retQty": 6, "cancelQty": 4, "pengunjung": 1470}, "17": {"gmv": 18281950, "retVal": 1090998, "cancelVal": 369141, "pesanan": 146, "retQty": 6, "cancelQty": 4, "pengunjung": 1460}, "18": {"gmv": 20336579, "retVal": 800824, "cancelVal": 596919, "pesanan": 163, "retQty": 7, "cancelQty": 5, "pengunjung": 1630}, "19": {"gmv": 19167856, "retVal": 800003, "cancelVal": 466980, "pesanan": 153, "retQty": 6, "cancelQty": 5, "pengunjung": 1530}, "20": {"gmv": 16739633, "retVal": 780022, "cancelVal": 374725, "pesanan": 134, "retQty": 5, "cancelQty": 4, "pengunjung": 1340}, "21": {"gmv": 19099477, "retVal": 746371, "cancelVal": 922614, "pesanan": 153, "retQty": 6, "cancelQty": 5, "pengunjung": 1530}, "22": {"gmv": 19597923, "retVal": 1024396, "cancelVal": 663791, "pesanan": 157, "retQty": 6, "cancelQty": 5, "pengunjung": 1570}, "23": {"gmv": 19104639, "retVal": 635163, "cancelVal": 930015, "pesanan": 153, "retQty": 6, "cancelQty": 5, "pengunjung": 1530}, "24": {"gmv": 18523945, "retVal": 946916, "cancelVal": 484856, "pesanan": 148, "retQty": 6, "cancelQty": 4, "pengunjung": 1480}, "25": {"gmv": 19615954, "retVal": 785792, "cancelVal": 769874, "pesanan": 157, "retQty": 6, "cancelQty": 5, "pengunjung": 1570}, "26": {"gmv": 18992635, "retVal": 958158, "cancelVal": 528491, "pesanan": 152, "retQty": 6, "cancelQty": 5, "pengunjung": 1520}, "27": {"gmv": 17733474, "retVal": 1038067, "cancelVal": 526034, "pesanan": 142, "retQty": 6, "cancelQty": 4, "pengunjung": 1420}, "28": {"gmv": 19836266, "retVal": 746382, "cancelVal": 899796, "pesanan": 159, "retQty": 6, "cancelQty": 5, "pengunjung": 1590}, "29": {"gmv": 19033787, "retVal": 658611, "cancelVal": 769629, "pesanan": 152, "retQty": 6, "cancelQty": 5, "pengunjung": 1520}, "30": {"gmv": 18414721, "retVal": 662864, "cancelVal": 698637, "pesanan": 147, "retQty": 6, "cancelQty": 4, "pengunjung": 1470}}, "Lazada": {"1": {"gmv": 3242743, "retVal": 174302, "cancelVal": 144855, "pesanan": 34, "retQty": 1, "cancelQty": 1, "pengunjung": 1700}, "2": {"gmv": 3210906, "retVal": 147324, "cancelVal": 68953, "pesanan": 34, "retQty": 1, "cancelQty": 1, "pengunjung": 1700}, "3": {"gmv": 3393483, "retVal": 120900, "cancelVal": 108894, "pesanan": 36, "retQty": 1, "cancelQty": 1, "pengunjung": 1800}, "4": {"gmv": 3371722, "retVal": 156977, "cancelVal": 90206, "pesanan": 35, "retQty": 1, "cancelQty": 1, "pengunjung": 1750}, "5": {"gmv": 3460414, "retVal": 187109, "cancelVal": 156774, "pesanan": 36, "retQty": 1, "cancelQty": 1, "pengunjung": 1800}, "6": {"gmv": 3086969, "retVal": 178287, "cancelVal": 143565, "pesanan": 32, "retQty": 1, "cancelQty": 1, "pengunjung": 1600}, "7": {"gmv": 3406000, "retVal": 103979, "cancelVal": 127596, "pesanan": 36, "retQty": 1, "cancelQty": 1, "pengunjung": 1800}, "8": {"gmv": 3208561, "retVal": 104000, "cancelVal": 150771, "pesanan": 34, "retQty": 1, "cancelQty": 1, "pengunjung": 1700}, "9": {"gmv": 5301018, "retVal": 277815, "cancelVal": 226768, "pesanan": 56, "retQty": 2, "cancelQty": 2, "pengunjung": 2800}, "10": {"gmv": 3176260, "retVal": 113230, "cancelVal": 69209, "pesanan": 33, "retQty": 1, "cancelQty": 1, "pengunjung": 1650}, "11": {"gmv": 3277506, "retVal": 178480, "cancelVal": 125186, "pesanan": 35, "retQty": 1, "cancelQty": 1, "pengunjung": 1750}, "12": {"gmv": 3642859, "retVal": 177074, "cancelVal": 124343, "pesanan": 38, "retQty": 2, "cancelQty": 1, "pengunjung": 1900}, "13": {"gmv": 2909168, "retVal": 157105, "cancelVal": 87682, "pesanan": 31, "retQty": 1, "cancelQty": 1, "pengunjung": 1550}, "14": {"gmv": 3590500, "retVal": 136769, "cancelVal": 109847, "pesanan": 38, "retQty": 2, "cancelQty": 1, "pengunjung": 1900}, "15": {"gmv": 3460754, "retVal": 134761, "cancelVal": 134323, "pesanan": 36, "retQty": 1, "cancelQty": 1, "pengunjung": 1800}, "16": {"gmv": 3316734, "retVal": 188073, "cancelVal": 73401, "pesanan": 35, "retQty": 1, "cancelQty": 1, "pengunjung": 1750}, "17": {"gmv": 3093895, "retVal": 99094, "cancelVal": 109377, "pesanan": 33, "retQty": 1, "cancelQty": 1, "pengunjung": 1650}, "18": {"gmv": 3383304, "retVal": 170316, "cancelVal": 86929, "pesanan": 36, "retQty": 1, "cancelQty": 1, "pengunjung": 1800}, "19": {"gmv": 3321950, "retVal": 126552, "cancelVal": 72295, "pesanan": 35, "retQty": 1, "cancelQty": 1, "pengunjung": 1750}, "20": {"gmv": 3084152, "retVal": 95962, "cancelVal": 107488, "pesanan": 32, "retQty": 1, "cancelQty": 1, "pengunjung": 1600}, "21": {"gmv": 3552185, "retVal": 179111, "cancelVal": 140649, "pesanan": 37, "retQty": 1, "cancelQty": 1, "pengunjung": 1850}, "22": {"gmv": 3230411, "retVal": 112243, "cancelVal": 74698, "pesanan": 34, "retQty": 1, "cancelQty": 1, "pengunjung": 1700}, "23": {"gmv": 3090194, "retVal": 179002, "cancelVal": 111731, "pesanan": 33, "retQty": 1, "cancelQty": 1, "pengunjung": 1650}, "24": {"gmv": 3264668, "retVal": 137940, "cancelVal": 132956, "pesanan": 34, "retQty": 1, "cancelQty": 1, "pengunjung": 1700}, "25": {"gmv": 3245728, "retVal": 168241, "cancelVal": 115994, "pesanan": 34, "retQty": 1, "cancelQty": 1, "pengunjung": 1700}, "26": {"gmv": 3415868, "retVal": 110501, "cancelVal": 153093, "pesanan": 36, "retQty": 1, "cancelQty": 1, "pengunjung": 1800}, "27": {"gmv": 3037237, "retVal": 110590, "cancelVal": 64433, "pesanan": 32, "retQty": 1, "cancelQty": 1, "pengunjung": 1600}, "28": {"gmv": 3619759, "retVal": 146847, "cancelVal": 130226, "pesanan": 38, "retQty": 2, "cancelQty": 1, "pengunjung": 1900}, "29": {"gmv": 3273466, "retVal": 159898, "cancelVal": 82566, "pesanan": 34, "retQty": 1, "cancelQty": 1, "pengunjung": 1700}, "30": {"gmv": 3131586, "retVal": 160616, "cancelVal": 109024, "pesanan": 33, "retQty": 1, "cancelQty": 1, "pengunjung": 1650}}}, "target": 4677000000, "ads": {"Shopee": {"m": {"cost": 167999998, "rev": 1006156661}, "w": {}, "d": {"1": {"cost": 4565917, "rev": 31050519}, "2": {"cost": 6020889, "rev": 35210863}, "3": {"cost": 5927510, "rev": 31632483}, "4": {"cost": 6137913, "rev": 36380641}, "5": {"cost": 5658750, "rev": 31186651}, "6": {"cost": 4682710, "rev": 28905984}, "7": {"cost": 5866134, "rev": 39164682}, "8": {"cost": 6130294, "rev": 35849111}, "9": {"cost": 5349943, "rev": 29022520}, "10": {"cost": 6142357, "rev": 32151603}, "11": {"cost": 6272670, "rev": 37378836}, "12": {"cost": 5047712, "rev": 31534008}, "13": {"cost": 6212814, "rev": 32512398}, "14": {"cost": 6202135, "rev": 39710745}, "15": {"cost": 5900338, "rev": 32870137}, "16": {"cost": 4247518, "rev": 22855413}, "17": {"cost": 4966980, "rev": 34186178}, "18": {"cost": 5519611, "rev": 33902260}, "19": {"cost": 5506081, "rev": 37567921}, "20": {"cost": 5819670, "rev": 35648404}, "21": {"cost": 5589863, "rev": 30240100}, "22": {"cost": 4564784, "rev": 25673649}, "23": {"cost": 6189508, "rev": 36898103}, "24": {"cost": 5356218, "rev": 34053707}, "25": {"cost": 6085798, "rev": 40140135}, "26": {"cost": 4660571, "rev": 30573466}, "27": {"cost": 6331558, "rev": 40369539}, "28": {"cost": 5395568, "rev": 30473639}, "29": {"cost": 5861701, "rev": 35006884}, "30": {"cost": 5786483, "rev": 34006082}}}, "TikTok+Tokopedia": {"m": {"cost": 96000002, "rev": 500793410}, "w": {}, "d": {"1": {"cost": 3155574, "rev": 16893820}, "2": {"cost": 2871535, "rev": 15796701}, "3": {"cost": 3216719, "rev": 18559910}, "4": {"cost": 3116539, "rev": 17427748}, "5": {"cost": 2580089, "rev": 12913006}, "6": {"cost": 3578059, "rev": 17212657}, "7": {"cost": 3278349, "rev": 18489070}, "8": {"cost": 3552526, "rev": 20096478}, "9": {"cost": 3468606, "rev": 20353504}, "10": {"cost": 3461370, "rev": 16372666}, "11": {"cost": 3794248, "rev": 21788092}, "12": {"cost": 3012718, "rev": 17501883}, "13": {"cost": 3033935, "rev": 13775476}, "14": {"cost": 2539774, "rev": 12446020}, "15": {"cost": 3377094, "rev": 18265108}, "16": {"cost": 3272066, "rev": 15208593}, "17": {"cost": 3265669, "rev": 18668551}, "18": {"cost": 3799561, "rev": 18363855}, "19": {"cost": 2784637, "rev": 15272253}, "20": {"cost": 2823094, "rev": 13780807}, "21": {"cost": 3465563, "rev": 16497476}, "22": {"cost": 3564726, "rev": 16907004}, "23": {"cost": 3147026, "rev": 16352586}, "24": {"cost": 2604683, "rev": 14410037}, "25": {"cost": 3004544, "rev": 14301230}, "26": {"cost": 3582457, "rev": 19670540}, "27": {"cost": 3168574, "rev": 15661504}, "28": {"cost": 3119977, "rev": 16950356}, "29": {"cost": 3028662, "rev": 15126265}, "30": {"cost": 3331628, "rev": 15730214}}}}}}};
+const DEMO_PROD={"2026-09": {"Shopee": {"SKU-SH-001": {"n": "Sarung Tangan Model 01", "g": 70364944, "u": 205, "v": 8740, "o": 205, "p": 343000, "s": 3}, "SKU-SH-002": {"n": "Helm Model 02", "g": 66943171, "u": 519, "v": 26413, "o": 519, "p": 129000, "s": 8}, "SKU-SH-003": {"n": "Jersey Model 03", "g": 157389128, "u": 394, "v": 16471, "o": 394, "p": 399000, "s": 0}, "SKU-SH-004": {"n": "Lampu Model 04", "g": 34458227, "u": 124, "v": 4964, "o": 124, "p": 278000, "s": 0}, "SKU-SH-005": {"n": "Lampu Model 05", "g": 146334632, "u": 402, "v": 20812, "o": 402, "p": 364000, "s": 3}, "SKU-SH-006": {"n": "Sarung Tangan Model 06", "g": 121523294, "u": 372, "v": 14655, "o": 372, "p": 327000, "s": 140}, "SKU-SH-007": {"n": "Pompa Model 07", "g": 106907465, "u": 1028, "v": 39667, "o": 1028, "p": 104000, "s": 0}, "SKU-SH-008": {"n": "Tas Sepeda Model 08", "g": 184966274, "u": 1241, "v": 57282, "o": 1241, "p": 149000, "s": 0}, "SKU-SH-009": {"n": "Tas Sepeda Model 09", "g": 62123708, "u": 140, "v": 5650, "o": 140, "p": 444000, "s": 60}, "SKU-SH-010": {"n": "Tas Sepeda Model 10", "g": 138013598, "u": 1468, "v": 58818, "o": 1468, "p": 94000, "s": 60}, "SKU-SH-011": {"n": "Botol Model 11", "g": 103201020, "u": 230, "v": 11285, "o": 230, "p": 448000, "s": 0}, "SKU-SH-012": {"n": "Kacamata Model 12", "g": 111177831, "u": 446, "v": 23999, "o": 446, "p": 249000, "s": 140}, "SKU-SH-013": {"n": "Pompa Model 13", "g": 112988656, "u": 496, "v": 18346, "o": 496, "p": 228000, "s": 25}, "SKU-SH-014": {"n": "Pompa Model 14", "g": 94291327, "u": 1387, "v": 69887, "o": 1387, "p": 68000, "s": 60}, "SKU-SH-015": {"n": "Lampu Model 15", "g": 28164340, "u": 97, "v": 3594, "o": 97, "p": 291000, "s": 140}, "SKU-SH-016": {"n": "Kacamata Model 16", "g": 177681528, "u": 2090, "v": 105497, "o": 2090, "p": 85000, "s": 140}, "SKU-SH-017": {"n": "Botol Model 17", "g": 47675370, "u": 266, "v": 13663, "o": 266, "p": 179000, "s": 8}, "SKU-SH-018": {"n": "Jersey Model 18", "g": 89355998, "u": 408, "v": 19762, "o": 408, "p": 219000, "s": 140}, "SKU-SH-019": {"n": "Pompa Model 19", "g": 96090084, "u": 534, "v": 28316, "o": 534, "p": 180000, "s": 8}, "SKU-SH-020": {"n": "Sarung Tangan Model 20", "g": 128931259, "u": 1791, "v": 74481, "o": 1791, "p": 72000, "s": 0}, "SKU-SH-021": {"n": "Jersey Model 21", "g": 140357474, "u": 477, "v": 24462, "o": 477, "p": 294000, "s": 3}, "SKU-SH-022": {"n": "Lampu Model 22", "g": 119007022, "u": 277, "v": 11643, "o": 277, "p": 430000, "s": 25}, "SKU-SH-023": {"n": "Kacamata Model 23", "g": 95352574, "u": 935, "v": 45252, "o": 935, "p": 102000, "s": 25}, "SKU-SH-024": {"n": "Helm Model 24", "g": 62122737, "u": 381, "v": 16447, "o": 381, "p": 163000, "s": 25}, "SKU-SH-025": {"n": "Sarung Tangan Model 25", "g": 161783552, "u": 527, "v": 25178, "o": 527, "p": 307000, "s": 25}, "SKU-SH-026": {"n": "Botol Model 26", "g": 169089184, "u": 1084, "v": 56825, "o": 1084, "p": 156000, "s": 140}, "SKU-SH-027": {"n": "Helm Model 27", "g": 160390437, "u": 1099, "v": 49843, "o": 1099, "p": 146000, "s": 8}, "SKU-SH-028": {"n": "Jersey Model 28", "g": 149315169, "u": 419, "v": 18549, "o": 419, "p": 356000, "s": 0}}, "TikTok": {"SKU-TI-001": {"n": "Pompa Model 01", "g": 27770949, "u": 67, "v": 1553, "o": 67, "p": 414000, "s": 60}, "SKU-TI-002": {"n": "Kacamata Model 02", "g": 13389300, "u": 73, "v": 1845, "o": 73, "p": 184000, "s": 60}, "SKU-TI-003": {"n": "Tas Sepeda Model 03", "g": 15712753, "u": 36, "v": 1148, "o": 36, "p": 437000, "s": 0}, "SKU-TI-004": {"n": "Pompa Model 04", "g": 13501338, "u": 89, "v": 3030, "o": 89, "p": 152000, "s": 25}, "SKU-TI-005": {"n": "Botol Model 05", "g": 47266501, "u": 125, "v": 3159, "o": 125, "p": 378000, "s": 3}, "SKU-TI-006": {"n": "Pompa Model 06", "g": 7062575, "u": 19, "v": 517, "o": 19, "p": 380000, "s": 8}, "SKU-TI-007": {"n": "Lampu Model 07", "g": 39222262, "u": 89, "v": 2562, "o": 89, "p": 439000, "s": 0}, "SKU-TI-008": {"n": "Helm Model 08", "g": 42466581, "u": 369, "v": 11616, "o": 369, "p": 115000, "s": 3}, "SKU-TI-009": {"n": "Sarung Tangan Model 09", "g": 47280804, "u": 171, "v": 5400, "o": 171, "p": 277000, "s": 0}, "SKU-TI-010": {"n": "Jersey Model 10", "g": 17025214, "u": 205, "v": 4947, "o": 205, "p": 83000, "s": 60}, "SKU-TI-011": {"n": "Kacamata Model 11", "g": 21506586, "u": 63, "v": 1910, "o": 63, "p": 343000, "s": 140}, "SKU-TI-012": {"n": "Pompa Model 12", "g": 42284548, "u": 218, "v": 6894, "o": 218, "p": 194000, "s": 140}, "SKU-TI-013": {"n": "Sarung Tangan Model 13", "g": 14534558, "u": 44, "v": 1146, "o": 44, "p": 328000, "s": 0}, "SKU-TI-014": {"n": "Pompa Model 14", "g": 36161764, "u": 90, "v": 2916, "o": 90, "p": 404000, "s": 8}, "SKU-TI-015": {"n": "Jersey Model 15", "g": 44529585, "u": 158, "v": 5203, "o": 158, "p": 282000, "s": 8}, "SKU-TI-016": {"n": "Jersey Model 16", "g": 14187704, "u": 30, "v": 732, "o": 30, "p": 478000, "s": 8}, "SKU-TI-017": {"n": "Jersey Model 17", "g": 22100039, "u": 58, "v": 1461, "o": 58, "p": 378000, "s": 3}, "SKU-TI-018": {"n": "Sarung Tangan Model 18", "g": 12568534, "u": 27, "v": 703, "o": 27, "p": 464000, "s": 3}, "SKU-TI-019": {"n": "Jersey Model 19", "g": 22066999, "u": 480, "v": 11209, "o": 480, "p": 46000, "s": 8}, "SKU-TI-020": {"n": "Tas Sepeda Model 20", "g": 44684696, "u": 112, "v": 3206, "o": 112, "p": 399000, "s": 0}, "SKU-TI-021": {"n": "Helm Model 21", "g": 34078399, "u": 75, "v": 1863, "o": 75, "p": 456000, "s": 60}, "SKU-TI-022": {"n": "Botol Model 22", "g": 18677987, "u": 47, "v": 1199, "o": 47, "p": 394000, "s": 3}, "SKU-TI-023": {"n": "Jersey Model 23", "g": 38229280, "u": 80, "v": 2397, "o": 80, "p": 478000, "s": 3}, "SKU-TI-024": {"n": "Tas Sepeda Model 24", "g": 35965253, "u": 101, "v": 2421, "o": 101, "p": 355000, "s": 140}, "SKU-TI-025": {"n": "Pompa Model 25", "g": 37594991, "u": 186, "v": 4789, "o": 186, "p": 202000, "s": 3}, "SKU-TI-026": {"n": "Pompa Model 26", "g": 9828868, "u": 24, "v": 654, "o": 24, "p": 417000, "s": 8}, "SKU-TI-027": {"n": "Helm Model 27", "g": 8978152, "u": 21, "v": 539, "o": 21, "p": 426000, "s": 8}, "SKU-TI-028": {"n": "Kacamata Model 28", "g": 36919120, "u": 229, "v": 7384, "o": 229, "p": 161000, "s": 3}, "SKU-TI-029": {"n": "Sadel Model 29", "g": 19369392, "u": 223, "v": 7555, "o": 223, "p": 87000, "s": 25}, "SKU-TI-030": {"n": "Lampu Model 30", "g": 30186565, "u": 108, "v": 2699, "o": 108, "p": 280000, "s": 60}, "SKU-TI-031": {"n": "Helm Model 31", "g": 41235668, "u": 153, "v": 5037, "o": 153, "p": 269000, "s": 25}, "SKU-TI-032": {"n": "Botol Model 32", "g": 39613040, "u": 450, "v": 12788, "o": 450, "p": 88000, "s": 3}}, "Tokopedia": {"SKU-TO-001": {"n": "Tas Sepeda Model 01", "g": 23165803, "u": 62, "v": 716, "o": 62, "p": 373000, "s": 25}, "SKU-TO-002": {"n": "Kunci Model 02", "g": 16779639, "u": 77, "v": 706, "o": 77, "p": 219000, "s": 3}, "SKU-TO-003": {"n": "Botol Model 03", "g": 3545699, "u": 9, "v": 89, "o": 9, "p": 381000, "s": 3}, "SKU-TO-004": {"n": "Sadel Model 04", "g": 20050644, "u": 51, "v": 472, "o": 51, "p": 396000, "s": 60}, "SKU-TO-005": {"n": "Kunci Model 05", "g": 24875156, "u": 72, "v": 730, "o": 72, "p": 346000, "s": 3}, "SKU-TO-006": {"n": "Kacamata Model 06", "g": 14703672, "u": 40, "v": 353, "o": 40, "p": 368000, "s": 3}, "SKU-TO-007": {"n": "Botol Model 07", "g": 19077327, "u": 59, "v": 698, "o": 59, "p": 321000, "s": 3}, "SKU-TO-008": {"n": "Lampu Model 08", "g": 3393456, "u": 36, "v": 326, "o": 36, "p": 93000, "s": 25}, "SKU-TO-009": {"n": "Sadel Model 09", "g": 22693400, "u": 87, "v": 882, "o": 87, "p": 261000, "s": 3}, "SKU-TO-010": {"n": "Kacamata Model 10", "g": 22339963, "u": 74, "v": 618, "o": 74, "p": 302000, "s": 60}, "SKU-TO-011": {"n": "Sarung Tangan Model 11", "g": 24838613, "u": 66, "v": 752, "o": 66, "p": 374000, "s": 60}, "SKU-TO-012": {"n": "Tas Sepeda Model 12", "g": 24254194, "u": 315, "v": 3772, "o": 315, "p": 77000, "s": 3}, "SKU-TO-013": {"n": "Helm Model 13", "g": 5313071, "u": 13, "v": 131, "o": 13, "p": 401000, "s": 60}, "SKU-TO-014": {"n": "Tas Sepeda Model 14", "g": 12229658, "u": 40, "v": 422, "o": 40, "p": 304000, "s": 140}, "SKU-TO-015": {"n": "Pompa Model 15", "g": 24784412, "u": 96, "v": 868, "o": 96, "p": 259000, "s": 140}, "SKU-TO-016": {"n": "Pompa Model 16", "g": 22164638, "u": 162, "v": 1421, "o": 162, "p": 137000, "s": 140}, "SKU-TO-017": {"n": "Pompa Model 17", "g": 20518828, "u": 106, "v": 1025, "o": 106, "p": 194000, "s": 140}, "SKU-TO-018": {"n": "Kacamata Model 18", "g": 13995595, "u": 37, "v": 434, "o": 37, "p": 381000, "s": 140}, "SKU-TO-019": {"n": "Pompa Model 19", "g": 9131088, "u": 24, "v": 239, "o": 24, "p": 385000, "s": 60}, "SKU-TO-020": {"n": "Tas Sepeda Model 20", "g": 15677437, "u": 37, "v": 305, "o": 37, "p": 420000, "s": 8}, "SKU-TO-021": {"n": "Jersey Model 21", "g": 17282252, "u": 100, "v": 1184, "o": 100, "p": 173000, "s": 60}, "SKU-TO-022": {"n": "Botol Model 22", "g": 24532940, "u": 93, "v": 765, "o": 93, "p": 264000, "s": 140}, "SKU-TO-023": {"n": "Tas Sepeda Model 23", "g": 9928094, "u": 78, "v": 893, "o": 78, "p": 127000, "s": 0}, "SKU-TO-024": {"n": "Tas Sepeda Model 24", "g": 23552773, "u": 109, "v": 947, "o": 109, "p": 216000, "s": 60}, "SKU-TO-025": {"n": "Jersey Model 25", "g": 6450798, "u": 49, "v": 509, "o": 49, "p": 133000, "s": 140}, "SKU-TO-026": {"n": "Sadel Model 26", "g": 23361788, "u": 60, "v": 500, "o": 60, "p": 390000, "s": 0}, "SKU-TO-027": {"n": "Kunci Model 27", "g": 17595594, "u": 37, "v": 418, "o": 37, "p": 479000, "s": 60}, "SKU-TO-028": {"n": "Lampu Model 28", "g": 15515518, "u": 44, "v": 382, "o": 44, "p": 352000, "s": 25}, "SKU-TO-029": {"n": "Kacamata Model 29", "g": 20108294, "u": 85, "v": 838, "o": 85, "p": 237000, "s": 0}, "SKU-TO-030": {"n": "Lampu Model 30", "g": 11901631, "u": 92, "v": 805, "o": 92, "p": 129000, "s": 60}, "SKU-TO-031": {"n": "Kunci Model 31", "g": 19577173, "u": 82, "v": 710, "o": 82, "p": 239000, "s": 25}, "SKU-TO-032": {"n": "Sarung Tangan Model 32", "g": 11373427, "u": 52, "v": 556, "o": 52, "p": 220000, "s": 3}, "SKU-TO-033": {"n": "Botol Model 33", "g": 14477924, "u": 39, "v": 441, "o": 39, "p": 374000, "s": 0}, "SKU-TO-034": {"n": "Jersey Model 34", "g": 23209500, "u": 225, "v": 1836, "o": 225, "p": 103000, "s": 25}}, "Lazada": {"SKU-LA-001": {"n": "Pompa Model 01", "g": 3291960, "u": 8, "v": 381, "o": 8, "p": 422000, "s": 8}, "SKU-LA-002": {"n": "Tas Sepeda Model 02", "g": 4446405, "u": 10, "v": 463, "o": 10, "p": 458000, "s": 8}, "SKU-LA-003": {"n": "Kacamata Model 03", "g": 2955592, "u": 7, "v": 376, "o": 7, "p": 432000, "s": 0}, "SKU-LA-004": {"n": "Sarung Tangan Model 04", "g": 1114248, "u": 3, "v": 179, "o": 3, "p": 367000, "s": 0}, "SKU-LA-005": {"n": "Sarung Tangan Model 05", "g": 4126680, "u": 11, "v": 640, "o": 11, "p": 385000, "s": 140}, "SKU-LA-006": {"n": "Jersey Model 06", "g": 2603105, "u": 9, "v": 502, "o": 9, "p": 285000, "s": 25}, "SKU-LA-007": {"n": "Pompa Model 07", "g": 4239680, "u": 20, "v": 891, "o": 20, "p": 213000, "s": 8}, "SKU-LA-008": {"n": "Lampu Model 08", "g": 5288211, "u": 64, "v": 2787, "o": 64, "p": 83000, "s": 140}, "SKU-LA-009": {"n": "Tas Sepeda Model 09", "g": 3175378, "u": 38, "v": 1803, "o": 38, "p": 84000, "s": 25}, "SKU-LA-010": {"n": "Botol Model 10", "g": 1893201, "u": 6, "v": 356, "o": 6, "p": 316000, "s": 60}, "SKU-LA-011": {"n": "Kunci Model 11", "g": 2396158, "u": 10, "v": 421, "o": 10, "p": 249000, "s": 60}, "SKU-LA-012": {"n": "Lampu Model 12", "g": 3055133, "u": 7, "v": 292, "o": 7, "p": 430000, "s": 60}, "SKU-LA-013": {"n": "Kunci Model 13", "g": 2215048, "u": 9, "v": 394, "o": 9, "p": 249000, "s": 3}, "SKU-LA-014": {"n": "Kacamata Model 14", "g": 1195403, "u": 7, "v": 394, "o": 7, "p": 161000, "s": 0}, "SKU-LA-015": {"n": "Tas Sepeda Model 15", "g": 2586280, "u": 20, "v": 821, "o": 20, "p": 131000, "s": 60}, "SKU-LA-016": {"n": "Sadel Model 16", "g": 3793176, "u": 15, "v": 809, "o": 15, "p": 248000, "s": 3}, "SKU-LA-017": {"n": "Sarung Tangan Model 17", "g": 4541837, "u": 14, "v": 820, "o": 14, "p": 335000, "s": 8}, "SKU-LA-018": {"n": "Sarung Tangan Model 18", "g": 4287221, "u": 9, "v": 509, "o": 9, "p": 474000, "s": 8}, "SKU-LA-019": {"n": "Helm Model 19", "g": 4860469, "u": 11, "v": 591, "o": 11, "p": 435000, "s": 3}, "SKU-LA-020": {"n": "Pompa Model 20", "g": 4472933, "u": 15, "v": 727, "o": 15, "p": 293000, "s": 0}, "SKU-LA-021": {"n": "Kunci Model 21", "g": 2647014, "u": 11, "v": 603, "o": 11, "p": 236000, "s": 8}, "SKU-LA-022": {"n": "Helm Model 22", "g": 3737870, "u": 66, "v": 3352, "o": 66, "p": 57000, "s": 3}, "SKU-LA-023": {"n": "Kunci Model 23", "g": 973965, "u": 16, "v": 817, "o": 16, "p": 61000, "s": 60}, "SKU-LA-024": {"n": "Jersey Model 24", "g": 4438926, "u": 18, "v": 1060, "o": 18, "p": 243000, "s": 25}, "SKU-LA-025": {"n": "Sarung Tangan Model 25", "g": 4035968, "u": 10, "v": 516, "o": 10, "p": 408000, "s": 8}, "SKU-LA-026": {"n": "Helm Model 26", "g": 1962786, "u": 4, "v": 181, "o": 4, "p": 462000, "s": 8}, "SKU-LA-027": {"n": "Lampu Model 27", "g": 2932105, "u": 15, "v": 816, "o": 15, "p": 202000, "s": 3}, "SKU-LA-028": {"n": "Lampu Model 28", "g": 1993028, "u": 6, "v": 308, "o": 6, "p": 350000, "s": 8}, "SKU-LA-029": {"n": "Lampu Model 29", "g": 4443980, "u": 15, "v": 717, "o": 15, "p": 306000, "s": 60}, "SKU-LA-030": {"n": "Helm Model 30", "g": 2718670, "u": 17, "v": 1013, "o": 17, "p": 160000, "s": 8}, "SKU-LA-031": {"n": "Sarung Tangan Model 31", "g": 4377567, "u": 16, "v": 894, "o": 16, "p": 266000, "s": 8}}}};
+function freshDb(){ return clone(DEMO_DB); }
+// Data iklan versi lama disimpan per marketplace; TikTok & Tokopedia digabung, Lazada dibuang.
+function adsKeyOf(name){
+  const n=String(name||"").trim();
+  if(AD_KEYS.includes(n)) return n;
+  const ch=AD_CHANNELS.find(c=>c.mps.includes(n));
+  return ch?ch.k:null;
+}
+function addAds(dst,src){
+  if(!src) return;
+  dst.m.cost+=parseNum(src.m&&src.m.cost); dst.m.rev+=parseNum(src.m&&src.m.rev);
+  for(const i of Object.keys(src.w||{})){
+    const w=src.w[i]||{}; dst.w[i]=dst.w[i]||{cost:0,rev:0};
+    dst.w[i].cost+=parseNum(w.cost); dst.w[i].rev+=parseNum(w.rev);
+  }
+  dst.d=dst.d||{};
+  for(const day of Object.keys(src.d||{})){
+    const x=src.d[day]||{}; dst.d[day]=dst.d[day]||{cost:0,rev:0};
+    dst.d[day].cost+=parseNum(x.cost); dst.d[day].rev+=parseNum(x.rev);
+  }
+}
+function normPeriod(p){
+  const o={data:emptyData(),target:0,ads:emptyAds()};
+  let src=(p&&p.data)?p.data:{};
+  // migrasi skema lama (data bertingkat per toko): { "<nama toko>": { Shopee:{...} } }
+  if(src[STORE]&&typeof src[STORE]==="object"&&MPS.some(m=>src[STORE][m])) src=src[STORE];
+  for(const m of MPS) if(src[m]) o.data[m]=clone(src[m]);
+  o.target = (typeof p?.target==="number") ? p.target
+           : (p&&p.targets&&p.targets[STORE]!=null) ? parseNum(p.targets[STORE])
+           : parseNum(p&&p.target);
+  if(p&&p.ads) for(const name of Object.keys(p.ads)){
+    const k=adsKeyOf(name); if(!k) continue;
+    addAds(o.ads[k],p.ads[name]);
+  }
+  return o;
+}
+function migrate(x){
+  if(!x||!x.periods) return null;
+  const out={active:x.active||defaultMonth(),periods:{}};
+  for(const k of Object.keys(x.periods)) out.periods[k]=normPeriod(x.periods[k]);
+  if(!out.periods[out.active]) out.active=Object.keys(out.periods).sort().slice(-1)[0]||defaultMonth();
+  if(!out.periods[out.active]) out.periods[out.active]=normPeriod(null);
+  return out;
+}
+async function loadDb(){
+  if(DBCAP){
+    try{
+      const meta=await DBCAP.doc("meta/main").get();
+      if(!meta.exists) return null;
+      const md=meta.data()||{}; const keys=Array.isArray(md.keys)?md.keys:[];
+      const periods={};
+      await Promise.all(keys.map(async k=>{
+        try{ const s=await DBCAP.doc("periods/"+k).get();
+          if(s.exists) periods[k]=normPeriod(clone(s.data()||{})); }catch(e){}
+      }));
+      if(!Object.keys(periods).length) return null;
+      return {active:md.active||Object.keys(periods).sort().slice(-1)[0],periods};
+    }catch(e){ return localGet(KEY); }
+  }
+  return localGet(KEY);
+}
+async function loadProdMonth(pk){
+  if(PROD[pk]) return PROD[pk];
+  if(DBCAP){
+    try{ const s=await DBCAP.doc("products/"+pk).get();
+      PROD[pk]=s.exists?clone((s.data()||{}).mp||{}):{}; }
+    catch(e){ PROD[pk]={}; }
+  }else{
+    const all=localGet(PKEY)||{}; PROD[pk]=all[pk]||(DEMO_PROD[pk]?clone(DEMO_PROD[pk]):{});
+  }
+  return PROD[pk];
+}
+async function saveMeta(){ if(DBCAP) await DBCAP.doc("meta/main").set({active:DB.active,keys:Object.keys(DB.periods)}); }
+async function savePeriod(k){ if(DBCAP&&DB.periods[k]) await DBCAP.doc("periods/"+k).set(DB.periods[k]); }
+async function saveProd(pk){
+  if(DBCAP){ await DBCAP.doc("products/"+pk).set({mp:PROD[pk]||{}}); }
+  else { const all=localGet(PKEY)||{}; all[pk]=PROD[pk]||{}; localSet(PKEY,all); }
+}
+async function persist(){ if(DBCAP){ await saveMeta(); await savePeriod(DB.active); } else { localSet(KEY,DB); } }
+async function persistAll(){ if(DBCAP){ await saveMeta(); for(const k of Object.keys(DB.periods)) await savePeriod(k); } else { localSet(KEY,DB); } }
+
+async function loadHist(){
+  if(DBCAP){ try{ const s=await DBCAP.doc("meta/history").get(); const d=s.exists?s.data():null;
+    return (d&&Array.isArray(d.entries))?clone(d.entries):[]; }catch(e){ return []; } }
+  return localGet(HKEY)||[];
+}
+function saveHist(){ if(DBCAP){ DBCAP.doc("meta/history").set({entries:HIST}).catch(()=>{}); } else { localSet(HKEY,HIST); } }
+function logAct(action){ HIST.unshift({ts:Date.now(),who:(ME||"-"),action}); HIST=HIST.slice(0,200); saveHist(); }
+function setMe(v){ ME=v; try{ localStorage.setItem(MEKEY,v);}catch(e){} }
+
+function cur(){ return DB.periods[DB.active]; }
+function ensurePeriod(p){ if(!DB.periods[p]) DB.periods[p]={data:emptyData(),target:lastTarget(),ads:emptyAds()}; return DB.periods[p]; }
+function lastTarget(){ const ks=Object.keys(DB.periods).sort(); return ks.length?(DB.periods[ks[ks.length-1]].target||0):DEFAULT_TARGET; }
+
+async function commit(msg){
+  render(); busy("Menyimpan…");
+  try{ await persist(); if(msg) toast(msg); }
+  catch(e){ localSet(KEY,DB); toast("Gagal simpan ke database ("+((e&&e.code)||(e&&e.message)||"error")+"). Tersimpan sementara di peramban ini - klik Refresh lalu coba lagi."); }
+  finally{ idle(); }
+}
+async function commitAll(msg){
+  render(); busy("Menyimpan…");
+  try{ await persistAll(); if(msg) toast(msg); }
+  catch(e){ localSet(KEY,DB); toast("Gagal simpan ke database. Tersimpan sementara di peramban ini - klik Refresh lalu coba lagi."); }
+  finally{ idle(); }
+}
+async function refreshAll(){
+  busy("Memuat data terbaru…");
+  try{
+    const db=await loadDb(); const mg=db&&migrate(db);
+    if(mg){ const keep=DB.active; DB=mg; if(DB.periods[keep]) DB.active=keep; }
+    PROD={}; await loadProdMonth(DB.active);
+    HIST=await loadHist();
+    render(); toast("Data terbaru dimuat");
+  }finally{ idle(); }
+}
+
+/* ============================ Iklan ============================ */
+function adsOf(k){ const a=cur().ads||{}; return a[k]||{m:{cost:0,rev:0},w:{},d:{}}; }
+function adsWeekSum(k,key){ const a=adsOf(k); return Object.values(a.w||{}).reduce((s,w)=>s+parseNum(w&&w[key]),0); }
+// Input harian (per tanggal). Kalau ada, ringkasan minggu & bulan dihitung dari sini.
+function adsDaily(k){ return adsOf(k).d||{}; }
+function adsHasDaily(k){ const d=adsDaily(k); return Object.keys(d).some(day=>{const x=d[day]||{};return parseNum(x.cost)||parseNum(x.rev);}); }
+function adsDaySum(k,st,en){ const d=adsDaily(k); let cost=0,rev=0; for(let day=st;day<=en;day++){const x=d[day]||{};cost+=parseNum(x.cost);rev+=parseNum(x.rev);} return {cost,rev}; }
+function adsMonth(k){
+  if(adsHasDaily(k)){ const s=adsDaySum(k,1,dim(DB.active)); return {cost:s.cost,rev:s.rev,src:"harian"}; }
+  const a=adsOf(k), mc=parseNum(a.m&&a.m.cost), mr=parseNum(a.m&&a.m.rev);
+  const wc=adsWeekSum(k,"cost"), wr=adsWeekSum(k,"rev");
+  const useM=(mc||mr)>0;
+  return {cost:useM?mc:wc, rev:useM?mr:wr, src:useM?"bulanan":(wc||wr?"mingguan":"kosong")};
+}
+function adsWeek(k,i){
+  if(adsHasDaily(k)){ const r=weekRanges(DB.active)[i]; if(r){ const s=adsDaySum(k,r.st,r.en); return {cost:s.cost,rev:s.rev}; } }
+  const w=(adsOf(k).w||{})[i]||{}; return {cost:parseNum(w.cost),rev:parseNum(w.rev)};
+}
+// Channel iklan yang relevan dengan marketplace yang sedang dipilih.
+function adsChannels(mps){ return AD_CHANNELS.filter(c=>c.mps.some(m=>(mps||MPS).includes(m))); }
+function adsMonthTotal(mps){ return adsChannels(mps).reduce((a,c)=>{const x=adsMonth(c.k);return{cost:a.cost+x.cost,rev:a.rev+x.rev};},{cost:0,rev:0}); }
+function adsWeekTotal(mps,i){ return adsChannels(mps).reduce((a,c)=>{const x=adsWeek(c.k,i);return{cost:a.cost+x.cost,rev:a.rev+x.rev};},{cost:0,rev:0}); }
+function setAds(k,scope,key,val){
+  const p=cur(); p.ads=p.ads||emptyAds(); p.ads[k]=p.ads[k]||{m:{cost:0,rev:0},w:{},d:{}};
+  if(scope==="m"){ p.ads[k].m=Object.assign({cost:0,rev:0},p.ads[k].m,{[key]:val}); }
+  else { p.ads[k].w=p.ads[k].w||{}; p.ads[k].w[scope]=Object.assign({cost:0,rev:0},p.ads[k].w[scope],{[key]:val}); }
+}
+function setAdsDay(k,day,key,val){
+  const p=cur(); p.ads=p.ads||emptyAds(); p.ads[k]=p.ads[k]||{m:{cost:0,rev:0},w:{},d:{}};
+  p.ads[k].d=p.ads[k].d||{}; p.ads[k].d[day]=Object.assign({cost:0,rev:0},p.ads[k].d[day],{[key]:val});
+}
+
+/* ============================ Agregasi ============================ */
+function mpsSel(){ return MP_SEL==="Semua"?MPS:(MP_GROUPS.find(g=>g.label===MP_SEL)||{mps:MPS}).mps; }
+function aggregate(){
+  const D=dim(DB.active), CD=cur().data, mps=mpsSel();
+  const get=(m,d)=>(CD[m]&&CD[m][d])||{};
+  const daily=[];
+  for(let d=1;d<=D;d++){
+    let gmv=0,red=0,pes=0,redq=0,peng=0;const perMp={};
+    for(const m of MPS){const x=get(m,d);
+      const net=(x.gmv||0)-(x.retVal||0)-(x.cancelVal||0);
+      perMp[m]=net;
+      if(mps.includes(m)){gmv+=x.gmv||0;red+=(x.retVal||0)+(x.cancelVal||0);
+        pes+=x.pesanan||0;redq+=(x.retQty||0)+(x.cancelQty||0);peng+=x.pengunjung||0;}}
+    daily.push(Object.assign({day:d,net:gmv-red,pes:pes-redq,peng},perMp));
+  }
+  const sum=k=>daily.reduce((a,r)=>a+r[k],0);
+  const target=cur().target||0;
+  const netGmv=sum("net"),netPes=sum("pes"),peng=sum("peng");
+  const ads=adsMonthTotal(mps);
+  let cum=0;const chart=daily.map(r=>{cum+=r.net;return Object.assign({},r,{cum,tgtCum:(target/D)*r.day});});
+  const byMp=MPS.map(m=>{let real=0;for(let d=1;d<=D;d++){const x=get(m,d);real+=(x.gmv||0)-(x.retVal||0)-(x.cancelVal||0);}
+    return{mp:m,real};});
+  const realOf=mm=>byMp.filter(x=>mm.includes(x.mp)).reduce((s,x)=>s+x.real,0);
+  const byCh=adsChannels(mps).map(c=>{const a=adsMonth(c.k), real=realOf(c.mps);
+    return{k:c.k,label:c.label,color:c.color,real,cost:a.cost,rev:a.rev,src:a.src,
+      roas:a.cost?a.rev/a.cost:0,gmvAdsPct:real?a.rev/real:0};});
+  const weeks=weekRanges(DB.active).map((r,i)=>{
+    const sl=daily.filter(x=>x.day>=r.st&&x.day<=r.en);
+    const perMp={};MPS.forEach(m=>perMp[m]=sl.reduce((a,x)=>a+x[m],0));
+    const ws=k=>sl.reduce((a,x)=>a+x[k],0);
+    const wa=adsWeekTotal(mps,i);
+    return Object.assign({i,label:r.st+"–"+r.en,st:r.st,en:r.en,net:ws("net"),pes:ws("pes"),peng:ws("peng"),
+      cost:wa.cost,rev:wa.rev,tgt:(target/D)*(r.en-r.st+1)},perMp);});
+  return{D,target,netGmv,netPes,peng,cost:ads.cost,rev:ads.rev,
+    aov:netPes?netGmv/netPes:0,konv:peng?netPes/peng:0,roas:ads.cost?ads.rev/ads.cost:0,
+    gmvAdsPct:netGmv?ads.rev/netGmv:0,pencapaian:target?netGmv/target:0,chart,byMp,byCh,weeks};
+}
+// Minggu yang sedang ditampilkan di tab Produk (PWEEK null → otomatis pilih minggu terakhir yang ada datanya).
+function prodWeekIdx(){
+  const wks=weekRanges(DB.active);
+  let wi=PWEEK;
+  if(wi==null||wi<0||wi>=wks.length){
+    const src=PROD[DB.active]||{}; let last=-1;
+    for(const m of MPS){ const byW=src[m]||{}; for(const k of Object.keys(byW)){ const i=+k;
+      if(!isNaN(i)&&byW[k]&&Object.keys(byW[k]).length) last=Math.max(last,i); } }
+    if(last>=0){ wi=last; }
+    else { const now=new Date(), yy=+DB.active.split("-")[0], mm=+DB.active.split("-")[1];
+      wi=(now.getFullYear()===yy&&now.getMonth()+1===mm)?wks.findIndex(r=>now.getDate()>=r.st&&now.getDate()<=r.en):0;
+      if(wi<0) wi=0; }
+  }
+  return wi;
+}
+// wi = indeks minggu; kalau tidak diberikan, jumlahkan SEMUA minggu (dipakai ringkasan bulanan).
+function prodRows(wi){
+  const src=PROD[DB.active]||{}, mps=mpsSel(), agg={};
+  for(const m of mps){
+    const byW=src[m]||{};
+    const weeks=(wi==null)?Object.keys(byW):[String(wi)];
+    for(const wk of weeks){
+      const items=byW[wk]||{};
+      for(const sku of Object.keys(items)){
+        const x=items[sku]||{}, id=m+"|"+sku, prev=agg[id];
+        if(prev){ prev.g+=x.g||0; prev.u+=x.u||0; prev.v+=x.v||0; prev.o+=x.o||0;
+          prev.s=Math.max(prev.s,x.s||0); if(x.p) prev.p=x.p; if(x.n) prev.n=x.n; }
+        else agg[id]={sku,mp:m,n:x.n||sku,g:x.g||0,u:x.u||0,v:x.v||0,o:x.o||0,s:x.s||0,p:x.p||0};
+      }
+    }
+  }
+  return Object.values(agg).map(r=>Object.assign(r,{p:r.p||(r.u?r.g/r.u:0),k:r.v?((r.o||r.u)/r.v):0}));
+}
+function prodAgg(rows){
+  const g=rows.reduce((a,r)=>a+r.g,0), u=rows.reduce((a,r)=>a+r.u,0);
+  const v=rows.reduce((a,r)=>a+r.v,0), o=rows.reduce((a,r)=>a+(r.o||r.u),0);
+  const sorted=rows.slice().sort((a,b)=>b.g-a.g);
+  let c=0,n80=0; for(const r of sorted){c+=r.g;n80++;if(g&&c/g>=0.8)break;}
+  const kritis=rows.filter(r=>r.s>0&&r.s<=STOK_KRITIS).length;
+  const habis=rows.filter(r=>r.s===0&&r.u>0).length;
+  return {gmv:g,unit:u,peng:v,ord:o,sku:rows.length,aov:u?g/u:0,konv:v?o/v:0,n80,kritis,habis,sorted};
+}
+
+/* ============================ Chart ============================ */
+function chartSVG(data){
+  const W=720,H=280,pL=46,pR=48,pT=12,pB=26,pw=W-pL-pR,ph=H-pT-pB;
+  const netMax=Math.max(1,...data.map(d=>d.net))*1.15;
+  const rMax=Math.max(1,...data.map(d=>Math.max(d.cum,d.tgtCum)))*1.05;
+  const n=data.length, bw=(pw/n)*0.6;
+  const x=d=>pL+((d-0.5)/n)*pw;
+  let g="";
+  for(let i=0;i<=4;i++){const y=pT+ph-(i/4)*ph;
+    g+=`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="#eef1f5"/>`;
+    g+=`<text x="${pL-6}" y="${y+3}" text-anchor="end" font-size="10" fill="#94a3b8">${(netMax*i/4/1e6).toFixed(0)} jt</text>`;
+    g+=`<text x="${W-pR+6}" y="${y+3}" font-size="10" fill="#94a3b8">${(rMax*i/4/1e6).toFixed(0)} jt</text>`;}
+  let bars="";
+  for(const d of data){const h=(d.net/netMax)*ph;
+    bars+=`<rect x="${x(d.day)-bw/2}" y="${pT+ph-h}" width="${bw}" height="${Math.max(0,h)}" rx="2" fill="#BFD4FE"><title>Tgl ${d.day} · ${rp(d.net)}</title></rect>`;}
+  const line=(key,color,dash)=>{const pts=data.map(d=>`${x(d.day).toFixed(1)},${(pT+ph-(d[key]/rMax)*ph).toFixed(1)}`).join(" ");
+    return `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" ${dash?'stroke-dasharray="5 4"':""}/>`;}
+  let xl="";const ticks=[1,5,10,15,20,25,n].filter((v,i,a)=>a.indexOf(v)===i&&v<=n);
+  for(const t of ticks) xl+=`<text x="${x(t)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#94a3b8">${t}</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMidYMid meet" role="img" aria-label="GMV bersih harian dan akumulasi terhadap target">
+    ${g}${bars}${line("tgtCum","#f43f5e",true)}${line("cum","#2563EB",false)}${xl}</svg>`;
+}
+
+/* ============================ Render ============================ */
+function kpi(lab,val,vsub,tone){return `<div class="card kpi"><div class="lab">${lab}</div>
+  <div class="val ${tone||""}">${val}</div>${vsub?`<div class="vsub">${vsub}</div>`:""}</div>`;}
+function deltaTxt(c,p){
+  if(p===null||p===undefined||p===0) return `<span class="muted">- vs minggu lalu</span>`;
+  const ch=(c-p)/p, cls=ch>=0?"up":"down", s=ch>=0?"▲":"▼";
+  return `<span class="${cls}">${s} ${(Math.abs(ch)*100).toFixed(1)}% vs minggu lalu</span>`;}
+function deltaShort(c,p){
+  if(p===null||p===undefined||p===0) return `<span class="muted">-</span>`;
+  const ch=(c-p)/p, cls=ch>=0?"up":"down", s=ch>=0?"▲":"▼";
+  return `<span class="${cls}">${s} ${(Math.abs(ch)*100).toFixed(1)}%</span>`;}
+
+function render(){
+  const a=aggregate();
+  const periodOpts=Object.keys(DB.periods).sort().map(p=>`<option value="${p}" ${p===DB.active?"selected":""}>${mName(p)}</option>`).join("");
+  const mpChips=["Semua",...MP_GROUPS.map(g=>g.label)].map(s=>`<button class="chip ${MP_SEL===s?"on":""}" data-mp="${esc(s)}">${esc(s)}</button>`).join("");
+  const viewTabs=`<div class="chips" style="margin-top:0">
+      ${[["bulan","Bulanan"],["minggu","Mingguan"]].map(([k,l])=>
+        `<button class="chip ${VIEW===k?"on":""}" data-view="${k}">${l}</button>`).join("")}</div>`;
+
+  let body="";
+  if(VIEW==="minggu") body=viewMinggu(a);
+  else body=viewBulan(a);
+
+  document.getElementById("app").innerHTML=`
+    <div class="between">
+      <div><h1>GMV &amp; Iklan · demo oleh Diar Azari</h1>
+        <p class="sub">Shopee, TikTok, Tokopedia, Lazada - penjualan harian dari file export, iklan diisi mingguan &amp; bulanan.</p>
+        <div class="row" style="margin-top:9px;align-items:center;gap:8px">
+          <select id="periodSel" style="width:auto;font-weight:600" aria-label="Pilih bulan">${periodOpts}</select>
+          <span class="muted" style="font-size:12px">atau</span>
+          <input type="month" id="periodAdd" value="${DB.active}" style="width:auto" aria-label="Bulan baru">
+          <button class="btn-ghost" id="periodGo">Buka bulan</button>
+          <button class="btn-ghost" id="refreshBtn">Refresh</button>
+          <button class="btn-ghost" id="histBtn">Riwayat</button>
+          <button class="btn-ghost" id="backupBtn">Cadangan data</button>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn-primary" data-open="upload">Unggah penjualan</button>
+        <button class="btn-ghost" data-open="ads">Isi iklan</button>
+        <button class="btn-ghost" data-open="target">Target</button>
+      </div>
+    </div>
+    <div class="row" style="justify-content:space-between;align-items:center;margin-top:12px;gap:10px">
+      <div class="chips" style="margin-top:0">${mpChips}</div>
+      ${viewTabs}
+    </div>
+    ${body}
+    <p class="foot">Database dipakai bersama semua yang membuka dashboard ini. Klik Refresh untuk menarik perubahan terbaru sebelum mengisi.</p>`;
+
+  document.querySelectorAll("[data-mp]").forEach(b=>b.onclick=()=>{MP_SEL=b.dataset.mp;render();});
+  document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{VIEW=b.dataset.view;render();});
+  document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openPanel(b.dataset.open));
+  const ws=document.getElementById("weekSel"); if(ws) ws.onchange=()=>{WEEK_IDX=+ws.value;render();};
+  const pws=document.getElementById("pweekSel"); if(pws) pws.onchange=()=>{PWEEK=+pws.value;render();};
+  const ps=document.getElementById("periodSel");
+  if(ps) ps.onchange=async()=>{DB.active=ps.value;WEEK_IDX=null;PWEEK=null;busy("Memuat bulan…");try{await loadProdMonth(DB.active);}finally{idle();}commit();};
+  const pg=document.getElementById("periodGo");
+  if(pg) pg.onclick=async()=>{const v=document.getElementById("periodAdd").value;
+    if(!/^\d{4}-\d{2}$/.test(v)){toast("Pilih bulan dulu");return;}
+    const isNew=!DB.periods[v];ensurePeriod(v);DB.active=v;WEEK_IDX=null;PWEEK=null;
+    busy("Memuat bulan…");try{await loadProdMonth(v);}finally{idle();}
+    commit(isNew?("Bulan "+mName(v)+" dibuat"):("Pindah ke "+mName(v)));};
+  const bk=document.getElementById("backupBtn"); if(bk) bk.onclick=openBackup;
+  const rf=document.getElementById("refreshBtn"); if(rf) rf.onclick=refreshAll;
+  const hb=document.getElementById("histBtn"); if(hb) hb.onclick=openHistory;
+  bindProdControls();
+}
+
+function viewBulan(a){
+  const totReal=a.byMp.reduce((x,m)=>x+m.real,0)||1;
+  const maxReal=Math.max(1,...a.byMp.map(m=>m.real));
+  const mpBars=a.byMp.map(m=>`<div class="mp-row"><div class="mp-head">
+      <span class="name"><span class="swatch" style="background:${MP_COLOR[m.mp]}"></span>${m.mp}</span>
+      <span class="muted">${rpShort(m.real)} · ${pct(m.real/totReal)}</span></div>
+      <div class="bar"><span style="width:${Math.min(100,(m.real/maxReal)*100)}%;background:${MP_COLOR[m.mp]}"></span></div></div>`).join("");
+  const rows=a.weeks.map(w=>{const p=w.tgt?w.net/w.tgt:0;
+    return `<tr><td class="l muted">${w.label}</td>${MP_GROUPS.map(g=>`<td>${rpShort(g.mps.reduce((s,m)=>s+(w[m]||0),0))}</td>`).join("")}
+      <td class="tot">${rpShort(w.net)}</td><td class="${p>=1?"up":"down"}" style="font-weight:600">${w.tgt?pct(p):"-"}</td></tr>`;}).join("");
+  const adsRows=a.byCh.map(c=>`<tr>
+      <td class="l"><span class="swatch" style="background:${c.color};margin-right:6px"></span>${c.label}
+        <span class="mini">${c.src==="kosong"?"belum diisi":c.src}</span></td>
+      <td>${rpShort(c.cost)}</td><td>${rpShort(c.rev)}</td>
+      <td class="${c.cost?(c.roas>=1?"up":"down"):""}" style="font-weight:600">${c.cost?c.roas.toFixed(2)+"×":"–"}</td>
+      <td class="${acosTone(c.cost,c.rev)}" style="font-weight:600">${acosTxt(c.cost,c.rev)}</td>
+      <td>${(c.cost||c.rev)?pct(c.gmvAdsPct):"–"}</td></tr>`).join("")
+    ||`<tr><td class="l muted" colspan="6">Marketplace yang dipilih tidak memakai iklan.</td></tr>`;
+  const adsTotalRow=a.byCh.length?`<tr style="border-top:2px solid #E3E9F0"><td class="l tot">Total</td><td class="tot">${rpShort(a.cost)}</td><td class="tot">${rpShort(a.rev)}</td>
+        <td class="tot">${a.cost?a.roas.toFixed(2)+"×":"–"}</td><td class="tot">${acosTxt(a.cost,a.rev)}</td>
+        <td class="tot">${(a.cost||a.rev)?pct(a.gmvAdsPct):"–"}</td></tr>`:"";
+  return `
+    <div class="grid k4" style="margin-top:16px">
+      ${kpi("Realisasi GMV",rpShort(a.netGmv),"Target "+rpShort(a.target))}
+      ${kpi("Pencapaian target",a.target?pct(a.pencapaian):"–",a.target?((a.netGmv-a.target>=0?"+":"")+rpShort(a.netGmv-a.target)):"target belum diisi",a.pencapaian>=1?"up":"down")}
+      ${kpi("Pesanan bersih",num(a.netPes),"AOV "+rpShort(a.aov))}
+      ${kpi("Konversi",pct(a.konv),num(a.peng)+" pengunjung")}
+    </div>
+    <div class="card" style="margin-top:14px">
+      <p class="sec-title">GMV bersih harian &amp; akumulasi terhadap target <span class="muted" style="font-weight:400">· ${esc(MP_SEL)}</span></p>
+      ${chartSVG(a.chart)}
+      <div class="row" style="gap:16px;margin-top:6px;font-size:12px;color:#6E8098">
+        <span><span class="swatch" style="background:#BFD4FE"></span> GMV bersih harian</span>
+        <span><span class="swatch" style="background:#2563EB"></span> Akumulasi realisasi</span>
+        <span><span class="swatch" style="background:#f43f5e"></span> Akumulasi target</span>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <p class="sec-title">Iklan per channel <span class="muted" style="font-weight:400">· TikTok dan Tokopedia memakai satu akun iklan · ${NO_AD_MPS.join(" & ")} tanpa iklan</span></p>
+      <div style="overflow-x:auto"><table><thead><tr><th class="l">Channel</th><th>Biaya iklan</th><th>Omzet iklan</th><th>ROAS</th><th>ACOS</th><th>Porsi GMV</th></tr></thead>
+      <tbody>${adsRows}${adsTotalRow}</tbody></table></div>
+      <p class="mini" style="margin:8px 0 0">Porsi GMV = omzet iklan dibagi GMV bersih channel itu. Angka dihitung dari input harian bila ada; kalau tidak, dari input bulanan/mingguan.</p>
+    </div>
+    <div class="two" style="margin-top:14px">
+      <div class="card"><p class="sec-title">Kontribusi per marketplace</p>${mpBars}</div>
+      <div class="card"><p class="sec-title">Rekap mingguan (GMV bersih)</p>
+        <table><thead><tr><th class="l">Tgl</th>${MP_GROUPS.map(g=>`<th>${g.short}</th>`).join("")}<th>Total</th><th>%</th></tr></thead>
+        <tbody>${rows}</tbody></table></div>
+    </div>`;
+}
+
+function viewMinggu(a){
+  const wk=a.weeks;
+  let wi=WEEK_IDX; if(wi==null||wi>=wk.length) wi=wk.reduce((acc,w,i)=>(w.net||w.pes)?i:acc,0);
+  const w=wk[wi]||{net:0,pes:0,peng:0,cost:0,rev:0}, prev=wi>0?wk[wi-1]:null;
+  const aov=w.pes?w.net/w.pes:0, konv=w.peng?w.pes/w.peng:0;
+  const paov=prev&&prev.pes?prev.net/prev.pes:null, pkonv=prev&&prev.peng?prev.pes/prev.peng:null;
+  const roas=w.cost?w.rev/w.cost:0;
+  const wkOpts=wk.map((x,i)=>`<option value="${i}" ${i===wi?"selected":""}>Minggu ${i+1} (tgl ${x.label})</option>`).join("");
+  const grpVal=(row,g)=>g.mps.reduce((s,m)=>s+(row[m]||0),0);
+  const totW=MP_GROUPS.reduce((s,g)=>s+grpVal(w,g),0)||1;
+
+  const mpRows=MP_GROUPS.map(g=>{
+    const cv=grpVal(w,g), pv=prev?grpVal(prev,g):null;
+    const ch=AD_CHANNELS.find(c=>c.mps.join()===g.mps.join());
+    const ca=ch?adsWeek(ch.k,wi):null;
+    const r=ca&&ca.cost?ca.rev/ca.cost:0;
+    const adsCells=ch
+      ? `<td>${rpShort(ca.cost)}</td>
+         <td class="${ca.cost?(r>=1?"up":"down"):""}" style="font-weight:600">${ca.cost?r.toFixed(2)+"×":"–"}</td>
+         <td class="${acosTone(ca.cost,ca.rev)}" style="font-weight:600">${acosTxt(ca.cost,ca.rev)}</td>`
+      : `<td class="muted" colspan="3" style="text-align:center">tanpa iklan</td>`;
+    return `<tr>
+      <td class="l"><span class="swatch" style="background:${g.color};margin-right:6px"></span>${g.label}</td>
+      <td>${rpShort(cv)}</td><td>${pct(cv/totW)}</td><td style="font-weight:600">${deltaShort(cv,pv)}</td>
+      ${adsCells}</tr>`;}).join("");
+  const allRows=wk.map((x,i)=>{const p=x.tgt?x.net/x.tgt:0;
+    return `<tr class="${i===wi?"selrow":""}"><td class="l muted">${x.label}</td>${MP_GROUPS.map(g=>`<td>${rpShort(grpVal(x,g))}</td>`).join("")}
+      <td class="tot">${rpShort(x.net)}</td><td class="${p>=1?"up":"down"}" style="font-weight:600">${x.tgt?pct(p):"-"}</td></tr>`;}).join("");
+  const adsNote=w.cost||w.rev?"":`<p class="mini" style="margin:8px 0 0">Iklan minggu ini belum diisi - buka Isi iklan, tab Harian.</p>`;
+  return `
+    <div class="row" style="margin-top:14px;align-items:center;gap:8px">
+      <span class="muted" style="font-size:13px">Minggu:</span>
+      <select id="weekSel" style="width:auto;font-weight:600">${wkOpts}</select>
+      <span class="muted" style="font-size:12px">dibandingkan minggu sebelumnya</span>
+    </div>
+    <div class="grid k4" style="margin-top:12px">
+      ${kpi("Realisasi GMV",rpShort(w.net),deltaTxt(w.net,prev?prev.net:null))}
+      ${kpi("Pesanan bersih",num(w.pes),deltaTxt(w.pes,prev?prev.pes:null))}
+      ${kpi("AOV",rpShort(aov),deltaTxt(aov,paov))}
+      ${kpi("Konversi",pct(konv),deltaTxt(konv,pkonv))}
+    </div>
+    <div class="grid k4" style="margin-top:12px">
+      ${kpi("Pengunjung",num(w.peng),deltaTxt(w.peng,prev?prev.peng:null))}
+      ${kpi("Biaya iklan",rpShort(w.cost),deltaTxt(w.cost,prev?prev.cost:null))}
+      ${kpi("Omzet iklan",rpShort(w.rev),deltaTxt(w.rev,prev?prev.rev:null))}
+      ${kpi("ROAS",w.cost?roas.toFixed(2)+"×":"–","ACOS "+acosTxt(w.cost,w.rev),acosTone(w.cost,w.rev))}
+    </div>
+    <div class="card" style="margin-top:14px">
+      <p class="sec-title">Per marketplace - minggu ${wi+1} (tgl ${w.label})</p>
+      <div style="overflow-x:auto"><table>
+        <thead><tr><th class="l">Marketplace</th><th>GMV bersih</th><th>Porsi</th><th>Δ minggu lalu</th><th>Biaya iklan</th><th>ROAS</th><th>ACOS</th></tr></thead>
+        <tbody>${mpRows}</tbody></table></div>${adsNote}
+    </div>
+    <div class="card" style="margin-top:14px">
+      <p class="sec-title">Semua minggu di ${mName(DB.active)}</p>
+      <table><thead><tr><th class="l">Tgl</th>${MP_GROUPS.map(g=>`<th>${g.short}</th>`).join("")}<th>Total</th><th>Capai target</th></tr></thead>
+      <tbody>${allRows}</tbody></table>
+    </div>`;
+}
+
+function viewProduk(a){
+  const wks=weekRanges(DB.active), wi=prodWeekIdx();
+  const wkOpts=wks.map((r,i)=>`<option value="${i}" ${i===wi?"selected":""}>Minggu ${i+1} (tgl ${r.st}–${r.en})</option>`).join("");
+  const weekBar=`<div class="row" style="margin-top:14px;align-items:center;gap:8px">
+      <span class="muted" style="font-size:13px">Minggu:</span>
+      <select id="pweekSel" style="width:auto;font-weight:600" aria-label="Pilih minggu produk">${wkOpts}</select>
+      <span class="muted" style="font-size:12px">performa produk diunggah per minggu &amp; per marketplace</span></div>`;
+  const rows=prodRows(wi), pa=prodAgg(rows);
+  if(!rows.length) return weekBar+`<div class="card" style="margin-top:12px;text-align:center;padding:42px 18px">
+      <p class="sec-title" style="margin-bottom:6px">Belum ada data produk untuk Minggu ${wi+1} · ${mName(DB.active)}</p>
+      <p class="muted" style="margin:0 0 16px;font-size:13px">Unggah file export performa produk (Shopee, TikTok, atau Tokopedia) untuk minggu ini. Kolomnya dicocokkan otomatis dan bisa diperbaiki sebelum disimpan.</p>
+      <button class="btn-primary" data-open="produk">Unggah produk</button></div>`;
+  const hasStok=rows.some(r=>r.s>0);
+  const q=PQ.toLowerCase().trim();
+  let list=rows.filter(r=>!q||r.n.toLowerCase().includes(q)||r.sku.toLowerCase().includes(q));
+  list.sort((x,y)=>{const A=x[PSORT],B=y[PSORT];
+    if(typeof A==="string") return PDIR*String(A).localeCompare(String(B),"id");
+    return PDIR*((A||0)-(B||0));});
+  const shown=PLIMIT==="all"?list:list.slice(0,PLIMIT);
+  const totG=pa.gmv||1;
+  const th=(k,lab,cls)=>`<th class="sortable ${cls||""}" data-sort="${k}">${lab}${PSORT===k?(PDIR<0?" ↓":" ↑"):""}</th>`;
+  const body=shown.map(r=>{
+    const tag=!hasStok?"":(r.s===0&&r.u>0?`<span class="tag tag-out">habis</span>`:(r.s>0&&r.s<=STOK_KRITIS?`<span class="tag tag-low">menipis</span>`:""));
+    return `<tr>
+      <td class="l"><span class="pname" title="${esc(r.n)}">${esc(r.n)}</span><span class="psku">${esc(r.sku)}</span></td>
+      <td class="l"><span class="swatch" style="background:${MP_COLOR[r.mp]};margin-right:5px"></span><span class="mini">${r.mp}</span></td>
+      <td>${rpShort(r.g)}</td><td>${pct(r.g/totG)}</td><td>${num(r.u)}</td>
+      <td>${rpShort(r.p)}</td><td>${r.v?num(r.v):"–"}</td>
+      <td class="${r.v?(r.k>=pa.konv?"up":"down"):""}">${r.v?pct(r.k):"–"}</td>
+      ${hasStok?`<td>${num(r.s)} ${tag}</td>`:""}</tr>`;}).join("");
+  const maxG=Math.max(1,...pa.sorted.slice(0,10).map(r=>r.g));
+  const bars=pa.sorted.slice(0,10).map(r=>`<div class="mp-row"><div class="mp-head">
+      <span class="name" style="font-weight:550"><span class="swatch" style="background:${MP_COLOR[r.mp]}"></span>${esc(r.n.length>34?r.n.slice(0,34)+"…":r.n)}</span>
+      <span class="muted">${rpShort(r.g)} · ${pct(r.g/totG)}</span></div>
+      <div class="bar"><span style="width:${(r.g/maxG)*100}%;background:${MP_COLOR[r.mp]}"></span></div></div>`).join("");
+  const perMp=MPS.map(m=>{const sub=rows.filter(r=>r.mp===m);
+    if(!sub.length) return "";
+    const g=sub.reduce((s,r)=>s+r.g,0), u=sub.reduce((s,r)=>s+r.u,0);
+    return `<tr><td class="l"><span class="swatch" style="background:${MP_COLOR[m]};margin-right:6px"></span>${m}</td>
+      <td>${num(sub.length)}</td><td>${rpShort(g)}</td><td>${pct(g/totG)}</td><td>${num(u)}</td><td>${rpShort(u?g/u:0)}</td></tr>`;}).join("");
+  return weekBar+`
+    <div class="grid k4" style="margin-top:12px">
+      ${kpi("GMV produk tercatat",rpShort(pa.gmv),num(pa.sku)+" SKU aktif")}
+      ${kpi("Unit terjual",num(pa.unit),"Harga rata-rata "+rpShort(pa.aov))}
+      ${kpi("Konversi produk",pct(pa.konv),num(pa.peng)+" pengunjung produk")}
+      ${hasStok
+        ? kpi("Stok perlu dicek",num(pa.kritis+pa.habis),pa.habis+" habis · "+pa.kritis+" ≤ "+STOK_KRITIS+" pcs",(pa.kritis+pa.habis)?"warn":"")
+        : kpi("SKU tanpa penjualan",num(rows.filter(r=>!r.u).length),"dari "+num(pa.sku)+" SKU · file tanpa data stok")}
+    </div>
+    <div class="two" style="margin-top:14px">
+      <div class="card"><p class="sec-title">Sepuluh produk penyumbang GMV terbesar</p>${bars}
+        <p class="mini" style="margin:10px 0 0">${pa.n80} dari ${pa.sku} SKU menyumbang 80% GMV.</p></div>
+      <div class="card"><p class="sec-title">Ringkasan per marketplace</p>
+        <table><thead><tr><th class="l">Marketplace</th><th>SKU</th><th>GMV</th><th>Porsi</th><th>Unit</th><th>Harga rata-rata</th></tr></thead>
+        <tbody>${perMp}</tbody></table></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px">
+        <p class="sec-title" style="margin:0">Semua produk · Minggu ${wi+1} · ${mName(DB.active)}</p>
+        <div class="row" style="gap:8px">
+          <input type="text" id="pq" value="${esc(PQ)}" placeholder="Cari nama atau SKU" style="width:200px">
+          <select id="plimit" style="width:auto" aria-label="Jumlah baris">
+            ${[10,25,50].map(n=>`<option value="${n}" ${PLIMIT===n?"selected":""}>${n} baris</option>`).join("")}
+            <option value="all" ${PLIMIT==="all"?"selected":""}>Semua</option></select>
+        </div>
+      </div>
+      <div style="overflow-x:auto"><table>
+        <thead><tr>${th("n","Produk","l")}<th class="l">MP</th>${th("g","GMV")}<th>Porsi</th>${th("u","Unit")}${th("p","Harga")}${th("v","Pengunjung")}${th("k","Konversi")}${hasStok?th("s","Stok"):""}</tr></thead>
+        <tbody>${body}</tbody></table></div>
+      <p class="mini" style="margin:10px 0 0">Menampilkan ${shown.length} dari ${list.length} produk. Konversi = pesanan dibagi pengunjung. Untuk TikTok, kolom Pengunjung berisi klik produk karena TikTok tidak melaporkan pengunjung.</p>
+    </div>`;
+}
+function bindProdControls(){
+  document.querySelectorAll("th.sortable").forEach(t=>t.onclick=()=>{
+    const k=t.dataset.sort;
+    if(PSORT===k) PDIR=-PDIR; else {PSORT=k;PDIR=k==="n"?1:-1;}
+    render();});
+  const q=document.getElementById("pq");
+  if(q) q.oninput=()=>{PQ=q.value;const pos=q.selectionStart;render();
+    const nq=document.getElementById("pq");if(nq){nq.focus();try{nq.setSelectionRange(pos,pos);}catch(e){}}};
+  const l=document.getElementById("plimit");
+  if(l) l.onchange=()=>{PLIMIT=l.value==="all"?"all":+l.value;render();};
+}
+
+/* ============================ Panel ============================ */
+function openPanel(tab){
+  const titles={upload:"Unggah laporan penjualan",ads:"Iklan · "+mName(DB.active),target:"Target · "+mName(DB.active)};
+  const d=document.getElementById("drawer");
+  d.innerHTML=`<div class="dhead"><h3>${titles[tab]}</h3><button class="x" id="closeP" aria-label="Tutup">✕</button></div><div id="pbody"></div>`;
+  document.getElementById("overlay").classList.add("open");
+  document.getElementById("closeP").onclick=closePanel;
+  if(tab==="upload") renderUpload();
+  if(tab==="ads") renderAds();
+  if(tab==="target") renderTarget();
+}
+function closePanel(){document.getElementById("overlay").classList.remove("open");}
+document.getElementById("overlay").addEventListener("click",e=>{if(e.target.id==="overlay")closePanel();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel();});
+
+/* ---- Unggah laporan harian ---- */
+let PENDING=null;
+function renderUpload(){
+  document.getElementById("pbody").innerHTML=`
+    <p class="muted" style="margin-top:0">Pilih file <code>.xlsx</code> hasil export laporan penjualan. Marketplace dikenali otomatis dari isi file; file Shopee dibaca dari sheet <b>Pesanan Siap Dikirim</b>. File yang memuat beberapa bulan dipisah sendiri per bulan.</p>
+    <label class="drop"><span class="big">Pilih file export</span><span class="sm">Shopee · TikTok · Tokopedia · Lazada</span>
+      <input id="fileIn" type="file" accept=".xlsx,.xls" style="display:none"></label>
+    <div id="upErr"></div><div id="upConfirm"></div>
+    <div class="reset">
+      <button class="btn-ghost" id="clearBtn" style="color:#D0011B;border-color:#fecdd3">Kosongkan penjualan ${mName(DB.active)}</button>
+    </div>`;
+  document.getElementById("fileIn").onchange=e=>{if(e.target.files[0])handleFile(e.target.files[0]);};
+  document.getElementById("clearBtn").onclick=()=>{cur().data=emptyData();
+    logAct("kosongkan penjualan "+mName(DB.active));commit("Penjualan "+mName(DB.active)+" dikosongkan");};
+}
+async function handleFile(file){
+  document.getElementById("upErr").innerHTML="";
+  busy("Membaca file…");
+  try{
+    const buf=await file.arrayBuffer();
+    const wb=XLSX.read(buf,{type:"array"});
+    const mp=detectMarketplace(wb);
+    const byMonth=parseWorkbook(wb,mp);
+    const months=Object.keys(byMonth).sort();
+    PENDING={wb,mp,byMonth,months,count:months.reduce((a,k)=>a+Object.keys(byMonth[k]).length,0),fname:file.name};
+    drawConfirm();
+  }catch(err){document.getElementById("upErr").innerHTML=`<div class="err">${esc(err.message||"File tidak terbaca.")}</div>`;}
+  finally{ idle(); }
+}
+function drawConfirm(){
+  const c=document.getElementById("upConfirm");
+  const per=PENDING.months.length?PENDING.months.map(k=>`${mName(k)} (${Object.keys(PENDING.byMonth[k]).length} hari)`).join(", "):"tidak terbaca";
+  c.innerHTML=`<div class="confirm"><div class="fname">${esc(PENDING.fname)}</div>
+    <label class="fld">Marketplace<select id="pMp">${MPS.map(m=>`<option ${m===PENDING.mp?"selected":""}>${m}</option>`).join("")}</select></label>
+    <p class="muted" style="font-size:12px;margin:10px 0 2px">Periode terbaca: <b>${per}</b></p>
+    <button class="btn-primary" id="saveUp" style="width:100%;margin-top:10px" ${PENDING.count?"":"disabled"}>Simpan penjualan</button></div>`;
+  document.getElementById("pMp").onchange=e=>{PENDING.mp=e.target.value;
+    try{PENDING.byMonth=parseWorkbook(PENDING.wb,PENDING.mp);}catch(err){PENDING.byMonth={};}
+    PENDING.months=Object.keys(PENDING.byMonth).sort();
+    PENDING.count=PENDING.months.reduce((a,k)=>a+Object.keys(PENDING.byMonth[k]).length,0);
+    drawConfirm();};
+  document.getElementById("saveUp").onclick=saveUpload;
+}
+async function saveUpload(){
+  if(!PENDING) return;
+  const btn=document.getElementById("saveUp");
+  if(btn){btn.classList.add("btn-busy");btn.disabled=true;}
+  try{
+    const months=PENDING.months;
+    if(!months.length){toast("Tidak ada data yang bisa disimpan");return;}
+    for(const pk of months){
+      const pd=ensurePeriod(pk);
+      const prev=pd.data[PENDING.mp]||{}, merged=Object.assign({},prev);
+      for(const[d,v] of Object.entries(PENDING.byMonth[pk])) merged[d]=Object.assign({},prev[d]||{},v);
+      pd.data[PENDING.mp]=merged;
+    }
+    const mp=PENDING.mp, ms=months.map(mName).join(", "), cnt=PENDING.count;
+    DB.active=months[months.length-1];
+    logAct(`unggah penjualan ${mp} · ${ms} (${cnt} hari)`);
+    PENDING=null;
+    await loadProdMonth(DB.active);
+    render(); busy("Menyimpan…");
+    try{ await persistAll(); toast("Tersimpan: "+mp+" · "+ms); closePanel(); }
+    catch(e){ localSet(KEY,DB); toast("Gagal simpan ke database. Tersimpan sementara di peramban ini - klik Refresh lalu coba lagi."); }
+    finally{ idle(); }
+  }finally{ if(btn){btn.classList.remove("btn-busy");btn.disabled=false;} }
+}
+
+/* ---- Unggah performa produk ---- */
+let PPEND=null;
+function renderProdUpload(){
+  const src=PROD[DB.active]||{}, wks=weekRanges(DB.active);
+  const info=[];
+  wks.forEach((r,i)=>MPS.forEach(m=>{const n=Object.keys((src[m]&&src[m][i])||{}).length;if(n)info.push("M"+(i+1)+" "+m+" ("+n+")");}));
+  document.getElementById("pbody").innerHTML=`
+    <p class="muted" style="margin-top:0">Data produk disimpan <b>per minggu &amp; per marketplace</b> (Senin–Minggu). Sedang mengisi <b>${mName(DB.active)}</b>. Pilih file export performa produk - nanti tentukan minggunya di langkah berikut. Kolom dicocokkan otomatis dan bisa diperbaiki sebelum disimpan.</p>
+    ${info.length?`<p class="mini">Sudah ada: ${info.join(" · ")}</p>`:""}
+    <label class="drop"><span class="big">Pilih file produk</span><span class="sm">.xlsx / .xls / .csv</span>
+      <input id="pfileIn" type="file" accept=".xlsx,.xls,.csv" style="display:none"></label>
+    <div id="pErr"></div><div id="pMap"></div>
+    <div class="reset">
+      <button class="btn-ghost" id="pClear" style="color:#D0011B;border-color:#fecdd3">Hapus produk ${mName(DB.active)}</button>
+    </div>`;
+  document.getElementById("pfileIn").onchange=e=>{if(e.target.files[0])handleProdFile(e.target.files[0]);};
+  document.getElementById("pClear").onclick=async()=>{
+    PROD[DB.active]={};logAct("hapus data produk "+mName(DB.active));
+    busy("Menyimpan…");try{await saveProd(DB.active);toast("Data produk "+mName(DB.active)+" dihapus");}
+    catch(e){toast("Gagal menyimpan perubahan");}finally{idle();}
+    render();renderProdUpload();};
+}
+async function handleProdFile(file){
+  document.getElementById("pErr").innerHTML="";
+  busy("Membaca file…");
+  try{
+    const buf=await file.arrayBuffer();
+    const wb=XLSX.read(buf,{type:"array"});
+    const hit=detectPreset(wb);
+    if(hit){
+      PPEND={wb,sheet:hit.sheet,rows:hit.rows,hi:hit.hi,mp:hit.preset.mp,wi:prodWeekIdx(),
+        preset:hit.preset,level:hit.preset.levels[0].k,map:null,fname:file.name};
+      drawProdMap(); return;
+    }
+    const sheet=wb.SheetNames[0];
+    const rows=sheetMatrix(wb,sheet);
+    const hi=guessHeaderRow(rows);
+    let mp="Shopee";
+    const blob=(file.name+" "+rows.slice(0,Math.min(6,rows.length)).flat().join(" ")).toLowerCase();
+    if(blob.includes("tiktok")) mp="TikTok"; else if(blob.includes("tokopedia")) mp="Tokopedia";
+    else if(blob.includes("lazada")) mp="Lazada"; else if(blob.includes("shopee")) mp="Shopee";
+    PPEND={wb,sheet,rows,hi,mp,wi:prodWeekIdx(),preset:null,level:null,map:guessMapping(rows[hi]||[]),fname:file.name};
+    drawProdMap();
+  }catch(err){document.getElementById("pErr").innerHTML=`<div class="err">${esc(err.message||"File tidak terbaca.")}</div>`;}
+  finally{ idle(); }
+}
+function prodParse(){
+  if(PPEND.preset){
+    const res=PPEND.preset.resolve(lowRow(PPEND.rows[PPEND.hi]),PPEND.rows,PPEND.hi,PPEND.level);
+    return {res,items:buildProducts(PPEND.rows,PPEND.hi,res.map,res)};
+  }
+  return {res:null,items:buildProducts(PPEND.rows,PPEND.hi,PPEND.map)};
+}
+function drawProdMap(){
+  const {wb,rows,hi}=PPEND;
+  const {res,items}=prodParse();
+  const n=Object.keys(items).length;
+  const sample=Object.entries(items).slice(0,3).map(([k,v])=>`<tr><td class="l">${esc(v.n.slice(0,26))}</td><td>${rpShort(v.g)}</td><td>${num(v.u)}</td><td>${num(v.v)}</td></tr>`).join("");
+  const preview=n?`<div class="ok" style="margin-top:10px">${n} produk terbaca</div>
+      <div class="scroll" style="max-height:150px"><table><thead><tr><th class="l">Produk</th><th>GMV</th><th>Unit</th><th>Peng.</th></tr></thead><tbody>${sample}</tbody></table></div>`
+    :`<div class="err" style="margin-top:10px">Belum ada produk terbaca. ${PPEND.preset?"Coba level yang lain atau atur kolom manual.":"Periksa baris header dan kolom Kode/Nama/GMV."}</div>`;
+  const wkOpts=weekRanges(DB.active).map((r,i)=>`<option value="${i}" ${i===PPEND.wi?"selected":""}>Minggu ${i+1} (tgl ${r.st}–${r.en})</option>`).join("");
+  const saveBtn=`<label class="fld" style="margin-top:10px">Minggu (Senin–Minggu)<select id="pwk">${wkOpts}</select></label>
+    <button class="btn-primary" id="pSave" style="width:100%;margin-top:10px" ${n?"":"disabled"}>Simpan ${n} produk ke Minggu ${PPEND.wi+1} · ${esc(PPEND.mp)} · ${mName(DB.active)}</button>
+    <p class="mini" style="margin:8px 0 0">SKU yang sudah ada di minggu &amp; marketplace ini ditimpa dengan angka terbaru.</p>`;
+
+  if(PPEND.preset){
+    const p=PPEND.preset;
+    document.getElementById("pMap").innerHTML=`<div class="confirm"><div class="fname">${esc(PPEND.fname)}</div>
+      <div class="ok" style="margin-bottom:10px">Format dikenali: <b>${esc(p.title)}</b> · sheet ${esc(PPEND.sheet)}</div>
+      <label class="fld">Rincian data<select id="lvlSel">
+        ${p.levels.map(l=>`<option value="${l.k}" ${l.k===PPEND.level?"selected":""}>${esc(l.label)}</option>`).join("")}
+      </select></label>
+      <p class="mini" style="margin:10px 0 4px">Kolom yang dipakai: ${Object.entries(res.cols).map(([k,i])=>`${k} → <b>${esc(Array.isArray(i)?(i.length+" kolom digabung"):String(rows[hi][i]||"?"))}</b>`).join(" · ")}</p>
+      <p class="mini" style="margin:0">${esc(res.note||"")}</p>
+      ${preview}${saveBtn}
+      <button class="btn-ghost" id="manualBtn" style="width:100%;margin-top:8px;font-size:12px">Atur kolom manual</button></div>`;
+    document.getElementById("lvlSel").onchange=e=>{PPEND.level=e.target.value;drawProdMap();};
+    document.getElementById("manualBtn").onclick=()=>{
+      PPEND.preset=null;PPEND.level=null;PPEND.map=guessMapping(rows[hi]||[]);drawProdMap();};
+    const pw=document.getElementById("pwk"); if(pw) pw.onchange=e=>{PPEND.wi=+e.target.value;drawProdMap();};
+    const b=document.getElementById("pSave"); if(b) b.onclick=saveProdUpload;
+    return;
+  }
+
+  const hdr=(rows[hi]||[]).map((h,i)=>({i,lab:String(h||"").trim()||("Kolom "+(i+1))}));
+  const opt=sel=>`<option value="-1" ${sel==null||sel<0?"selected":""}>- tidak ada -</option>`+
+    hdr.map(h=>`<option value="${h.i}" ${sel===h.i?"selected":""}>${esc(h.lab)}</option>`).join("");
+  document.getElementById("pMap").innerHTML=`<div class="confirm"><div class="fname">${esc(PPEND.fname)}</div>
+    <div class="g2">
+      <label class="fld">Marketplace<select id="mpSel">${MPS.map(m=>`<option ${m===PPEND.mp?"selected":""}>${m}</option>`).join("")}</select></label>
+      <label class="fld">Sheet<select id="shSel">${wb.SheetNames.map(s=>`<option ${s===PPEND.sheet?"selected":""}>${esc(s)}</option>`).join("")}</select></label>
+    </div>
+    <label class="fld" style="margin-top:8px">Baris header<select id="hiSel">
+      ${rows.slice(0,Math.min(rows.length,20)).map((r,i)=>`<option value="${i}" ${i===hi?"selected":""}>Baris ${i+1}: ${esc(String(r.filter(Boolean).slice(0,4).join(" | ")).slice(0,46))}</option>`).join("")}
+    </select></label>
+    <p class="mini" style="margin:12px 0 6px">Cocokkan kolom:</p>
+    ${PROD_FIELDS.map(f=>`<label class="fld" style="margin-bottom:6px">${f.lab}${f.req?"":" <span class='mini'>(opsional)</span>"}
+      <select data-f="${f.k}">${opt(PPEND.map[f.k])}</select></label>`).join("")}
+    ${preview}${saveBtn}</div>`;
+  document.getElementById("mpSel").onchange=e=>{PPEND.mp=e.target.value;drawProdMap();};
+  document.getElementById("shSel").onchange=e=>{
+    PPEND.sheet=e.target.value;PPEND.rows=sheetMatrix(PPEND.wb,PPEND.sheet);
+    PPEND.hi=guessHeaderRow(PPEND.rows);PPEND.map=guessMapping(PPEND.rows[PPEND.hi]||[]);drawProdMap();};
+  document.getElementById("hiSel").onchange=e=>{
+    PPEND.hi=+e.target.value;PPEND.map=guessMapping(PPEND.rows[PPEND.hi]||[]);drawProdMap();};
+  document.querySelectorAll("#pMap select[data-f]").forEach(s=>s.onchange=()=>{
+    PPEND.map=Object.assign({},PPEND.map,{[s.dataset.f]:+s.value});drawProdMap();});
+  const pw=document.getElementById("pwk"); if(pw) pw.onchange=e=>{PPEND.wi=+e.target.value;drawProdMap();};
+  const btn=document.getElementById("pSave");
+  if(btn) btn.onclick=saveProdUpload;
+}
+async function saveProdUpload(){
+  if(!PPEND) return;
+  const btn=document.getElementById("pSave");
+  if(btn){btn.classList.add("btn-busy");btn.disabled=true;}
+  busy("Menyimpan…");
+  try{
+    const parsed=prodParse().items;
+    const pk=DB.active, mp=PPEND.mp, wi=PPEND.wi, lvl=PPEND.level;
+    PROD[pk]=PROD[pk]||{}; PROD[pk][mp]=PROD[pk][mp]||{};
+    PROD[pk][mp][wi]=Object.assign({},PROD[pk][mp][wi]||{},parsed);
+    const n=Object.keys(parsed).length;
+    logAct(`unggah produk ${mp}${lvl?" ("+lvl+")":""} · Minggu ${wi+1} · ${mName(pk)} (${n} SKU)`);
+    PPEND=null;
+    await saveProd(pk);
+    VIEW="produk"; PWEEK=wi; render(); toast(n+" produk tersimpan (Minggu "+(wi+1)+")"); closePanel();
+  }catch(e){
+    toast("Gagal menyimpan produk ("+((e&&e.code)||(e&&e.message)||"error")+"). Coba Refresh lalu ulangi.");
+    if(btn){btn.classList.remove("btn-busy");btn.disabled=false;}
+  }finally{ idle(); }
+}
+
+/* ---- Iklan: harian (utama), mingguan & bulanan ---- */
+let ADS_TAB="harian";
+function renderAds(){
+  const body=document.getElementById("pbody");
+  body.innerHTML=`<div class="tabline">
+      <button class="chip ${ADS_TAB==="harian"?"on":""}" data-atab="harian">Harian</button>
+      <button class="chip ${ADS_TAB==="minggu"?"on":""}" data-atab="minggu">Mingguan</button>
+      <button class="chip ${ADS_TAB==="bulan"?"on":""}" data-atab="bulan">Bulanan</button>
+      <button class="chip ${ADS_TAB==="file"?"on":""}" data-atab="file">Unggah file</button></div>
+    <p class="muted" style="font-size:12px;margin-top:0">Bulan <b>${mName(DB.active)}</b>. Iklan ada di dua channel: Shopee, dan TikTok + Tokopedia (satu akun iklan). ${NO_AD_MPS.join(" & ")} tidak beriklan. Isi <b>harian</b> per tanggal - ringkasan mingguan &amp; bulanan otomatis dihitung dari input harian. (Tab Mingguan/Bulanan hanya dipakai kalau harian dikosongkan.)</p>
+    <div id="adsBody"></div>`;
+  document.querySelectorAll("[data-atab]").forEach(b=>b.onclick=()=>{ADS_TAB=b.dataset.atab;renderAds();});
+  if(ADS_TAB==="file") drawAdsUpload(); else drawAds();
+}
+function drawAds(){
+  const wr=weekRanges(DB.active);
+  let html="";
+  if(ADS_TAB==="harian"){
+    const D=dim(DB.active);
+    html=AD_CHANNELS.map(c=>{
+      const d=adsDaily(c.k), tot=adsDaySum(c.k,1,D);
+      let rows="";
+      for(let day=1;day<=D;day++){const x=d[day]||{};
+        rows+=`<tr><td class="l muted">${day}</td>
+          <td><input class="num" type="text" inputmode="numeric" data-ch="${c.k}" data-sc="d" data-day="${day}" data-k="cost" value="${x.cost||""}" placeholder="0"></td>
+          <td><input class="num" type="text" inputmode="numeric" data-ch="${c.k}" data-sc="d" data-day="${day}" data-k="rev" value="${x.rev||""}" placeholder="0"></td></tr>`;}
+      return `<div class="card" style="margin-bottom:10px;padding:12px">
+        <div class="tname" style="font-weight:600;margin-bottom:8px"><span class="swatch" style="background:${c.color};margin-right:6px"></span>${c.label}
+          <span class="mini">total ${rpShort(tot.cost)} biaya · ${rpShort(tot.rev)} omzet</span></div>
+        <div class="scroll" style="max-height:46vh"><table><thead><tr><th class="l">Tgl</th><th>Biaya iklan</th><th>Omzet iklan</th></tr></thead><tbody>${rows}</tbody></table></div>
+      </div>`;}).join("");
+  }else if(ADS_TAB==="bulan"){
+    html=AD_CHANNELS.map(c=>{
+      const a=adsOf(c.k).m||{}, daily=adsHasDaily(c.k), am=adsMonth(c.k);
+      const head=`<div class="tname" style="font-weight:600;margin-bottom:8px"><span class="swatch" style="background:${c.color};margin-right:6px"></span>${c.label}</div>`;
+      if(daily){
+        return `<div class="card" style="margin-bottom:10px;padding:12px">${head}
+          <div class="adsgrid"><span class="h">Total bulan</span><span class="h">Biaya iklan</span><span class="h">Omzet iklan</span>
+            <span class="mini">${mName(DB.active)}</span>
+            <input class="num" type="text" value="${rp(am.cost)}" disabled aria-label="Biaya iklan bulanan (otomatis)">
+            <input class="num" type="text" value="${rp(am.rev)}" disabled aria-label="Omzet iklan bulanan (otomatis)"></div>
+          <p class="mini" style="margin:6px 0 0">Dihitung otomatis dari input harian. Kosongkan input harian kalau mau mengisi manual.</p>
+        </div>`;
+      }
+      return `<div class="card" style="margin-bottom:10px;padding:12px">${head}
+        <div class="adsgrid"><span class="h">Total bulan</span><span class="h">Biaya iklan</span><span class="h">Omzet iklan</span>
+          <span class="mini">${mName(DB.active)}</span>
+          <input class="num" type="text" inputmode="numeric" data-ch="${c.k}" data-sc="m" data-k="cost" value="${a.cost||""}" placeholder="0">
+          <input class="num" type="text" inputmode="numeric" data-ch="${c.k}" data-sc="m" data-k="rev" value="${a.rev||""}" placeholder="0"></div>
+        <p class="mini" style="margin:6px 0 0">Dari input mingguan: ${rpShort(adsWeekSum(c.k,"cost"))} biaya · ${rpShort(adsWeekSum(c.k,"rev"))} omzet</p>
+      </div>`;}).join("");
+  }else{
+    html=AD_CHANNELS.map(c=>{
+      const daily=adsHasDaily(c.k);
+      return `<div class="card" style="margin-bottom:10px;padding:12px">
+      <div class="tname" style="font-weight:600;margin-bottom:8px"><span class="swatch" style="background:${c.color};margin-right:6px"></span>${c.label}</div>
+      ${daily?`<p class="mini" style="margin:0 0 8px">Dihitung otomatis dari input harian. Kosongkan input harian kalau mau mengisi mingguan manual.</p>`:""}
+      <div class="adsgrid"><span class="h">Minggu</span><span class="h">Biaya iklan</span><span class="h">Omzet iklan</span></div>
+      ${wr.map((r,i)=>{const w=adsWeek(c.k,i);
+        return `<div class="adsgrid"><span class="mini">M${i+1} · tgl ${r.st}–${r.en}</span>
+          <input class="num" type="text" inputmode="numeric" ${daily?`disabled value="${rp(w.cost)}"`:`data-ch="${c.k}" data-sc="${i}" data-k="cost" value="${w.cost||""}"`} placeholder="0">
+          <input class="num" type="text" inputmode="numeric" ${daily?`disabled value="${rp(w.rev)}"`:`data-ch="${c.k}" data-sc="${i}" data-k="rev" value="${w.rev||""}"`} placeholder="0"></div>`;}).join("")}
+    </div>`;}).join("");
+  }
+  document.getElementById("adsBody").innerHTML=html;
+  document.querySelectorAll("#adsBody input").forEach(inp=>inp.onchange=()=>{
+    const v=parseRp(inp.value); inp.value=v?String(v):"";
+    if(inp.dataset.sc==="d"){
+      const day=+inp.dataset.day;
+      setAdsDay(inp.dataset.ch,day,inp.dataset.k,v);
+      logAct(`isi iklan ${inp.dataset.ch} · harian tgl ${day} · ${mName(DB.active)}`);
+    }else{
+      const sc=inp.dataset.sc==="m"?"m":+inp.dataset.sc;
+      setAds(inp.dataset.ch,sc,inp.dataset.k,v);
+      logAct(`isi iklan ${inp.dataset.ch} · ${sc==="m"?"bulanan":"minggu "+(sc+1)} · ${mName(DB.active)}`);
+    }
+    commit();
+    drawAds();
+  });
+}
+
+/* ---- Iklan dari file ---- */
+let APEND=null;
+function drawAdsUpload(){
+  document.getElementById("adsBody").innerHTML=`
+    <p class="mini" style="margin:0 0 10px">Pilih file laporan iklan. Kalau ada kolom tanggal, angkanya langsung dipecah ke minggu yang benar; kalau tidak ada, seluruh isi file dijadikan total bulanan.</p>
+    <label class="drop"><span class="big">Pilih file iklan</span><span class="sm">.xlsx / .xls / .csv</span>
+      <input id="afileIn" type="file" accept=".xlsx,.xls,.csv" style="display:none"></label>
+    <div id="aErr"></div><div id="aMap"></div>`;
+  document.getElementById("afileIn").onchange=e=>{if(e.target.files[0])handleAdsFile(e.target.files[0]);};
+}
+async function handleAdsFile(file){
+  document.getElementById("aErr").innerHTML="";
+  busy("Membaca file…");
+  try{
+    const buf=await file.arrayBuffer();
+    const wb=XLSX.read(buf,{type:"array",cellDates:true});
+    const hit=detectAdsPreset(wb);
+    if(hit){
+      APEND={wb,sheet:hit.sheet,rows:hit.rows,hi:hit.hi,ch:hit.preset.ch,
+        preset:hit.preset,level:hit.preset.levels[0].k,pk:hit.pk||DB.active,map:null,mode:null,fname:file.name};
+      drawAdsMap(); return;
+    }
+    const sheet=wb.SheetNames[0];
+    const rows=sheetMatrix(wb,sheet);
+    const hi=guessHeaderRow(rows,ADS_FIELDS);
+    const blob=(file.name+" "+rows.slice(0,6).flat().join(" ")).toLowerCase();
+    const ch=(blob.includes("tiktok")||blob.includes("tokopedia"))?"TikTok+Tokopedia":"Shopee";
+    APEND={wb,sheet,rows,hi,ch,preset:null,level:null,pk:null,map:guessMapping(rows[hi]||[],ADS_FIELDS),fname:file.name};
+    drawAdsMap();
+  }catch(err){document.getElementById("aErr").innerHTML=`<div class="err">${esc(err.message||"File tidak terbaca.")}</div>`;}
+  finally{ idle(); }
+}
+// Baris iklan dijumlahkan per bulan dan per minggu sesuai tanggalnya.
+function parseAdsFile(rows,hi,map){
+  const byMonth={}, byDay={}; let total={cost:0,rev:0}, dated=0, skipped=0;
+  for(let r=hi+1;r<rows.length;r++){
+    const row=rows[r]||[];
+    // Baris ringkasan di kaki tabel tidak ikut dijumlah.
+    if(row.slice(0,2).some(c=>/^(total|jumlah|grand total|keseluruhan|total keseluruhan)$/i.test(String(c||"").trim()))) continue;
+    const cost=map.cost>=0?parseNum(row[map.cost]):0;
+    const rev=map.rev>=0?parseNum(row[map.rev]):0;
+    if(!cost&&!rev) continue;
+    const dt=map.date>=0?toDate(row[map.date]):null;
+    // Kolom tanggal ada tapi barisnya kosong / "-" → itu baris total, bukan data harian.
+    if(map.date>=0&&!dt){ skipped++; continue; }
+    total.cost+=cost; total.rev+=rev;
+    if(!dt) continue;
+    dated++;
+    const pk=pkey(dt), i=weekIndex(pk,dt.d);
+    byMonth[pk]=byMonth[pk]||{};
+    byMonth[pk][i]=byMonth[pk][i]||{cost:0,rev:0};
+    byMonth[pk][i].cost+=cost; byMonth[pk][i].rev+=rev;
+    // Simpan juga per TANGGAL, supaya file bertanggal mengisi data harian (mingguan & bulanan otomatis diturunkan darinya).
+    byDay[pk]=byDay[pk]||{};
+    byDay[pk][dt.d]=byDay[pk][dt.d]||{cost:0,rev:0};
+    byDay[pk][dt.d].cost+=cost; byDay[pk][dt.d].rev+=rev;
+  }
+  return {byMonth,byDay,total,dated,skipped};
+}
+function adsParse(){
+  if(APEND.preset){
+    const res=APEND.preset.resolve(lowRow(APEND.rows[APEND.hi]),APEND.rows,APEND.hi,APEND.level);
+    return {res,parsed:parseAdsFile(APEND.rows,APEND.hi,res.map)};
+  }
+  return {res:null,parsed:parseAdsFile(APEND.rows,APEND.hi,APEND.map)};
+}
+function drawAdsMap(){
+  const {rows,hi,wb}=APEND;
+
+  if(APEND.preset){
+    const p=APEND.preset, {res,parsed}=adsParse();
+    APEND.parsed=parsed; APEND.mode=res.mode;
+    const pk=APEND.pk||DB.active;
+    const ada=parsed.total.cost||parsed.total.rev;
+    const roas=parsed.total.cost?parsed.total.rev/parsed.total.cost:0;
+    const perMinggu=res.mode==="minggu";
+    const months=Object.keys(parsed.byMonth).sort();
+    const rincian=perMinggu
+      ? months.map(mk=>{
+          const wr=weekRanges(mk), w=parsed.byMonth[mk];
+          const baris=wr.map((r,i)=>{const v=w[i]||{cost:0,rev:0};
+            return `<tr><td class="l muted">M${i+1} · ${r.st}–${r.en}</td><td>${rpShort(v.cost)}</td><td>${rpShort(v.rev)}</td>
+              <td>${v.cost?(v.rev/v.cost).toFixed(2)+"×":"–"}</td></tr>`;}).join("");
+          return `<p class="mini" style="margin:10px 0 4px"><b>${mName(mk)}</b> · ${parsed.dated} hari terbaca</p>
+            <table><thead><tr><th class="l">Minggu</th><th>Biaya</th><th>Omzet</th><th>ROAS</th></tr></thead><tbody>${baris}</tbody></table>`;
+        }).join("")
+      : `<table style="margin-top:10px"><tbody>
+          <tr><td class="l muted">Biaya iklan</td><td class="tot">${rp(parsed.total.cost)}</td></tr>
+          <tr><td class="l muted">Omzet iklan</td><td class="tot">${rp(parsed.total.rev)}</td></tr>
+          <tr><td class="l muted">ROAS</td><td class="tot">${roas.toFixed(2)}×</td></tr>
+          <tr><td class="l muted">ACOS</td><td class="tot">${acosTxt(parsed.total.cost,parsed.total.rev)}</td></tr></tbody></table>`;
+    document.getElementById("aMap").innerHTML=`<div class="confirm"><div class="fname">${esc(APEND.fname)}</div>
+      <div class="ok" style="margin-bottom:10px">Format dikenali: <b>${esc(p.title)}</b> → channel ${esc(APEND.ch)}</div>
+      ${p.levels.length>1?`<label class="fld">Dasar omzet<select id="aLvl">
+        ${p.levels.map(l=>`<option value="${l.k}" ${l.k===APEND.level?"selected":""}>${esc(l.label)}</option>`).join("")}
+      </select></label>`:""}
+      ${perMinggu?`<p class="mini" style="margin:8px 0 0">Bulan diambil dari tanggal tiap baris: <b>${months.map(mName).join(", ")||"-"}</b></p>`
+        :`<label class="fld" style="margin-top:8px">Masuk ke bulan<input type="month" id="aPk" value="${pk}" style="width:100%;margin-top:4px"></label>
+          ${APEND.pk?`<p class="mini" style="margin:4px 0 0">Terbaca dari baris Periode di file.</p>`:""}`}
+      <p class="mini" style="margin:10px 0 4px">Kolom: ${Object.entries(res.cols).map(([k,i])=>`${k} → <b>${esc(String(rows[hi][i]||"?"))}</b>`).join(" · ")}</p>
+      <p class="mini" style="margin:0">${esc(res.note||"")}</p>
+      ${ada?rincian:`<div class="err" style="margin-top:10px">Belum ada angka terbaca.</div>`}
+      <button class="btn-primary" id="aSave" style="width:100%;margin-top:12px" ${ada?"":"disabled"}>Simpan iklan</button>
+      <p class="mini" style="margin:8px 0 0">${perMinggu?"Data harian dari file mengisi tab Harian; ringkasan mingguan dan bulanan otomatis dihitung dari situ.":"Angka bulanan channel ini akan ditimpa."}</p>
+      <button class="btn-ghost" id="aManual" style="width:100%;margin-top:8px;font-size:12px">Atur kolom manual</button></div>`;
+    const lv=document.getElementById("aLvl");
+    if(lv) lv.onchange=e=>{APEND.level=e.target.value;drawAdsMap();};
+    const pkIn=document.getElementById("aPk");
+    if(pkIn) pkIn.onchange=e=>{if(/^\d{4}-\d{2}$/.test(e.target.value))APEND.pk=e.target.value;};
+    document.getElementById("aManual").onclick=()=>{
+      APEND.preset=null;APEND.level=null;APEND.mode=null;
+      APEND.map=guessMapping(rows[hi]||[],ADS_FIELDS);drawAdsMap();};
+    const sb=document.getElementById("aSave"); if(sb) sb.onclick=saveAdsUpload;
+    return;
+  }
+
+  const map=APEND.map;
+  const parsed=parseAdsFile(rows,hi,map);
+  APEND.parsed=parsed;
+  const months=Object.keys(parsed.byMonth).sort();
+  const bisaMinggu=parsed.dated>0;
+  if(APEND.mode==null) APEND.mode=bisaMinggu?"minggu":"bulan";
+  const hdr=(rows[hi]||[]).map((h,i)=>({i,lab:String(h||"").trim()||("Kolom "+(i+1))}));
+  const opt=sel=>`<option value="-1" ${sel==null||sel<0?"selected":""}>- tidak ada -</option>`+
+    hdr.map(h=>`<option value="${h.i}" ${sel===h.i?"selected":""}>${esc(h.lab)}</option>`).join("");
+  let rincian="";
+  if(APEND.mode==="minggu"&&months.length){
+    rincian=months.map(pk=>{
+      const wr=weekRanges(pk), w=parsed.byMonth[pk];
+      const baris=wr.map((r,i)=>{const v=w[i]||{cost:0,rev:0};
+        return `<tr><td class="l muted">M${i+1} · ${r.st}–${r.en}</td><td>${rpShort(v.cost)}</td><td>${rpShort(v.rev)}</td>
+          <td>${v.cost?(v.rev/v.cost).toFixed(2)+"×":"–"}</td></tr>`;}).join("");
+      return `<p class="mini" style="margin:10px 0 4px"><b>${mName(pk)}</b></p>
+        <table><thead><tr><th class="l">Minggu</th><th>Biaya</th><th>Omzet</th><th>ROAS</th></tr></thead><tbody>${baris}</tbody></table>`;
+    }).join("");
+  }else{
+    rincian=`<p class="mini" style="margin:10px 0 4px">Masuk sebagai total bulanan <b>${mName(DB.active)}</b></p>
+      <table><tbody><tr><td class="l muted">Biaya iklan</td><td>${rp(parsed.total.cost)}</td></tr>
+      <tr><td class="l muted">Omzet iklan</td><td>${rp(parsed.total.rev)}</td></tr>
+      <tr><td class="l muted">ROAS</td><td>${parsed.total.cost?(parsed.total.rev/parsed.total.cost).toFixed(2)+"×":"–"}</td></tr></tbody></table>`;
+  }
+  const ada=parsed.total.cost||parsed.total.rev;
+  document.getElementById("aMap").innerHTML=`<div class="confirm"><div class="fname">${esc(APEND.fname)}</div>
+    <div class="g2">
+      <label class="fld">Channel iklan<select id="aCh">${AD_CHANNELS.map(c=>`<option value="${c.k}" ${c.k===APEND.ch?"selected":""}>${c.label}</option>`).join("")}</select></label>
+      <label class="fld">Sheet<select id="aSh">${wb.SheetNames.map(s=>`<option ${s===APEND.sheet?"selected":""}>${esc(s)}</option>`).join("")}</select></label>
+    </div>
+    <label class="fld" style="margin-top:8px">Baris header<select id="aHi">
+      ${rows.slice(0,Math.min(rows.length,20)).map((r,i)=>`<option value="${i}" ${i===hi?"selected":""}>Baris ${i+1}: ${esc(String(r.filter(Boolean).slice(0,4).join(" | ")).slice(0,44))}</option>`).join("")}
+    </select></label>
+    <p class="mini" style="margin:12px 0 6px">Cocokkan kolom:</p>
+    ${ADS_FIELDS.map(f=>`<label class="fld" style="margin-bottom:6px">${f.lab}${f.req?"":" <span class='mini'>(opsional)</span>"}
+      <select data-a="${f.k}">${opt(map[f.k])}</select></label>`).join("")}
+    <label class="fld" style="margin-top:8px">Cara mengisi<select id="aMode">
+      <option value="minggu" ${APEND.mode==="minggu"?"selected":""} ${bisaMinggu?"":"disabled"}>Pisahkan per tanggal (harian)${bisaMinggu?"":", tidak ada tanggal terbaca"}</option>
+      <option value="bulan" ${APEND.mode==="bulan"?"selected":""}>Jadikan total bulanan ${mName(DB.active)}</option>
+    </select></label>
+    ${ada?`<div class="ok" style="margin-top:10px">${parsed.dated?parsed.dated+" baris bertanggal terbaca":"Total file terbaca"}${parsed.skipped&&APEND.mode==="minggu"?` · ${parsed.skipped} baris tanpa tanggal diabaikan`:""}</div>${rincian}`
+      :`<div class="err" style="margin-top:10px">Belum ada angka terbaca. Periksa baris header dan kolom biaya/omzet.</div>`}
+    <button class="btn-primary" id="aSave" style="width:100%;margin-top:12px" ${ada?"":"disabled"}>Simpan iklan</button>
+    <p class="mini" style="margin:8px 0 0">Angka lama untuk channel dan periode yang sama akan ditimpa.</p></div>`;
+  document.getElementById("aCh").onchange=e=>{APEND.ch=e.target.value;drawAdsMap();};
+  document.getElementById("aSh").onchange=e=>{
+    APEND.sheet=e.target.value;APEND.rows=sheetMatrix(APEND.wb,APEND.sheet);
+    APEND.hi=guessHeaderRow(APEND.rows,ADS_FIELDS);
+    APEND.map=guessMapping(APEND.rows[APEND.hi]||[],ADS_FIELDS);APEND.mode=null;drawAdsMap();};
+  document.getElementById("aHi").onchange=e=>{
+    APEND.hi=+e.target.value;APEND.map=guessMapping(APEND.rows[APEND.hi]||[],ADS_FIELDS);drawAdsMap();};
+  document.getElementById("aMode").onchange=e=>{APEND.mode=e.target.value;drawAdsMap();};
+  document.querySelectorAll("#aMap select[data-a]").forEach(s=>s.onchange=()=>{
+    APEND.map=Object.assign({},APEND.map,{[s.dataset.a]:+s.value});APEND.mode=null;drawAdsMap();});
+  const b=document.getElementById("aSave"); if(b) b.onclick=saveAdsUpload;
+}
+async function saveAdsUpload(){
+  if(!APEND||!APEND.parsed) return;
+  const btn=document.getElementById("aSave");
+  if(btn){btn.classList.add("btn-busy");btn.disabled=true;}
+  try{
+    const {byMonth,byDay,total}=APEND.parsed, ch=APEND.ch;
+    let pesan="";
+    if(APEND.mode==="minggu"){
+      // File bertanggal → tulis ke data HARIAN per tanggal. Mingguan & bulanan otomatis diturunkan.
+      const src=byDay||{};
+      const months=Object.keys(src).sort();
+      for(const pk of months){
+        const pd=ensurePeriod(pk);
+        pd.ads[ch]=pd.ads[ch]||{m:{cost:0,rev:0},w:{},d:{}};
+        pd.ads[ch].d=pd.ads[ch].d||{};
+        for(const day of Object.keys(src[pk])) pd.ads[ch].d[day]=src[pk][day];
+        // harian jadi sumber tunggal; kosongkan ringkasan manual biar tidak dobel dihitung
+        pd.ads[ch].w={};
+        pd.ads[ch].m={cost:0,rev:0};
+      }
+      DB.active=months[months.length-1];
+      pesan=`Iklan ${ch} · ${months.map(mName).join(", ")} tersimpan`;
+      logAct(`unggah iklan ${ch} · ${months.map(mName).join(", ")} (harian dari file)`);
+    }else{
+      const pk=(APEND.preset&&APEND.pk)||DB.active;
+      const pd=ensurePeriod(pk);
+      pd.ads[ch]=pd.ads[ch]||{m:{cost:0,rev:0},w:{}};
+      pd.ads[ch].m={cost:total.cost,rev:total.rev};
+      DB.active=pk;
+      pesan=`Iklan ${ch} · ${mName(pk)} tersimpan`;
+      logAct(`unggah iklan ${ch} · ${mName(pk)} (total bulanan)`);
+    }
+    APEND=null;
+    render(); busy("Menyimpan…");
+    try{ await persistAll(); toast(pesan); closePanel(); }
+    catch(e){ localSet(KEY,DB); toast("Gagal simpan ke database. Tersimpan sementara di peramban ini - klik Refresh lalu coba lagi."); }
+    finally{ idle(); }
+  }finally{ if(btn){btn.classList.remove("btn-busy");btn.disabled=false;} }
+}
+
+/* ---- Target ---- */
+function renderTarget(){
+  document.getElementById("pbody").innerHTML=`
+    <p class="muted" style="font-size:12px;margin-top:0">Target GMV bersih (demo, data ilustratif) untuk <b>${mName(DB.active)}</b>, gabungan semua marketplace. Bulan baru otomatis mengikuti target bulan terakhir.</p>
+    <label class="fld">Target GMV bulanan
+      <input type="text" inputmode="numeric" class="num" id="tgtIn" value="${cur().target||""}" placeholder="0" style="width:100%;margin-top:6px"></label>`;
+  document.getElementById("tgtIn").onchange=e=>{const v=parseRp(e.target.value);e.target.value=v?String(v):"";
+    cur().target=v;logAct(`ubah target ${mName(DB.active)} → ${rpShort(v)}`);commit("Target disimpan");};
+}
+
+/* ---- Riwayat ---- */
+function openHistory(){
+  const d=document.getElementById("drawer");
+  const fmt=ts=>new Date(ts).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
+  const rows=HIST.length?HIST.map(e=>`<tr><td class="l muted" style="white-space:nowrap">${fmt(e.ts)}</td>
+      <td class="l" style="font-weight:600">${esc(e.who||"-")}</td><td class="l">${esc(e.action)}</td></tr>`).join("")
+    :`<tr><td class="l muted" colspan="3">Belum ada aktivitas.</td></tr>`;
+  d.innerHTML=`<div class="dhead"><h3>Riwayat pengisian</h3><button class="x" id="closeP" aria-label="Tutup">✕</button></div>
+    <div id="pbody">
+      <label class="fld">Nama kamu (dicatat di riwayat)
+        <input id="meIn" type="text" value="${esc(ME)}" placeholder="mis. Diar" style="width:100%;margin-top:6px"></label>
+      <div class="row" style="gap:8px;margin:12px 0">
+        <button class="btn-ghost" id="refreshH">Refresh</button>
+        <button class="btn-ghost" id="clearH" style="color:#D0011B;border-color:#fecdd3">Bersihkan riwayat</button>
+      </div>
+      <div class="scroll" style="max-height:60vh"><table><thead><tr><th class="l">Waktu</th><th class="l">Oleh</th><th class="l">Aktivitas</th></tr></thead><tbody>${rows}</tbody></table></div>
+    </div>`;
+  document.getElementById("overlay").classList.add("open");
+  document.getElementById("closeP").onclick=closePanel;
+  document.getElementById("meIn").onchange=e=>setMe(e.target.value.trim());
+  document.getElementById("refreshH").onclick=async()=>{await refreshAll();openHistory();};
+  document.getElementById("clearH").onclick=()=>{HIST=[];saveHist();openHistory();toast("Riwayat dibersihkan");};
+}
+
+/* ---- Cadangan: ekspor & impor Excel ---- */
+function openBackup(){
+  const d=document.getElementById("drawer");
+  d.innerHTML=`<div class="dhead"><h3>Cadangan data</h3><button class="x" id="closeP" aria-label="Tutup">✕</button></div>
+    <div id="pbody">
+      <p class="muted" style="margin-top:0;font-size:13px">Simpan seluruh database - penjualan harian, target, iklan, dan performa produk - ke satu file Excel bersheet <b>Data</b>, <b>Target</b>, <b>Iklan</b>, dan <b>Produk</b>.</p>
+      <button class="btn-primary" id="expBtn" style="width:100%">Ekspor ke Excel</button>
+      <div style="border-top:1px solid #f1f5f9;margin:18px 0 14px"></div>
+      <p class="muted" style="font-size:13px;margin:0 0 10px">Impor dari file hasil ekspor:</p>
+      <label class="fld" style="display:block;margin-bottom:8px"><input type="radio" name="impMode" value="merge" checked> Gabungkan - baris yang sama ditimpa, sisanya ditambah</label>
+      <label class="fld" style="display:block;margin-bottom:14px"><input type="radio" name="impMode" value="replace"> Ganti semua - database diisi ulang dari file</label>
+      <label class="drop"><span class="big">Pilih file .xlsx</span><span class="sm">hasil ekspor sebelumnya</span>
+        <input id="impIn" type="file" accept=".xlsx,.xls" style="display:none"></label>
+      <div id="impErr"></div>
+    </div>`;
+  document.getElementById("overlay").classList.add("open");
+  document.getElementById("closeP").onclick=closePanel;
+  document.getElementById("expBtn").onclick=exportDb;
+  document.getElementById("impIn").onchange=async e=>{
+    const f=e.target.files[0];if(!f)return;
+    const mode=document.querySelector('input[name="impMode"]:checked').value;
+    document.getElementById("impErr").innerHTML="";
+    try{await importDb(f,mode);closePanel();}
+    catch(err){document.getElementById("impErr").innerHTML=`<div class="err">${esc(err.message||"Gagal impor.")}</div>`;}
+  };
+}
+async function exportDb(){
+  busy("Menyiapkan file Excel…");
+  try{
+    const dataRows=[["Bulan","Marketplace","Tanggal","GMV","Pembatalan","Pengembalian","GMV Bersih","Pesanan","Pesanan Batal","Pesanan Retur","Pengunjung"]];
+    const tgtRows=[["Bulan","Target GMV"]];
+    const adsRows=[["Bulan","Channel","Periode","Biaya Iklan","Omzet Iklan"]];
+    const prodRowsX=[["Bulan","Minggu","Marketplace","SKU","Nama Produk","GMV","Unit","Pengunjung","Pesanan","Harga","Stok"]];
+    for(const pk of Object.keys(DB.periods).sort()){
+      const pd=DB.periods[pk];
+      tgtRows.push([pk,pd.target||0]);
+      for(const m of MPS){
+        const md=pd.data[m]||{};
+        for(const d of Object.keys(md).map(Number).sort((a,b)=>a-b)){
+          const x=md[d]||{},g=x.gmv||0,cv=x.cancelVal||0,rv=x.retVal||0;
+          dataRows.push([pk,m,d,g,cv,rv,g-cv-rv,x.pesanan||0,x.cancelQty||0,x.retQty||0,x.pengunjung||0]);
+        }
+      }
+      for(const k of AD_KEYS){
+        const a=(pd.ads||{})[k]||{};
+        if(a.m&&(a.m.cost||a.m.rev)) adsRows.push([pk,k,"Bulanan",a.m.cost||0,a.m.rev||0]);
+        for(const i of Object.keys(a.w||{}).sort((x,y)=>x-y)){
+          const w=a.w[i]||{}; if(w.cost||w.rev) adsRows.push([pk,k,"M"+(Number(i)+1),w.cost||0,w.rev||0]);
+        }
+        for(const day of Object.keys(a.d||{}).sort((x,y)=>x-y)){
+          const x=a.d[day]||{}; if(x.cost||x.rev) adsRows.push([pk,k,"H"+day,x.cost||0,x.rev||0]);
+        }
+      }
+      const pm=PROD[pk];
+      if(pm) for(const m of MPS){const byW=pm[m]||{};
+        for(const wk of Object.keys(byW)){const items=byW[wk]||{};
+          for(const sku of Object.keys(items)){const v=items[sku]||{};
+            prodRowsX.push([pk,"M"+(Number(wk)+1),m,sku,v.n||"",v.g||0,v.u||0,v.v||0,v.o||0,v.p||0,v.s||0]);}}}
+    }
+    const wb=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(dataRows),"Data");
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(tgtRows),"Target");
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(adsRows),"Iklan");
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(prodRowsX),"Produk");
+    const out=XLSX.write(wb,{bookType:"xlsx",type:"array"});
+    const fname="gmv-demo-database-"+new Date().toISOString().slice(0,10)+".xlsx";
+    idle();
+    if(DLCAP){
+      try{ await DLCAP.save({filename:fname,data:out}); toast("Database diekspor"); }
+      catch(err){ if(err&&err.code==="declined") return; toast("Ekspor gagal - coba lagi"); }
+      return;
+    }
+    const blob=new Blob([out],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");a.href=url;a.download=fname;
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+    toast("Database diekspor");
+  }finally{ idle(); }
+}
+async function importDb(file,mode){
+  busy("Membaca file…");
+  try{
+    const buf=await file.arrayBuffer();
+    let wb; try{wb=XLSX.read(buf,{type:"array"});}catch(e){throw new Error("File Excel tidak terbaca.");}
+    const sheetRows=n=>{const ws=wb.Sheets[n];return ws?XLSX.utils.sheet_to_json(ws,{header:1,blankrows:false}):null;};
+    const rows=sheetRows("Data")||sheetRows(wb.SheetNames[0]);
+    if(!rows||!rows.length) throw new Error("Sheet 'Data' tidak ada atau kosong.");
+    const hdr=rows[0].map(x=>String(x).toLowerCase().trim());
+    const col=n=>hdr.indexOf(n);
+    const ci={bulan:col("bulan"),mp:col("marketplace"),tgl:col("tanggal"),gmv:col("gmv"),
+      batal:col("pembatalan"),retur:col("pengembalian"),pes:col("pesanan"),
+      pbatal:col("pesanan batal"),pretur:col("pesanan retur"),peng:col("pengunjung")};
+    if(ci.bulan<0||ci.mp<0||ci.tgl<0) throw new Error("Kolom Bulan/Marketplace/Tanggal tidak lengkap di sheet 'Data'.");
+    const inc={active:DB.active,periods:{}};
+    const ens=pk=>{if(!inc.periods[pk])inc.periods[pk]={data:emptyData(),target:0,ads:emptyAds()};return inc.periods[pk];};
+    const g=(r,i)=>i>=0?parseNum(r[i]):0;
+    for(let r=1;r<rows.length;r++){
+      const row=rows[r],pk=String(row[ci.bulan]||"").trim();
+      if(!/^\d{4}-\d{2}$/.test(pk)) continue;
+      const m=String(row[ci.mp]||"").trim(), d=parseInt(row[ci.tgl],10);
+      if(!MPS.includes(m)||!d) continue;
+      ens(pk).data[m][d]={gmv:g(row,ci.gmv),cancelVal:g(row,ci.batal),retVal:g(row,ci.retur),
+        pesanan:g(row,ci.pes),cancelQty:g(row,ci.pbatal),retQty:g(row,ci.pretur),pengunjung:g(row,ci.peng)};
+    }
+    const tr=sheetRows("Target");
+    if(tr&&tr.length){const th=tr[0].map(x=>String(x).toLowerCase().trim());
+      const b=th.indexOf("bulan"),t=th.indexOf("target gmv");
+      if(b>=0&&t>=0) for(let r=1;r<tr.length;r++){const pk=String(tr[r][b]||"").trim();
+        if(/^\d{4}-\d{2}$/.test(pk)) ens(pk).target=parseNum(tr[r][t]);}}
+    const ar=sheetRows("Iklan");
+    if(ar&&ar.length){const ah=ar[0].map(x=>String(x).toLowerCase().trim());
+      const b=ah.indexOf("bulan"),m=ah.indexOf("channel")>=0?ah.indexOf("channel"):ah.indexOf("marketplace"),
+            p=ah.indexOf("periode"),c=ah.indexOf("biaya iklan"),v=ah.indexOf("omzet iklan");
+      if(b>=0&&m>=0&&p>=0) for(let r=1;r<ar.length;r++){
+        const pk=String(ar[r][b]||"").trim(), per=String(ar[r][p]||"").trim();
+        const k=adsKeyOf(ar[r][m]);   // menerima "Shopee", "TikTok+Tokopedia", atau nama lama per marketplace
+        if(!/^\d{4}-\d{2}$/.test(pk)||!k) continue;
+        const pd=ens(pk); pd.ads[k]=pd.ads[k]||{m:{cost:0,rev:0},w:{},d:{}};
+        const rec={cost:parseNum(ar[r][c]),rev:parseNum(ar[r][v])};
+        if(/^bulanan$/i.test(per)){ pd.ads[k].m={cost:pd.ads[k].m.cost+rec.cost,rev:pd.ads[k].m.rev+rec.rev}; }
+        else {const mm=per.match(/^m(\d+)$/i), dm=per.match(/^h(\d+)$/i);
+          if(mm){const i=+mm[1]-1, prev=pd.ads[k].w[i]||{cost:0,rev:0};
+            pd.ads[k].w[i]={cost:prev.cost+rec.cost,rev:prev.rev+rec.rev};}
+          else if(dm){const day=+dm[1]; pd.ads[k].d=pd.ads[k].d||{}; const prev=pd.ads[k].d[day]||{cost:0,rev:0};
+            pd.ads[k].d[day]={cost:prev.cost+rec.cost,rev:prev.rev+rec.rev};}}
+      }}
+    const pr=sheetRows("Produk");
+    const incProd={};
+    if(pr&&pr.length){const ph=pr[0].map(x=>String(x).toLowerCase().trim());
+      const idx=n=>ph.indexOf(n);
+      const b=idx("bulan"),wk=idx("minggu"),m=idx("marketplace"),s=idx("sku"),nm=idx("nama produk");
+      if(b>=0&&m>=0&&s>=0) for(let r=1;r<pr.length;r++){
+        const pk=String(pr[r][b]||"").trim(), mp=String(pr[r][m]||"").trim(), sku=String(pr[r][s]||"").trim();
+        if(!/^\d{4}-\d{2}$/.test(pk)||!MPS.includes(mp)||!sku) continue;
+        const wmm=wk>=0?String(pr[r][wk]||"").trim().match(/(\d+)/):null; const wi=wmm?(+wmm[1]-1):0;
+        incProd[pk]=incProd[pk]||{}; incProd[pk][mp]=incProd[pk][mp]||{}; incProd[pk][mp][wi]=incProd[pk][mp][wi]||{};
+        incProd[pk][mp][wi][sku]={n:String(pr[r][nm]||sku),g:parseNum(pr[r][idx("gmv")]),u:parseNum(pr[r][idx("unit")]),
+          v:parseNum(pr[r][idx("pengunjung")]),o:parseNum(pr[r][idx("pesanan")]),
+          p:parseNum(pr[r][idx("harga")]),s:parseNum(pr[r][idx("stok")])};
+      }}
+    const obj=migrate(inc);
+    if(!obj||!Object.keys(obj.periods).length) throw new Error("Tidak ada data yang terbaca dari file.");
+    if(mode==="replace"){ DB=obj; PROD={}; }
+    else { for(const pk of Object.keys(obj.periods)){
+        const ip=obj.periods[pk], bp=ensurePeriod(pk);
+        if(ip.target) bp.target=ip.target;
+        for(const m of MPS) Object.assign(bp.data[m],ip.data[m]||{});
+        for(const k of AD_KEYS){ const ia=ip.ads[k]; if(!ia) continue;
+          if(ia.m&&(ia.m.cost||ia.m.rev)) bp.ads[k].m=ia.m;
+          bp.ads[k].w=Object.assign({},bp.ads[k].w,ia.w||{});
+          bp.ads[k].d=Object.assign({},bp.ads[k].d,ia.d||{}); } } }
+    for(const pk of Object.keys(incProd)){
+      PROD[pk]=PROD[pk]||{};
+      for(const mp of Object.keys(incProd[pk])){
+        PROD[pk][mp]=PROD[pk][mp]||{};
+        for(const wi of Object.keys(incProd[pk][mp]))
+          PROD[pk][mp][wi]=mode==="replace"?incProd[pk][mp][wi]:Object.assign({},PROD[pk][mp][wi]||{},incProd[pk][mp][wi]);
+      }
+    }
+    if(!DB.periods[DB.active]) DB.active=Object.keys(DB.periods).sort().slice(-1)[0];
+    logAct(`impor Excel (${mode==="replace"?"ganti semua":"gabungkan"})`);
+    for(const pk of Object.keys(incProd)){ try{ await saveProd(pk); }catch(e){} }
+    await loadProdMonth(DB.active);
+    commitAll(mode==="replace"?"Database diganti dari Excel":"Database digabung dari Excel");
+  }finally{ idle(); }
+}
+
+/* ============================ Toast & indikator ============================ */
+let toastT=null;
+function toast(msg){let el=document.getElementById("toast");if(el)el.remove();
+  el=document.createElement("div");el.id="toast";el.className="toast";el.textContent=msg;document.body.appendChild(el);
+  clearTimeout(toastT);toastT=setTimeout(()=>el.remove(),3000);}
+let busyN=0;
+function busy(msg){busyN++;let el=document.getElementById("busy");
+  if(!el){el=document.createElement("div");el.id="busy";el.className="busy";document.body.appendChild(el);}
+  el.innerHTML=`<span class="spin"></span>${esc(msg||"Memproses…")}`;}
+function idle(){busyN=Math.max(0,busyN-1);if(busyN===0){const el=document.getElementById("busy");if(el)el.remove();}}
+
+/* ============================ Boot ============================ */
+(async function(){
+  try{ ME=localStorage.getItem(MEKEY)||""; }catch(e){ ME=""; }
+  busy("Memuat database…");
+  try{
+    await initCaps();
+    const loaded=await loadDb();
+    DB=(loaded&&migrate(loaded))||freshDb();
+    HIST=await loadHist();
+    await loadProdMonth(DB.active);
+    render();
+  }catch(e){
+    DB=DB||freshDb(); render(); toast("Database belum bisa dimuat - data yang kamu isi tersimpan sementara di peramban ini.");
+  }finally{ idle(); }
+})();
+</script>
+
+</body></html>

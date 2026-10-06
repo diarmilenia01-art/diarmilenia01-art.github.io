@@ -1,0 +1,2113 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px 'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:#F6F8FB;color:#122A43}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Cycling Payment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+<style>
+:root{
+  --ground:#EDF1F7;
+  --surface:#FFFFFF;
+  --surface-2:#F0F4FA;
+  --ink:#122A43;
+  --ink-soft:#4A5B6E;
+  --muted:#6E8098;
+  --line:#D9E2EC;
+  --line-strong:#C2CFDB;
+  --jade:#2563EB;
+  --jade-ink:#1D4ED8;
+  --jade-soft:#E7EFFF;
+  --clay:#D97706;
+  --clay-soft:#FEF0DC;
+  --gold:#6366F1;
+  --gold-soft:#EAEBFE;
+  --shadow:0 1px 2px rgba(16,42,71,.06), 0 8px 24px -18px rgba(16,42,71,.5);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1E30;
+    --surface:#16293D;
+    --surface-2:#1B3147;
+    --ink:#EAF2FB;
+    --ink-soft:#AFC2D6;
+    --muted:#8198B0;
+    --line:#284056;
+    --line-strong:#38506A;
+    --jade:#60A5FA;
+    --jade-ink:#93C5FD;
+    --jade-soft:#16314E;
+    --clay:#FBBF77;
+    --clay-soft:#3A2A12;
+    --gold:#818CF8;
+    --gold-soft:#1E2150;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -20px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1E30;
+  --surface:#16293D;
+  --surface-2:#1B3147;
+  --ink:#EAF2FB;
+  --ink-soft:#AFC2D6;
+  --muted:#8198B0;
+  --line:#284056;
+  --line-strong:#38506A;
+  --jade:#60A5FA;
+  --jade-ink:#93C5FD;
+  --jade-soft:#16314E;
+  --clay:#FBBF77;
+  --clay-soft:#3A2A12;
+  --gold:#818CF8;
+  --gold-soft:#1E2150;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -20px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:'Archivo','Helvetica Neue',Arial,sans-serif;
+  font-size:14px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1500px;margin:0 auto;padding:0 20px;padding-block:0 56px;}
+h1,h2,h3{margin:0;font-stretch:112%;letter-spacing:-.015em;text-wrap:balance;}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit;}
+:focus-visible{outline:2px solid var(--jade);outline-offset:2px;border-radius:3px;}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace;}
+.num{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+
+/* ---------- masthead ---------- */
+.masthead{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  padding-block:26px 16px;border-bottom:1px solid var(--line-strong);
+}
+.brand h1{font-size:clamp(1.5rem,3.4vw,2rem);font-weight:700;}
+.brand .eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:.66rem;font-weight:600;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--jade);margin-bottom:5px;
+}
+.brand p{margin:4px 0 0;color:var(--muted);font-size:.83rem;max-width:56ch;}
+.mast-side{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;}
+.refresh{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.stamp{font-family:'IBM Plex Mono',monospace;font-size:.66rem;color:var(--muted);white-space:nowrap;}
+
+.pill{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:'IBM Plex Mono',monospace;font-size:.68rem;font-weight:600;
+  letter-spacing:.05em;text-transform:uppercase;
+  padding:6px 11px;border-radius:999px;border:1px solid var(--line-strong);
+  background:var(--surface);color:var(--muted);white-space:nowrap;
+}
+.pill .dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex:none;}
+.pill.live{border-color:var(--jade);color:var(--jade);background:var(--jade-soft);}
+.pill.live .dot{background:var(--jade);animation:beat 2.4s ease-in-out infinite;}
+.pill.local{border-color:var(--gold);color:var(--gold);background:var(--gold-soft);}
+.pill.local .dot{background:var(--gold);}
+@keyframes beat{0%,100%{opacity:1}50%{opacity:.32}}
+@media (prefers-reduced-motion:reduce){.pill.live .dot{animation:none}}
+
+/* ---------- ledger switcher ---------- */
+.ledgers{display:flex;gap:0;margin-top:18px;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden;background:var(--surface);width:fit-content;max-width:100%;flex-wrap:wrap;}
+.ledgers button{
+  appearance:none;border:0;background:none;cursor:pointer;
+  padding:11px 20px;font-weight:600;font-size:.9rem;color:var(--muted);
+  border-right:1px solid var(--line);white-space:nowrap;
+}
+.ledgers button:last-child{border-right:0;}
+.ledgers button[aria-selected="true"]{background:var(--jade);color:#fff;}
+:root[data-theme="dark"] .ledgers button[aria-selected="true"],
+:root:not([data-theme="light"]) .ledgers button[aria-selected="true"]{color:#10201a;}
+
+.ledger{display:none;}
+.ledger.on{display:block;}
+
+/* ---------- sub tabs ---------- */
+.subtabs{display:flex;gap:22px;margin:22px 0 0;border-bottom:1px solid var(--line);}
+.subtabs button{
+  appearance:none;border:0;background:none;cursor:pointer;padding:0 0 10px;
+  font-weight:600;font-size:.92rem;color:var(--muted);
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+}
+.subtabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--jade);}
+.pane{display:none;}
+.pane.on{display:block;}
+
+/* ---------- toolbar ---------- */
+.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:20px 0 12px;}
+.btn{
+  appearance:none;cursor:pointer;border-radius:6px;font-weight:600;font-size:.85rem;
+  padding:8px 15px;border:1px solid var(--jade);background:var(--jade);color:#fff;white-space:nowrap;
+}
+:root[data-theme="dark"] .btn,:root:not([data-theme="light"]) .btn{color:#10201a;}
+.btn:hover{filter:brightness(1.08);}
+.btn[disabled]{opacity:.45;cursor:not-allowed;filter:none;}
+.btn.quiet{background:var(--surface);color:var(--ink);border-color:var(--line-strong);}
+.btn.danger{background:none;color:var(--clay);border-color:var(--clay);}
+.btn.danger:hover{background:var(--clay);color:var(--surface);}
+.field{
+  padding:8px 12px;border:1px solid var(--line-strong);border-radius:6px;
+  background:var(--surface);font-size:.85rem;
+}
+.field.grow{flex:1 1 180px;min-width:150px;}
+.count{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--muted);margin-left:auto;white-space:nowrap;}
+
+.colpick{position:relative;}
+.pickbtn{display:inline-flex;align-items:center;gap:9px;cursor:pointer;white-space:nowrap;font-weight:500;}
+.pickbtn .caret{color:var(--muted);font-size:.7rem;}
+.pickbtn.active{border-color:var(--jade);color:var(--jade);background:var(--jade-soft);}
+.pickbtn.active .caret{color:var(--jade);}
+.colpick-panel{
+  position:absolute;top:calc(100% + 6px);left:0;z-index:40;display:none;
+  background:var(--surface);border:1px solid var(--line-strong);border-radius:8px;
+  padding:10px 14px;box-shadow:var(--shadow);min-width:220px;max-height:340px;overflow:auto;
+}
+.colpick-panel.open{display:block;}
+.colpick-panel label{display:flex;align-items:center;gap:9px;padding:3px 0;font-size:.83rem;cursor:pointer;}
+
+/* ---------- sheet / table ---------- */
+.sheet{
+  background:var(--surface);border:1px solid var(--line-strong);border-radius:10px;
+  overflow:auto;max-height:70vh;box-shadow:var(--shadow);
+}
+table{border-collapse:collapse;width:100%;font-size:.81rem;white-space:nowrap;}
+thead th{
+  position:sticky;top:0;z-index:3;background:var(--surface-2);
+  font-family:'IBM Plex Mono',monospace;font-size:.64rem;font-weight:600;
+  letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
+  text-align:left;padding:10px;border-bottom:1px solid var(--line-strong);
+}
+td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:0;}
+tbody tr:hover td{background:var(--surface-2);}
+th.r,td.r{text-align:right;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;}
+td.key{font-weight:600;}
+.dash{color:var(--muted);}
+
+.loadbar{position:fixed;left:0;top:0;height:3px;width:100%;z-index:90;overflow:hidden;display:none;}
+.loadbar.on{display:block;}
+.loadbar i{display:block;height:100%;width:38%;background:var(--jade);border-radius:0 2px 2px 0;animation:slide 1.1s ease-in-out infinite;}
+@keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(330%)}}
+.skel{height:11px;border-radius:3px;background:var(--line);background-image:linear-gradient(90deg,transparent,var(--surface-2),transparent);background-size:220% 100%;animation:shimmer 1.5s linear infinite;}
+@keyframes shimmer{0%{background-position:220% 0}100%{background-position:-220% 0}}
+tr.skelrow td{padding:11px 10px;}
+.spin{display:inline-block;animation:spin .9s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn.busy{opacity:.75;pointer-events:none;}
+.pivotbar{align-items:flex-end;}
+.pivotbar .rate{flex-direction:column;align-items:flex-start;gap:3px;}
+.pivotbar label{font-size:.7rem;color:var(--muted);font-weight:600;}
+.pivotbar select.field,.pivotbar input.field{min-width:150px;}
+.pivnote{font-size:.74rem;color:var(--muted);margin:10px 2px 0;}
+.popane{display:none;}
+.popane.on{display:block;}
+#pivotTable td.rowhead{font-weight:600;white-space:nowrap;}
+#pivotTable tr.grand td{border-top:1.5px solid var(--line-strong);font-weight:700;background:var(--surface-2);}
+#pivotTable td.zero{color:var(--muted);}
+#pivotTable th.grp{border-left:1px solid var(--line-strong);text-align:center;}
+#pivotTable th.sub{font-size:.6rem;letter-spacing:.04em;}
+#pivotTable thead tr:first-child th{top:0;}
+#pivotTable thead tr:nth-child(2) th{top:31px;}
+.loadnote{padding:34px 20px;text-align:center;color:var(--muted);font-size:.85rem;}
+@media (prefers-reduced-motion:reduce){
+  .skel{animation:none;background-image:none;}
+  .loadbar i{animation:none;width:100%;opacity:.5;}
+  .spin{animation:none;}
+}
+.empty{padding:52px 24px;text-align:center;}
+.empty h3{font-size:1.05rem;margin-bottom:6px;}
+.empty p{margin:0 auto 16px;color:var(--muted);font-size:.86rem;max-width:46ch;}
+
+.tag{
+  display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:.63rem;font-weight:600;
+  letter-spacing:.05em;padding:2px 8px;border-radius:4px;border:1px solid transparent;
+}
+.tag.lunas{background:var(--jade-soft);color:var(--jade);border-color:var(--jade);}
+.tag.belum{background:var(--clay-soft);color:var(--clay);border-color:var(--clay);}
+.tag.sebagian{background:var(--gold-soft);color:var(--gold);border-color:var(--gold);}
+.tag.kat{background:var(--surface-2);color:var(--muted);border-color:var(--line-strong);}
+.tag.cancel{background:var(--clay-soft);color:var(--clay);border-color:var(--clay);}
+tr.cancelled td{opacity:.55;}
+tr.cancelled td.key{text-decoration:line-through;}
+
+.mini{
+  appearance:none;cursor:pointer;border-radius:5px;padding:3px 7px;font-size:.7rem;font-weight:600;
+  border:1px solid var(--line-strong);background:var(--surface-2);
+}
+.mini.yes{border-color:var(--jade);color:var(--jade);background:var(--jade-soft);}
+.mini.no{border-color:var(--line-strong);color:var(--muted);}
+.act{white-space:nowrap;display:flex;gap:8px;align-items:center;}
+.link{
+  appearance:none;border:0;background:none;cursor:pointer;padding:0;
+  font-size:.76rem;font-weight:600;color:var(--jade);text-decoration:underline;text-underline-offset:2px;
+}
+.link.del{color:var(--clay);}
+.grip{
+  cursor:grab;color:var(--muted);font-size:.95rem;line-height:1;padding:0 2px;user-select:none;
+  background:none;border:0;
+}
+.grip:active{cursor:grabbing;}
+tr.dragging td{opacity:.35;}
+tr.dropbefore td{box-shadow:inset 0 2px 0 var(--jade);}
+tr.dropafter td{box-shadow:inset 0 -2px 0 var(--jade);}
+.mv{appearance:none;border:0;background:none;cursor:pointer;padding:0 2px;color:var(--muted);font-size:.72rem;}
+.mv:hover{color:var(--jade);}
+.owe{color:var(--clay);font-weight:600;}
+.over{color:var(--jade);font-weight:600;}
+.flat{color:var(--muted);}
+
+/* ---------- dashboard ---------- */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0 12px;}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:15px 17px;}
+.kpi.lead{background:var(--jade);border-color:var(--jade);color:#fff;}
+:root[data-theme="dark"] .kpi.lead,:root:not([data-theme="light"]) .kpi.lead{color:#0f1f19;}
+.kpi .k{
+  font-family:'IBM Plex Mono',monospace;font-size:.63rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;opacity:.75;
+}
+.kpi .v{font-size:1.85rem;font-weight:700;font-stretch:108%;line-height:1.1;margin-top:3px;font-variant-numeric:tabular-nums;}
+.kpi .s{font-family:'IBM Plex Mono',monospace;font-size:.7rem;opacity:.7;margin-top:3px;}
+
+.curstrip{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line-strong);border-radius:10px;overflow:hidden;background:var(--surface);margin-bottom:12px;}
+.cur{padding:14px 17px;border-right:1px solid var(--line);}
+.cur:last-child{border-right:0;}
+.cur .k{font-family:'IBM Plex Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.1em;color:var(--muted);}
+.cur .v{font-size:1.28rem;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums;}
+.cur .o{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--clay);margin-top:2px;}
+.cur .o.none{color:var(--muted);}
+
+.panels{display:grid;grid-template-columns:1.35fr 1fr;gap:12px;margin-bottom:12px;}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;}
+.panel h3{font-size:.98rem;font-weight:600;}
+.panel .sub{font-size:.74rem;color:var(--muted);margin:2px 0 14px;}
+.chartbox{position:relative;height:230px;}
+.chart-empty{height:230px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.82rem;border:1px dashed var(--line-strong);border-radius:8px;}
+
+/* ---------- kartu ---------- */
+.ratebar{
+  display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:20px 0 14px;
+  background:var(--surface);border:1px solid var(--line-strong);border-radius:10px;padding:12px 16px;
+}
+.rate{display:flex;align-items:center;gap:7px;}
+.rate label{font-size:.78rem;font-weight:600;}
+.rate input{width:116px;padding:6px 9px;border:1px solid var(--line-strong);border-radius:6px;background:var(--surface-2);font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;}
+.rate .u{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted);}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;}
+.card>h3{font-size:1rem;font-weight:700;}
+.card .sub{font-size:.74rem;color:var(--muted);margin-top:2px;}
+.block{margin-top:14px;padding-top:10px;border-top:1px solid var(--line);}
+.block h4{
+  margin:0 0 6px;font-family:'IBM Plex Mono',monospace;font-size:.64rem;font-weight:600;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+}
+.block.arrived h4{color:var(--jade);}
+.block.sum h4{color:var(--jade);}
+.rows{width:100%;border-collapse:collapse;font-size:.78rem;}
+.rows td{padding:4px 5px;border-bottom:1px solid var(--line);}
+.rows td.r{text-align:right;}
+.tot{display:flex;justify-content:space-between;gap:10px;padding:5px 2px;font-size:.83rem;}
+.tot b{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;color:var(--jade);}
+.nothing{color:var(--muted);font-size:.76rem;padding:3px 0 5px;}
+
+/* ---------- modal ---------- */
+.scrim{
+  position:fixed;inset:0;z-index:80;display:none;background:rgba(20,26,23,.58);
+  overflow-y:auto;padding:32px 16px;
+}
+.scrim.open{display:block;}
+.modal{
+  background:var(--ground);border:1px solid var(--line-strong);border-radius:12px;
+  max-width:760px;margin:0 auto;padding:24px 26px;box-shadow:var(--shadow);
+}
+.modal h2{font-size:1.25rem;font-weight:700;margin-bottom:16px;}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;}
+.fl{display:flex;flex-direction:column;gap:4px;}
+.fl.full{grid-column:1/-1;}
+.fl label{font-size:.72rem;font-weight:600;color:var(--muted);}
+.fl input,.fl select{padding:8px 10px;border:1px solid var(--line-strong);border-radius:6px;background:var(--surface);}
+.fl input[list]{
+  padding-right:28px;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%238a918b' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+}
+.fl .tip{font-size:.68rem;color:var(--muted);}
+.fl input[readonly]{background:var(--surface-2);color:var(--muted);cursor:default;}
+.fl input[type=number]{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+input[type=number]{-moz-appearance:textfield;appearance:textfield;}
+.seclabel{
+  grid-column:1/-1;margin-top:8px;padding-bottom:5px;border-bottom:1px solid var(--line);
+  font-family:'IBM Plex Mono',monospace;font-size:.66rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--jade);
+}
+.modal.ask{max-width:430px;}
+.modal.ask p{margin:0;color:var(--muted);font-size:.86rem;}
+.btn.danger.solid{background:var(--clay);color:var(--surface);border-color:var(--clay);}
+.btn.danger.solid:hover{filter:brightness(1.08);background:var(--clay);color:var(--surface);}
+.note{margin-top:14px;padding:10px 13px;border-radius:8px;background:var(--jade-soft);color:var(--jade-ink);font-size:.78rem;border:1px solid var(--jade);}
+.foot{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;}
+
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:120;
+  background:var(--ink);color:var(--ground);padding:10px 18px;border-radius:999px;
+  font-size:.83rem;font-weight:600;box-shadow:var(--shadow);display:none;max-width:90vw;text-align:center;
+}
+.toast.show{display:block;}
+
+footer{
+  margin-top:26px;padding-top:14px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--muted);
+}
+
+@media (max-width:980px){
+  .kpis{grid-template-columns:1fr 1fr;}
+  .panels{grid-template-columns:1fr;}
+  .cards{grid-template-columns:1fr;}
+  .curstrip{grid-template-columns:1fr;}
+  .cur{border-right:0;border-bottom:1px solid var(--line);}
+  .cur:last-child{border-bottom:0;}
+}
+@media (max-width:620px){
+  .wrap{padding:0 16px;padding-block:0 48px;}
+  .kpis{grid-template-columns:1fr;}
+  .form{grid-template-columns:1fr;}
+  .count{margin-left:0;}
+}
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="brand">
+      <div class="eyebrow">Demo, data ilustratif</div>
+      <h1>Cycling Payment</h1>
+      <p>Three ledgers on one page - purchase orders, supplier payments, and shipments from the China warehouse to Jakarta.</p>
+    </div>
+    <div class="mast-side">
+      <span class="pill" id="syncPill"><span class="dot"></span><span id="syncText">Menyambungkan…</span></span>
+      <div class="refresh">
+        <button class="btn" id="btnSync" disabled title="Pull the latest data and push it down the ledgers">&#8635; Refresh</button>
+        <div class="stamp" id="refreshStamp">Not refreshed yet</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="ledgers" role="tablist" aria-label="Choose a ledger">
+    <button role="tab" id="tab-po" aria-selected="false" data-ledger="po">Recap PO</button>
+    <button role="tab" id="tab-payment" aria-selected="true" data-ledger="payment">Recap Payment</button>
+    <button role="tab" id="tab-shipment" aria-selected="false" data-ledger="shipment">Recap Shipment</button>
+  </div>
+
+  <!-- ================= RECAP PO ================= -->
+  <section class="ledger" id="ledger-po" role="tabpanel" aria-labelledby="tab-po">
+    <div class="subtabs" role="tablist" aria-label="Recap PO views">
+      <button role="tab" id="pt-sum" aria-selected="false" data-popane="summary">Summary</button>
+      <button role="tab" id="pt-data" aria-selected="true" data-popane="data">PO data</button>
+    </div>
+
+    <div class="popane" id="popane-summary" role="tabpanel" aria-labelledby="pt-sum">
+      <div class="ratebar pivotbar">
+        <div class="rate"><label for="pvRow">Rows</label>
+          <select class="field" id="pvRow"></select></div>
+        <div class="rate"><label for="pvCol">Columns</label>
+          <select class="field" id="pvCol"></select></div>
+        <div class="rate"><label for="pvValBtn">Values</label>
+          <div class="colpick">
+            <button class="field pickbtn" id="pvValBtn" aria-haspopup="true" aria-expanded="false">
+              <span id="pvValLabel">All values</span><span class="caret" aria-hidden="true">&#9662;</span>
+            </button>
+            <div class="colpick-panel" id="pvValPanel" role="group" aria-label="Values to show"></div>
+          </div></div>
+        <div class="rate"><label for="pvFrom">PO Date from</label>
+          <input class="field" type="date" id="pvFrom"></div>
+        <div class="rate"><label for="pvTo">to</label>
+          <input class="field" type="date" id="pvTo"></div>
+        <button class="btn quiet" id="pvReset">Reset</button>
+      </div>
+      <div class="sheet"><table id="pivotTable"><thead id="pivotHead"></thead><tbody id="pivotBody"></tbody></table></div>
+      <p class="pivnote" id="pivotNote"></p>
+    </div>
+
+    <div class="popane on" id="popane-data" role="tabpanel" aria-labelledby="pt-data">
+    <div class="toolbar">
+      <div class="colpick">
+        <button class="btn quiet" id="poColBtn">Choose columns</button>
+        <div class="colpick-panel" id="poColPanel"></div>
+      </div>
+      <button class="btn" id="poAdd">+ Add PO</button>
+      <input class="field grow" id="poSearch" placeholder="Search PO number, supplier, factory…" autocomplete="off">
+      <span class="count" id="poCount">0 POs</span>
+    </div>
+    <div class="sheet">
+      <table id="poTable">
+        <thead><tr>
+          <th>No</th><th>PO Number</th><th>PO Date</th><th>Supplier</th><th>Factory</th><th>Category</th>
+          <th class="r">Amount USD</th><th class="r">Amount RMB</th><th class="r">Amount IDR</th>
+          <th>Finalised</th><th>ETD Supplier</th><th>ETA China WH</th><th>Remark</th><th>Actions</th>
+        </tr></thead>
+        <tbody id="poBody"></tbody>
+      </table>
+      <div class="empty" id="poEmpty">
+        <h3>No purchase orders yet</h3>
+        <p>Enter every non-forwarder PO here, then press <b>Refresh</b> at the top right so the rows flow into Recap Payment and Recap Shipment by PO number.</p>
+        <button class="btn" id="poAdd2">+ Add the first PO</button>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ================= RECAP PAYMENT ================= -->
+  <section class="ledger on" id="ledger-payment" role="tabpanel" aria-labelledby="tab-payment">
+    <div class="subtabs" role="tablist" aria-label="Recap Payment views">
+      <button role="tab" id="st-ring" aria-selected="false" data-pane="ringkasan">Summary</button>
+      <button role="tab" id="st-data" aria-selected="true" data-pane="data">Payment data</button>
+      <button role="tab" id="st-kartu" aria-selected="false" data-pane="kartu">Payment cards</button>
+    </div>
+
+    <!-- Ringkasan -->
+    <div class="pane" id="pane-ringkasan" role="tabpanel" aria-labelledby="st-ring">
+      <div class="kpis" id="kpis"></div>
+      <div class="curstrip" id="curstrip"></div>
+      <div class="panels">
+        <div class="panel">
+          <h3>Payments by month</h3>
+          <div class="sub">Outgoing transfers (IDR) and the number of POs settled</div>
+          <div id="wrapMonth"></div>
+        </div>
+        <div class="panel">
+          <h3>Payment status</h3>
+          <div class="sub">Paid, partly paid, unpaid</div>
+          <div id="wrapStatus"></div>
+        </div>
+      </div>
+      <div class="panels">
+        <div class="panel">
+          <h3>Group breakdown</h3>
+          <div class="sub">Merek A, Merek lain and forwarders</div>
+          <div id="wrapKat"></div>
+        </div>
+        <div class="panel">
+          <h3>Largest suppliers</h3>
+          <div class="sub">Total Amount RMB per supplier</div>
+          <div id="wrapSup"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data -->
+    <div class="pane on" id="pane-data" role="tabpanel" aria-labelledby="st-data">
+      <div class="toolbar">
+        <div class="colpick">
+          <button class="btn quiet" id="payColBtn">Choose columns</button>
+          <div class="colpick-panel" id="payColPanel"></div>
+        </div>
+        <button class="btn" id="payAdd">+ Add row</button>
+        <input class="field grow" id="paySearch" placeholder="Search PO, supplier, invoice, PL…" autocomplete="off">
+        <div class="colpick">
+          <button class="field pickbtn" id="payFilterBtn" aria-haspopup="true" aria-expanded="false">
+            <span id="payFilterLabel">All statuses</span><span class="caret" aria-hidden="true">&#9662;</span>
+          </button>
+          <div class="colpick-panel" id="payFilterPanel" role="group" aria-label="Filter payment status">
+            <label><input type="checkbox" id="fst_closed" value="closed"> Paid</label>
+            <label><input type="checkbox" id="fst_partial" value="partial"> Partly paid</label>
+            <label><input type="checkbox" id="fst_open" value="open"> Unpaid</label>
+            <button class="link" id="payFilterClear" type="button" style="margin-top:8px">Show all</button>
+          </div>
+        </div>
+        <button class="btn quiet" id="payExport">Export Excel</button>
+        <span class="count" id="payCount">0 rows</span>
+      </div>
+      <div class="sheet">
+        <table id="payTable">
+          <thead><tr>
+            <th>No</th><th>Supplier</th><th>Factory</th><th>PO# / PL-INV</th><th>Invoice PO#</th>
+            <th>Forwarder PL/Inv</th><th>Category</th><th>Group</th><th>Finalised</th><th>Status</th>
+            <th>ETD Supplier</th><th>ETA China WH</th><th>Actual ETA China WH</th>
+            <th class="r">Amount USD</th><th class="r">Amount RMB</th><th class="r">Amount IDR</th>
+            <th>TT 1</th><th class="r">TT1 USD</th><th class="r">TT1 RMB</th><th class="r">TT1 IDR</th>
+            <th>TT 2</th><th class="r">TT2 USD</th><th class="r">TT2 RMB</th><th class="r">TT2 IDR</th>
+            <th>TT 3</th><th class="r">TT3 USD</th><th class="r">TT3 RMB</th><th class="r">TT3 IDR</th>
+            <th class="r">Balance USD</th><th class="r">Balance RMB</th><th class="r">Balance IDR</th>
+            <th>Actions</th>
+          </tr></thead>
+          <tbody id="payBody"></tbody>
+        </table>
+        <div class="empty" id="payEmpty">
+          <h3>No payment rows yet</h3>
+          <p>Ordinary PO rows arrive from Recap PO through the <b>Refresh</b> button at the top right. Forwarder rows are added here directly.</p>
+          <button class="btn" id="payAdd2">+ Add the first row</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kartu -->
+    <div class="pane" id="pane-kartu" role="tabpanel" aria-labelledby="st-kartu">
+      <div class="ratebar">
+        <div class="rate"><label for="rateRmb">RMB rate</label><span class="u">Rp</span><input type="number" step="any" min="0" id="rateRmb"><span class="u">/ ¥1</span></div>
+        <div class="rate"><label for="rateUsd">USD rate</label><span class="u">Rp</span><input type="number" step="any" min="0" id="rateUsd"><span class="u">/ $1</span></div>
+        <div class="rate"><label for="rateRu">USD &rarr; RMB</label><span class="u">$1 =</span><input type="number" step="any" min="0" id="rateRu"><span class="u">¥</span></div>
+      </div>
+      <div class="cards">
+        <div class="card"><h3>Merek A</h3><div class="sub" id="rbSub">-</div><div id="rbBody"></div></div>
+        <div class="card"><h3>Merek lain</h3><div class="sub" id="nrbSub">-</div><div id="nrbBody"></div></div>
+        <div class="card"><h3>Forwarders</h3><div class="sub" id="jkSub">-</div><div id="jkBody"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RECAP SHIPMENT ================= -->
+  <section class="ledger" id="ledger-shipment" role="tabpanel" aria-labelledby="tab-shipment">
+    <div class="toolbar">
+      <div class="colpick">
+        <button class="btn quiet" id="shpColBtn">Choose columns</button>
+        <div class="colpick-panel" id="shpColPanel"></div>
+      </div>
+      <button class="btn" id="shpAdd">+ Add shipment</button>
+      <input class="field grow" id="shpSearch" placeholder="Search PO, supplier, PL number…" autocomplete="off">
+      <span class="count" id="shpCount">0 shipments</span>
+    </div>
+    <div class="sheet">
+      <table id="shpTable">
+        <thead><tr>
+          <th>No</th><th>PO No</th><th>Supplier</th><th>Factory</th><th>Category</th><th>Marking</th><th>Amount</th>
+          <th>Actual ETA China WH</th><th>Forwarder ETD</th><th>Forwarder PL No</th>
+          <th>ETA Jakarta</th><th>Actual ETA Jakarta</th><th class="r">Total CTN</th><th class="r">Volume (CBM)</th><th class="r">Price/ CBM</th><th>Actions</th>
+        </tr></thead>
+        <tbody id="shpBody"></tbody>
+      </table>
+      <div class="empty" id="shpEmpty">
+        <h3>No shipments yet</h3>
+        <p>Logistics data per PO. PO No, Supplier, Factory, Category and Amount flow down from Recap Payment when you press <b>Refresh</b>; everything else is filled in here.</p>
+        <button class="btn" id="shpAdd2">+ Add the first shipment</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Cycling Payment · demo oleh Diar Azari</span>
+    <span id="footNote">Changes are saved automatically</span>
+  </footer>
+</div>
+
+<!-- ===== modal PO ===== -->
+<div class="scrim" id="poScrim">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="poModalTitle">
+    <h2 id="poModalTitle">Add PO</h2>
+    <div class="form">
+      <div class="fl"><label for="po_no">PO number</label><input id="po_no" placeholder="PO #078 HRB26"></div>
+      <div class="fl"><label for="po_date">PO Date</label><input type="date" id="po_date"></div>
+      <div class="fl"><label for="po_sup">Supplier</label><input id="po_sup" list="supList"><span class="tip">Click the field to see the list, or type a new name</span></div>
+      <div class="fl"><label for="po_fac">Factory</label><input id="po_fac" list="facList"><span class="tip">Click the field to see the list, or type a new name</span></div>
+      <div class="fl"><label for="po_cat">Category</label><input id="po_cat" placeholder="Helmet, jersey, …"></div>
+      <div class="fl"><label for="po_fin">Amount finalised</label><select id="po_fin"><option value="no">Not final</option><option value="yes">Final</option></select></div>
+      <div class="fl"><label for="po_etd">ETD Supplier</label><input type="date" id="po_etd"></div>
+      <div class="fl"><label for="po_eta">ETA China WH</label><input type="date" id="po_eta"></div>
+      <div class="fl full"><label for="po_remark">Remark</label><select id="po_remark"><option value="">&mdash; none &mdash;</option><option value="cancel">Cancel</option></select><span class="tip">Cancel keeps the PO here but stops it reaching Recap Payment and Recap Shipment.</span></div>
+      <div class="seclabel">Amount</div>
+      <div class="fl"><label for="po_usd">Amount USD</label><input type="number" step="any" id="po_usd" value="0"></div>
+      <div class="fl"><label for="po_rmb">Amount RMB</label><input type="number" step="any" id="po_rmb" value="0"></div>
+      <div class="fl full"><label for="po_idr">Amount IDR</label><input type="number" step="any" id="po_idr" value="0"></div>
+    </div>
+    <div class="foot"><button class="btn quiet" data-close="poScrim">Cancel</button><button class="btn" id="poSave">Save</button></div>
+  </div>
+</div>
+
+<!-- ===== modal Payment ===== -->
+<div class="scrim" id="payScrim">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="payModalTitle">
+    <h2 id="payModalTitle">Add payment row</h2>
+    <div class="form">
+      <div class="fl"><label for="pay_po">PO#</label><input id="pay_po" placeholder="PO #078 HRB26"></div>
+      <div class="fl"><label for="pay_inv">Invoice PO#</label><input id="pay_inv" placeholder="INV-PO #078 HRB26"></div>
+      <div class="fl full"><label for="pay_pl">Forwarder PL / Invoice</label><input id="pay_pl" placeholder="PL1702/2607SI123876"></div>
+      <div class="fl"><label for="pay_sup">Supplier</label><input id="pay_sup" list="supList"><span class="tip">Click the field to see the list, or type a new name</span></div>
+      <div class="fl"><label for="pay_fac">Factory</label><input id="pay_fac" readonly placeholder="&mdash;"><span class="tip">Follows Recap PO. Change it there, then press Refresh.</span></div>
+      <div class="fl"><label for="pay_cat">Category</label><input id="pay_cat" readonly placeholder="&mdash;"><span class="tip">Follows Recap PO. Change it there, then press Refresh.</span></div>
+      <div class="fl"><label for="pay_kat">Group</label><select id="pay_kat"><option value="rb">Merek A</option><option value="nrb">Merek lain</option><option value="jk">Forwarder</option></select></div>
+      <div class="fl"><label for="pay_stat">Status</label><select id="pay_stat"><option value="">Unpaid</option><option value="CLOSED">Paid (closed)</option></select></div>
+      <div class="fl"><label for="pay_fin">Amount finalised</label><select id="pay_fin"><option value="no">Not final</option><option value="yes">Final</option></select></div>
+      <div class="fl"><label for="pay_etd">ETD Supplier</label><input type="date" id="pay_etd"></div>
+      <div class="fl"><label for="pay_act">ETA China WH</label><input type="date" id="pay_act"></div>
+      <div class="seclabel">PO amount</div>
+      <div class="fl"><label for="pay_usd">Amount USD</label><input type="number" step="any" id="pay_usd" value="0"></div>
+      <div class="fl"><label for="pay_rmb">Amount RMB</label><input type="number" step="any" id="pay_rmb" value="0"></div>
+      <div class="fl full"><label for="pay_idr">Amount IDR</label><input type="number" step="any" id="pay_idr" value="0"></div>
+      <div class="seclabel">Transfer 1</div>
+      <div class="fl"><label for="pay_tt1">TT 1 date</label><input type="date" id="pay_tt1"></div>
+      <div class="fl"><label for="pay_t1u">USD</label><input type="number" step="any" id="pay_t1u" value="0"></div>
+      <div class="fl"><label for="pay_t1r">RMB</label><input type="number" step="any" id="pay_t1r" value="0"></div>
+      <div class="fl"><label for="pay_t1i">IDR</label><input type="number" step="any" id="pay_t1i" value="0"></div>
+      <div class="seclabel">Transfer 2</div>
+      <div class="fl"><label for="pay_tt2">TT 2 date</label><input type="date" id="pay_tt2"></div>
+      <div class="fl"><label for="pay_t2u">USD</label><input type="number" step="any" id="pay_t2u" value="0"></div>
+      <div class="fl"><label for="pay_t2r">RMB</label><input type="number" step="any" id="pay_t2r" value="0"></div>
+      <div class="fl"><label for="pay_t2i">IDR</label><input type="number" step="any" id="pay_t2i" value="0"></div>
+      <div class="seclabel">Transfer 3</div>
+      <div class="fl"><label for="pay_tt3">TT 3 date</label><input type="date" id="pay_tt3"></div>
+      <div class="fl"><label for="pay_t3u">USD</label><input type="number" step="any" id="pay_t3u" value="0"></div>
+      <div class="fl"><label for="pay_t3r">RMB</label><input type="number" step="any" id="pay_t3r" value="0"></div>
+      <div class="fl"><label for="pay_t3i">IDR</label><input type="number" step="any" id="pay_t3i" value="0"></div>
+      <div class="fl full"><label for="pay_rem">Remarks</label><input id="pay_rem" placeholder="Additional notes"></div>
+    </div>
+    <div class="note">Balance is worked out automatically: amount minus every transfer. A red figure means there is still an outstanding amount.</div>
+    <div class="foot"><button class="btn quiet" data-close="payScrim">Cancel</button><button class="btn" id="paySave">Save</button></div>
+  </div>
+</div>
+
+<!-- ===== modal Shipment ===== -->
+<div class="scrim" id="shpScrim">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="shpModalTitle">
+    <h2 id="shpModalTitle">Add shipment</h2>
+    <div class="form">
+      <div class="fl"><label for="shp_po">PO No</label><input id="shp_po" placeholder="PO #078 HRB26"></div>
+      <div class="fl"><label for="shp_sup">Supplier</label><input id="shp_sup" list="supList"><span class="tip">Click the field to see the list, or type a new name</span></div>
+      <div class="fl"><label for="shp_fac">Factory</label><input id="shp_fac" readonly placeholder="&mdash;"><span class="tip">Follows Recap PO. Change it there, then press Refresh.</span></div>
+      <div class="fl"><label for="shp_cat">Category</label><input id="shp_cat"></div>
+      <div class="fl"><label for="shp_mark">Marking</label><input id="shp_mark" list="markList"><span class="tip">Pick a code or type a new one</span></div>
+      <div class="fl full"><label for="shp_amt">Amount</label><input id="shp_amt" readonly placeholder="&mdash;"><span class="tip">Follows Recap Payment. Change it there, then press Refresh.</span></div>
+      <div class="seclabel">Dates &amp; logistics</div>
+      <div class="fl"><label for="shp_china">Actual ETA China WH</label><input type="date" id="shp_china"></div>
+      <div class="fl"><label for="shp_etd">Forwarder ETD</label><input type="date" id="shp_etd"></div>
+      <div class="fl full"><label for="shp_pl">Forwarder PL No</label><input id="shp_pl" placeholder="PL 411 / YW 231"></div>
+      <div class="fl"><label for="shp_eta">ETA Jakarta</label><input type="date" id="shp_eta"></div>
+      <div class="fl"><label for="shp_jkt">Actual ETA Jakarta</label><input type="date" id="shp_jkt"></div>
+      <div class="fl"><label for="shp_ctn">Total CTN</label><input type="number" step="any" id="shp_ctn" value="0"></div>
+      <div class="fl"><label for="shp_cbm">Volume (CBM)</label><input type="number" step="any" id="shp_cbm" value="0"></div>
+      <div class="fl full"><label for="shp_price">Price/ CBM</label><input type="number" step="any" id="shp_price" value="0"></div>
+    </div>
+    <div class="foot"><button class="btn quiet" data-close="shpScrim">Cancel</button><button class="btn" id="shpSave">Save</button></div>
+  </div>
+</div>
+
+<div class="scrim" id="askScrim">
+  <div class="modal ask" role="alertdialog" aria-modal="true" aria-labelledby="askTitle" aria-describedby="askBody">
+    <h2 id="askTitle">Confirm</h2>
+    <p id="askBody"></p>
+    <div class="foot">
+      <button class="btn quiet" id="askNo">Cancel</button>
+      <button class="btn danger solid" id="askOk">Delete</button>
+    </div>
+  </div>
+</div>
+
+<datalist id="supList"></datalist>
+<datalist id="facList"></datalist>
+<datalist id="markList"></datalist>
+<div class="loadbar" id="loadbar"><i></i></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================ state ============================ */
+var S = { po:[], payment:[], shipment:[], kurs:{rmb:2700, usd:16500, rmbusd:7.2} };
+var store = null, downloads = null, charts = {};
+var editing = { po:null, payment:null, shipment:null };
+
+var $ = function(id){ return document.getElementById(id); };
+var num = function(v){ var n = parseFloat(v); return isNaN(n) ? 0 : n; };
+var esc = function(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+var nf = function(v, d){ return Number(v).toLocaleString('id-ID', {maximumFractionDigits: d||0}); };
+var money = function(v, sym){ return v ? sym + ' ' + nf(v) : '<span class="dash">-</span>'; };
+var txt = function(v){ return v ? esc(v) : '<span class="dash">-</span>'; };
+
+function toast(msg){
+  var t = $('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(function(){ t.classList.remove('show'); }, 2600);
+}
+
+/* ============================ storage ============================ */
+function localStore(){
+  var KEY = 'rci_recap_local_v1';
+  var data = {"po": [{"_id": "sp0001", "ord": 1, "po": "PO-2600001", "supplier": "Supplier E", "factory": "Pabrik 05", "category": "Tas", "kat": "rb", "final": "yes", "po_date": "2025-04-21", "etd": "2025-02-18", "eta_china": "2025-12-10", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 361000, "amt_idr": 0}, {"_id": "sp0002", "ord": 2, "po": "PO-2600002", "supplier": "Supplier F", "factory": "Pabrik 02", "category": "Aksesori", "kat": "rb", "final": "no", "po_date": "2025-08-22", "etd": "2025-05-07", "eta_china": "2025-09-12", "actual_eta": "", "remark": "", "amt_usd": 38000, "amt_rmb": 0, "amt_idr": 0}, {"_id": "sp0003", "ord": 3, "po": "PO-2600003", "supplier": "Supplier A", "factory": "Pabrik 04", "category": "Komponen", "kat": "nrb", "final": "no", "po_date": "2026-03-24", "etd": "2026-06-07", "eta_china": "2026-09-23", "actual_eta": "", "remark": "", "amt_usd": 43000, "amt_rmb": 0, "amt_idr": 0}, {"_id": "sp0004", "ord": 4, "po": "PO-2600004", "supplier": "Supplier G", "factory": "Pabrik 10", "category": "Helm", "kat": "rb", "final": "yes", "po_date": "2026-11-03", "etd": "2025-05-04", "eta_china": "2026-05-09", "actual_eta": "", "remark": "", "amt_usd": 55000, "amt_rmb": 0, "amt_idr": 0}, {"_id": "sp0005", "ord": 5, "po": "PO-2600005", "supplier": "Supplier A", "factory": "Pabrik 01", "category": "Aksesori", "kat": "rb", "final": "yes", "po_date": "2026-04-22", "etd": "2026-01-13", "eta_china": "2025-12-05", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 274000, "amt_idr": 0}, {"_id": "sp0006", "ord": 6, "po": "PO-2600006", "supplier": "Supplier E", "factory": "Pabrik 04", "category": "Apparel", "kat": "nrb", "final": "no", "po_date": "2026-01-10", "etd": "2025-03-28", "eta_china": "2025-02-12", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 0, "amt_idr": 449000000}, {"_id": "sp0007", "ord": 7, "po": "PO-2600007", "supplier": "Supplier A", "factory": "Pabrik 04", "category": "Tas", "kat": "rb", "final": "no", "po_date": "2026-02-12", "etd": "2025-01-23", "eta_china": "2025-11-27", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 265000, "amt_idr": 0}, {"_id": "sp0008", "ord": 8, "po": "PO-2600008", "supplier": "Supplier E", "factory": "Pabrik 02", "category": "Aksesori", "kat": "rb", "final": "no", "po_date": "2025-02-17", "etd": "2025-06-26", "eta_china": "2026-03-20", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 105000, "amt_idr": 0}, {"_id": "sp0009", "ord": 9, "po": "PO-2600009", "supplier": "Supplier A", "factory": "Pabrik 09", "category": "Aksesori", "kat": "rb", "final": "yes", "po_date": "2025-06-14", "etd": "2026-07-09", "eta_china": "2025-08-19", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 135000, "amt_idr": 0}, {"_id": "sp0010", "ord": 10, "po": "PO-2600010", "supplier": "Supplier B", "factory": "Pabrik 08", "category": "Helm", "kat": "rb", "final": "yes", "po_date": "2026-01-18", "etd": "2025-05-27", "eta_china": "2025-11-02", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 381000, "amt_idr": 0}, {"_id": "sp0011", "ord": 11, "po": "PO-2600011", "supplier": "Supplier H", "factory": "Pabrik 06", "category": "Komponen", "kat": "rb", "final": "no", "po_date": "2026-10-03", "etd": "2025-03-24", "eta_china": "2025-10-04", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 361000, "amt_idr": 0}, {"_id": "sp0012", "ord": 12, "po": "PO-2600012", "supplier": "Supplier H", "factory": "Pabrik 07", "category": "Aksesori", "kat": "rb", "final": "yes", "po_date": "2026-08-19", "etd": "2025-05-07", "eta_china": "2025-03-18", "actual_eta": "", "remark": "", "amt_usd": 27000, "amt_rmb": 0, "amt_idr": 0}, {"_id": "sp0013", "ord": 13, "po": "PO-2600013", "supplier": "Supplier A", "factory": "Pabrik 01", "category": "Komponen", "kat": "nrb", "final": "no", "po_date": "2026-12-03", "etd": "2025-02-02", "eta_china": "2026-10-02", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 0, "amt_idr": 232000000}, {"_id": "sp0014", "ord": 14, "po": "PO-2600014", "supplier": "Supplier C", "factory": "Pabrik 01", "category": "Sepeda", "kat": "rb", "final": "no", "po_date": "2026-02-04", "etd": "2026-10-04", "eta_china": "2025-12-19", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 132000, "amt_idr": 0}, {"_id": "sp0015", "ord": 15, "po": "PO-2600015", "supplier": "Supplier G", "factory": "Pabrik 07", "category": "Sepeda", "kat": "rb", "final": "yes", "po_date": "2026-12-07", "etd": "2025-12-06", "eta_china": "2025-11-14", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 188000, "amt_idr": 0}, {"_id": "sp0016", "ord": 16, "po": "PO-2600016", "supplier": "Supplier E", "factory": "Pabrik 02", "category": "Helm", "kat": "rb", "final": "yes", "po_date": "2025-08-15", "etd": "2026-12-05", "eta_china": "2025-09-24", "actual_eta": "", "remark": "", "amt_usd": 13000, "amt_rmb": 0, "amt_idr": 0}, {"_id": "sp0017", "ord": 17, "po": "PO-2600017", "supplier": "Supplier D", "factory": "Pabrik 04", "category": "Helm", "kat": "nrb", "final": "no", "po_date": "2025-12-01", "etd": "2026-07-28", "eta_china": "2025-08-03", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 39000, "amt_idr": 0}, {"_id": "sp0018", "ord": 18, "po": "PO-2600018", "supplier": "Supplier D", "factory": "Pabrik 05", "category": "Tas", "kat": "nrb", "final": "yes", "po_date": "2025-03-26", "etd": "2025-10-03", "eta_china": "2026-03-23", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 0, "amt_idr": 202000000}, {"_id": "sp0019", "ord": 19, "po": "PO-2600019", "supplier": "Supplier F", "factory": "Pabrik 03", "category": "Apparel", "kat": "rb", "final": "no", "po_date": "2025-09-24", "etd": "2025-07-20", "eta_china": "2026-04-25", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 143000, "amt_idr": 0}, {"_id": "sp0020", "ord": 20, "po": "PO-2600020", "supplier": "Supplier G", "factory": "Pabrik 06", "category": "Komponen", "kat": "nrb", "final": "yes", "po_date": "2026-05-04", "etd": "2025-06-15", "eta_china": "2025-02-28", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 374000, "amt_idr": 0}, {"_id": "sp0021", "ord": 21, "po": "PO-2600021", "supplier": "Supplier B", "factory": "Pabrik 10", "category": "Komponen", "kat": "rb", "final": "no", "po_date": "2025-02-13", "etd": "2026-05-24", "eta_china": "2026-04-16", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 80000, "amt_idr": 0}, {"_id": "sp0022", "ord": 22, "po": "PO-2600022", "supplier": "Supplier F", "factory": "Pabrik 01", "category": "Aksesori", "kat": "nrb", "final": "yes", "po_date": "2025-09-11", "etd": "2026-12-26", "eta_china": "2026-01-14", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 352000, "amt_idr": 0}, {"_id": "sp0023", "ord": 23, "po": "PO-2600023", "supplier": "Supplier F", "factory": "Pabrik 10", "category": "Apparel", "kat": "rb", "final": "yes", "po_date": "2025-05-03", "etd": "2025-02-14", "eta_china": "2026-08-27", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 27000, "amt_idr": 0}, {"_id": "sp0024", "ord": 24, "po": "PO-2600024", "supplier": "Supplier F", "factory": "Pabrik 07", "category": "Komponen", "kat": "rb", "final": "no", "po_date": "2026-02-03", "etd": "2026-08-23", "eta_china": "2026-07-13", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 0, "amt_idr": 577000000}, {"_id": "sp0025", "ord": 25, "po": "PO-2600025", "supplier": "Supplier G", "factory": "Pabrik 03", "category": "Sepeda", "kat": "rb", "final": "yes", "po_date": "2025-10-23", "etd": "2025-11-28", "eta_china": "2026-07-16", "actual_eta": "", "remark": "", "amt_usd": 55000, "amt_rmb": 0, "amt_idr": 0}, {"_id": "sp0026", "ord": 26, "po": "PO-2600026", "supplier": "Supplier H", "factory": "Pabrik 08", "category": "Sepeda", "kat": "rb", "final": "no", "po_date": "2026-05-06", "etd": "2026-12-11", "eta_china": "2026-03-02", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 165000, "amt_idr": 0}, {"_id": "sp0027", "ord": 27, "po": "PO-2600027", "supplier": "Supplier E", "factory": "Pabrik 03", "category": "Komponen", "kat": "rb", "final": "yes", "po_date": "2025-07-08", "etd": "2025-08-25", "eta_china": "2025-12-11", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 28000, "amt_idr": 0}, {"_id": "sp0028", "ord": 28, "po": "PO-2600028", "supplier": "Supplier H", "factory": "Pabrik 03", "category": "Aksesori", "kat": "nrb", "final": "no", "po_date": "2026-08-17", "etd": "2026-05-13", "eta_china": "2025-06-21", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 328000, "amt_idr": 0}, {"_id": "sp0029", "ord": 29, "po": "PO-2600029", "supplier": "Supplier E", "factory": "Pabrik 02", "category": "Helm", "kat": "nrb", "final": "yes", "po_date": "2025-05-24", "etd": "2025-02-18", "eta_china": "2026-01-05", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 302000, "amt_idr": 0}, {"_id": "sp0030", "ord": 30, "po": "PO-2600030", "supplier": "Supplier C", "factory": "Pabrik 01", "category": "Helm", "kat": "rb", "final": "no", "po_date": "2025-12-26", "etd": "2026-02-10", "eta_china": "2026-04-02", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 172000, "amt_idr": 0}, {"_id": "sp0031", "ord": 31, "po": "PO-2600031", "supplier": "Supplier E", "factory": "Pabrik 06", "category": "Tas", "kat": "nrb", "final": "yes", "po_date": "2025-05-18", "etd": "2026-06-03", "eta_china": "2026-03-28", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 136000, "amt_idr": 0}, {"_id": "sp0032", "ord": 32, "po": "PO-2600032", "supplier": "Supplier E", "factory": "Pabrik 08", "category": "Helm", "kat": "rb", "final": "yes", "po_date": "2026-09-10", "etd": "2026-07-09", "eta_china": "2026-07-15", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 0, "amt_idr": 180000000}, {"_id": "sp0033", "ord": 33, "po": "PO-2600033", "supplier": "Supplier A", "factory": "Pabrik 04", "category": "Sepeda", "kat": "nrb", "final": "yes", "po_date": "2026-03-09", "etd": "2025-10-14", "eta_china": "2025-06-27", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 0, "amt_idr": 354000000}, {"_id": "sp0034", "ord": 34, "po": "PO-2600034", "supplier": "Supplier C", "factory": "Pabrik 03", "category": "Apparel", "kat": "rb", "final": "yes", "po_date": "2026-12-27", "etd": "2025-01-14", "eta_china": "2025-11-15", "actual_eta": "", "remark": "", "amt_usd": 39000, "amt_rmb": 0, "amt_idr": 0}, {"_id": "sp0035", "ord": 35, "po": "PO-2600035", "supplier": "Supplier H", "factory": "Pabrik 04", "category": "Aksesori", "kat": "rb", "final": "yes", "po_date": "2025-11-09", "etd": "2026-07-06", "eta_china": "2026-09-11", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 376000, "amt_idr": 0}, {"_id": "sp0036", "ord": 36, "po": "PO-2600036", "supplier": "Supplier B", "factory": "Pabrik 08", "category": "Apparel", "kat": "rb", "final": "yes", "po_date": "2025-06-16", "etd": "2026-12-11", "eta_china": "2025-10-09", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 35000, "amt_idr": 0}, {"_id": "sp0037", "ord": 37, "po": "PO-2600037", "supplier": "Supplier D", "factory": "Pabrik 01", "category": "Tas", "kat": "rb", "final": "yes", "po_date": "2025-09-26", "etd": "2026-01-04", "eta_china": "2025-03-02", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 127000, "amt_idr": 0}, {"_id": "sp0038", "ord": 38, "po": "PO-2600038", "supplier": "Supplier C", "factory": "Pabrik 08", "category": "Sepeda", "kat": "rb", "final": "no", "po_date": "2025-06-22", "etd": "2026-05-05", "eta_china": "2026-11-17", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 149000, "amt_idr": 0}, {"_id": "sp0039", "ord": 39, "po": "PO-2600039", "supplier": "Supplier H", "factory": "Pabrik 05", "category": "Komponen", "kat": "rb", "final": "yes", "po_date": "2025-05-15", "etd": "2026-10-27", "eta_china": "2026-10-08", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 0, "amt_idr": 800000000}, {"_id": "sp0040", "ord": 40, "po": "PO-2600040", "supplier": "Supplier E", "factory": "Pabrik 10", "category": "Aksesori", "kat": "rb", "final": "yes", "po_date": "2026-05-27", "etd": "2025-06-03", "eta_china": "2026-01-06", "actual_eta": "", "remark": "", "amt_usd": 27000, "amt_rmb": 0, "amt_idr": 0}, {"_id": "sp0041", "ord": 41, "po": "PO-2600041", "supplier": "Supplier D", "factory": "Pabrik 07", "category": "Komponen", "kat": "rb", "final": "yes", "po_date": "2025-02-16", "etd": "2026-06-16", "eta_china": "2026-04-18", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 388000, "amt_idr": 0}, {"_id": "sp0042", "ord": 42, "po": "PO-2600042", "supplier": "Supplier B", "factory": "Pabrik 03", "category": "Helm", "kat": "rb", "final": "no", "po_date": "2026-10-09", "etd": "2026-09-13", "eta_china": "2025-01-20", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 0, "amt_idr": 323000000}, {"_id": "sp0043", "ord": 43, "po": "PO-2600043", "supplier": "Supplier D", "factory": "Pabrik 01", "category": "Helm", "kat": "rb", "final": "yes", "po_date": "2025-05-23", "etd": "2025-03-06", "eta_china": "2025-01-07", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 331000, "amt_idr": 0}, {"_id": "sp0044", "ord": 44, "po": "PO-2600044", "supplier": "Supplier B", "factory": "Pabrik 06", "category": "Tas", "kat": "nrb", "final": "yes", "po_date": "2026-09-19", "etd": "2025-04-14", "eta_china": "2026-02-04", "actual_eta": "", "remark": "", "amt_usd": 41000, "amt_rmb": 0, "amt_idr": 0}, {"_id": "sp0045", "ord": 45, "po": "PO-2600045", "supplier": "Supplier H", "factory": "Pabrik 02", "category": "Helm", "kat": "rb", "final": "no", "po_date": "2025-05-19", "etd": "2025-01-24", "eta_china": "2026-07-14", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 366000, "amt_idr": 0}, {"_id": "sp0046", "ord": 46, "po": "PO-2600046", "supplier": "Supplier D", "factory": "Pabrik 03", "category": "Aksesori", "kat": "nrb", "final": "no", "po_date": "2025-05-23", "etd": "2026-09-05", "eta_china": "2025-05-24", "actual_eta": "", "remark": "", "amt_usd": 0, "amt_rmb": 259000, "amt_idr": 0}], "payment": [{"_id": "sy0001", "ord": 1, "po": "PO-2600001", "invoice": "INV-0001", "plinv": "", "supplier": "Supplier E", "factory": "Pabrik 05", "category": "Tas", "kat": "rb", "status": "Paid", "final": "yes", "etd": "2025-04-21", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 361000, "amt_idr": 0, "tt1": "2025-05-27", "tr1_usd": 0, "tr1_rmb": 361000, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0002", "ord": 2, "po": "PO-2600002", "invoice": "INV-0002", "plinv": "", "supplier": "Supplier F", "factory": "Pabrik 02", "category": "Aksesori", "kat": "rb", "status": "Partial", "final": "no", "etd": "2025-08-22", "actual_eta": "", "remarks": "", "amt_usd": 38000, "amt_rmb": 0, "amt_idr": 0, "tt1": "2026-10-09", "tr1_usd": 11400, "tr1_rmb": 0, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0003", "ord": 3, "po": "PO-2600003", "invoice": "INV-0003", "plinv": "", "supplier": "Supplier A", "factory": "Pabrik 04", "category": "Komponen", "kat": "nrb", "status": "Unpaid", "final": "no", "etd": "2026-03-24", "actual_eta": "", "remarks": "", "amt_usd": 43000, "amt_rmb": 0, "amt_idr": 0, "tt1": "", "tr1_usd": 0, "tr1_rmb": 0, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0004", "ord": 4, "po": "PO-2600004", "invoice": "INV-0004", "plinv": "", "supplier": "Supplier G", "factory": "Pabrik 10", "category": "Helm", "kat": "rb", "status": "Paid", "final": "yes", "etd": "2026-11-03", "actual_eta": "", "remarks": "", "amt_usd": 55000, "amt_rmb": 0, "amt_idr": 0, "tt1": "2026-09-12", "tr1_usd": 55000, "tr1_rmb": 0, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0005", "ord": 5, "po": "PO-2600005", "invoice": "INV-0005", "plinv": "", "supplier": "Supplier A", "factory": "Pabrik 01", "category": "Aksesori", "kat": "rb", "status": "Paid", "final": "yes", "etd": "2026-04-22", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 274000, "amt_idr": 0, "tt1": "2026-07-19", "tr1_usd": 0, "tr1_rmb": 274000, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0006", "ord": 6, "po": "PO-2600006", "invoice": "INV-0006", "plinv": "", "supplier": "Supplier E", "factory": "Pabrik 04", "category": "Apparel", "kat": "nrb", "status": "Paid", "final": "yes", "etd": "2026-01-10", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 0, "amt_idr": 449000000, "tt1": "2026-05-20", "tr1_usd": 0, "tr1_rmb": 0, "tr1_idr": 449000000, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0010", "ord": 10, "po": "PO-2600010", "invoice": "INV-0010", "plinv": "", "supplier": "Supplier B", "factory": "Pabrik 08", "category": "Helm", "kat": "rb", "status": "Partial", "final": "no", "etd": "2026-01-18", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 381000, "amt_idr": 0, "tt1": "2026-04-16", "tr1_usd": 0, "tr1_rmb": 114300, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0011", "ord": 11, "po": "PO-2600011", "invoice": "INV-0011", "plinv": "", "supplier": "Supplier H", "factory": "Pabrik 06", "category": "Komponen", "kat": "rb", "status": "Paid", "final": "yes", "etd": "2026-10-03", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 361000, "amt_idr": 0, "tt1": "2025-08-12", "tr1_usd": 0, "tr1_rmb": 361000, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0012", "ord": 12, "po": "PO-2600012", "invoice": "INV-0012", "plinv": "", "supplier": "Supplier H", "factory": "Pabrik 07", "category": "Aksesori", "kat": "rb", "status": "Partial", "final": "no", "etd": "2026-08-19", "actual_eta": "", "remarks": "", "amt_usd": 27000, "amt_rmb": 0, "amt_idr": 0, "tt1": "2025-07-18", "tr1_usd": 13500, "tr1_rmb": 0, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0013", "ord": 13, "po": "PO-2600013", "invoice": "INV-0013", "plinv": "", "supplier": "Supplier A", "factory": "Pabrik 01", "category": "Komponen", "kat": "nrb", "status": "Unpaid", "final": "no", "etd": "2026-12-03", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 0, "amt_idr": 232000000, "tt1": "", "tr1_usd": 0, "tr1_rmb": 0, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0014", "ord": 14, "po": "PO-2600014", "invoice": "INV-0014", "plinv": "", "supplier": "Supplier C", "factory": "Pabrik 01", "category": "Sepeda", "kat": "rb", "status": "Paid", "final": "yes", "etd": "2026-02-04", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 132000, "amt_idr": 0, "tt1": "2026-04-16", "tr1_usd": 0, "tr1_rmb": 132000, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0016", "ord": 16, "po": "PO-2600016", "invoice": "INV-0016", "plinv": "", "supplier": "Supplier E", "factory": "Pabrik 02", "category": "Helm", "kat": "rb", "status": "Paid", "final": "yes", "etd": "2025-08-15", "actual_eta": "", "remarks": "", "amt_usd": 13000, "amt_rmb": 0, "amt_idr": 0, "tt1": "2026-01-16", "tr1_usd": 13000, "tr1_rmb": 0, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0017", "ord": 17, "po": "PO-2600017", "invoice": "INV-0017", "plinv": "", "supplier": "Supplier D", "factory": "Pabrik 04", "category": "Helm", "kat": "nrb", "status": "Partial", "final": "no", "etd": "2025-12-01", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 39000, "amt_idr": 0, "tt1": "2026-02-18", "tr1_usd": 0, "tr1_rmb": 11700, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0018", "ord": 18, "po": "PO-2600018", "invoice": "INV-0018", "plinv": "", "supplier": "Supplier D", "factory": "Pabrik 05", "category": "Tas", "kat": "nrb", "status": "Paid", "final": "yes", "etd": "2025-03-26", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 0, "amt_idr": 202000000, "tt1": "2026-01-20", "tr1_usd": 0, "tr1_rmb": 0, "tr1_idr": 202000000, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0019", "ord": 19, "po": "PO-2600019", "invoice": "INV-0019", "plinv": "", "supplier": "Supplier F", "factory": "Pabrik 03", "category": "Apparel", "kat": "rb", "status": "Partial", "final": "no", "etd": "2025-09-24", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 143000, "amt_idr": 0, "tt1": "2025-02-25", "tr1_usd": 0, "tr1_rmb": 42900, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0021", "ord": 21, "po": "PO-2600021", "invoice": "INV-0021", "plinv": "", "supplier": "Supplier B", "factory": "Pabrik 10", "category": "Komponen", "kat": "rb", "status": "Unpaid", "final": "no", "etd": "2025-02-13", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 80000, "amt_idr": 0, "tt1": "", "tr1_usd": 0, "tr1_rmb": 0, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0022", "ord": 22, "po": "PO-2600022", "invoice": "INV-0022", "plinv": "", "supplier": "Supplier F", "factory": "Pabrik 01", "category": "Aksesori", "kat": "nrb", "status": "Partial", "final": "no", "etd": "2025-09-11", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 352000, "amt_idr": 0, "tt1": "2025-06-05", "tr1_usd": 0, "tr1_rmb": 105600, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0023", "ord": 23, "po": "PO-2600023", "invoice": "INV-0023", "plinv": "", "supplier": "Supplier F", "factory": "Pabrik 10", "category": "Apparel", "kat": "rb", "status": "Unpaid", "final": "no", "etd": "2025-05-03", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 27000, "amt_idr": 0, "tt1": "", "tr1_usd": 0, "tr1_rmb": 0, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0024", "ord": 24, "po": "PO-2600024", "invoice": "INV-0024", "plinv": "", "supplier": "Supplier F", "factory": "Pabrik 07", "category": "Komponen", "kat": "rb", "status": "Unpaid", "final": "no", "etd": "2026-02-03", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 0, "amt_idr": 577000000, "tt1": "", "tr1_usd": 0, "tr1_rmb": 0, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0025", "ord": 25, "po": "PO-2600025", "invoice": "INV-0025", "plinv": "", "supplier": "Supplier G", "factory": "Pabrik 03", "category": "Sepeda", "kat": "rb", "status": "Paid", "final": "yes", "etd": "2025-10-23", "actual_eta": "", "remarks": "", "amt_usd": 55000, "amt_rmb": 0, "amt_idr": 0, "tt1": "2026-10-03", "tr1_usd": 55000, "tr1_rmb": 0, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0026", "ord": 26, "po": "PO-2600026", "invoice": "INV-0026", "plinv": "", "supplier": "Supplier H", "factory": "Pabrik 08", "category": "Sepeda", "kat": "rb", "status": "Paid", "final": "yes", "etd": "2026-05-06", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 165000, "amt_idr": 0, "tt1": "2025-04-25", "tr1_usd": 0, "tr1_rmb": 165000, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0027", "ord": 27, "po": "PO-2600027", "invoice": "INV-0027", "plinv": "", "supplier": "Supplier E", "factory": "Pabrik 03", "category": "Komponen", "kat": "rb", "status": "Partial", "final": "no", "etd": "2025-07-08", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 28000, "amt_idr": 0, "tt1": "2025-02-14", "tr1_usd": 0, "tr1_rmb": 8400, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0028", "ord": 28, "po": "PO-2600028", "invoice": "INV-0028", "plinv": "", "supplier": "Supplier H", "factory": "Pabrik 03", "category": "Aksesori", "kat": "nrb", "status": "Paid", "final": "yes", "etd": "2026-08-17", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 328000, "amt_idr": 0, "tt1": "2026-04-27", "tr1_usd": 0, "tr1_rmb": 328000, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0029", "ord": 29, "po": "PO-2600029", "invoice": "INV-0029", "plinv": "", "supplier": "Supplier E", "factory": "Pabrik 02", "category": "Helm", "kat": "nrb", "status": "Paid", "final": "yes", "etd": "2025-05-24", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 302000, "amt_idr": 0, "tt1": "2025-01-04", "tr1_usd": 0, "tr1_rmb": 302000, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0031", "ord": 31, "po": "PO-2600031", "invoice": "INV-0031", "plinv": "", "supplier": "Supplier E", "factory": "Pabrik 06", "category": "Tas", "kat": "nrb", "status": "Unpaid", "final": "no", "etd": "2025-05-18", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 136000, "amt_idr": 0, "tt1": "", "tr1_usd": 0, "tr1_rmb": 0, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0032", "ord": 32, "po": "PO-2600032", "invoice": "INV-0032", "plinv": "", "supplier": "Supplier E", "factory": "Pabrik 08", "category": "Helm", "kat": "rb", "status": "Paid", "final": "yes", "etd": "2026-09-10", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 0, "amt_idr": 180000000, "tt1": "2025-02-06", "tr1_usd": 0, "tr1_rmb": 0, "tr1_idr": 180000000, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0033", "ord": 33, "po": "PO-2600033", "invoice": "INV-0033", "plinv": "", "supplier": "Supplier A", "factory": "Pabrik 04", "category": "Sepeda", "kat": "nrb", "status": "Paid", "final": "yes", "etd": "2026-03-09", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 0, "amt_idr": 354000000, "tt1": "2025-10-24", "tr1_usd": 0, "tr1_rmb": 0, "tr1_idr": 354000000, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0035", "ord": 35, "po": "PO-2600035", "invoice": "INV-0035", "plinv": "", "supplier": "Supplier H", "factory": "Pabrik 04", "category": "Aksesori", "kat": "rb", "status": "Paid", "final": "yes", "etd": "2025-11-09", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 376000, "amt_idr": 0, "tt1": "2026-07-26", "tr1_usd": 0, "tr1_rmb": 376000, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0036", "ord": 36, "po": "PO-2600036", "invoice": "INV-0036", "plinv": "", "supplier": "Supplier B", "factory": "Pabrik 08", "category": "Apparel", "kat": "rb", "status": "Paid", "final": "yes", "etd": "2025-06-16", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 35000, "amt_idr": 0, "tt1": "2026-04-05", "tr1_usd": 0, "tr1_rmb": 35000, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0037", "ord": 37, "po": "PO-2600037", "invoice": "INV-0037", "plinv": "", "supplier": "Supplier D", "factory": "Pabrik 01", "category": "Tas", "kat": "rb", "status": "Partial", "final": "no", "etd": "2025-09-26", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 127000, "amt_idr": 0, "tt1": "2025-06-22", "tr1_usd": 0, "tr1_rmb": 38100, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0038", "ord": 38, "po": "PO-2600038", "invoice": "INV-0038", "plinv": "", "supplier": "Supplier C", "factory": "Pabrik 08", "category": "Sepeda", "kat": "rb", "status": "Partial", "final": "no", "etd": "2025-06-22", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 149000, "amt_idr": 0, "tt1": "2025-08-22", "tr1_usd": 0, "tr1_rmb": 74500, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0040", "ord": 40, "po": "PO-2600040", "invoice": "INV-0040", "plinv": "", "supplier": "Supplier E", "factory": "Pabrik 10", "category": "Aksesori", "kat": "rb", "status": "Partial", "final": "no", "etd": "2026-05-27", "actual_eta": "", "remarks": "", "amt_usd": 27000, "amt_rmb": 0, "amt_idr": 0, "tt1": "2025-08-07", "tr1_usd": 8100, "tr1_rmb": 0, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0041", "ord": 41, "po": "PO-2600041", "invoice": "INV-0041", "plinv": "", "supplier": "Supplier D", "factory": "Pabrik 07", "category": "Komponen", "kat": "rb", "status": "Partial", "final": "no", "etd": "2025-02-16", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 388000, "amt_idr": 0, "tt1": "2025-01-22", "tr1_usd": 0, "tr1_rmb": 194000, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0042", "ord": 42, "po": "PO-2600042", "invoice": "INV-0042", "plinv": "", "supplier": "Supplier B", "factory": "Pabrik 03", "category": "Helm", "kat": "rb", "status": "Partial", "final": "no", "etd": "2026-10-09", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 0, "amt_idr": 323000000, "tt1": "2025-08-18", "tr1_usd": 0, "tr1_rmb": 0, "tr1_idr": 161500000, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0043", "ord": 43, "po": "PO-2600043", "invoice": "INV-0043", "plinv": "", "supplier": "Supplier D", "factory": "Pabrik 01", "category": "Helm", "kat": "rb", "status": "Unpaid", "final": "no", "etd": "2025-05-23", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 331000, "amt_idr": 0, "tt1": "", "tr1_usd": 0, "tr1_rmb": 0, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0044", "ord": 44, "po": "PO-2600044", "invoice": "INV-0044", "plinv": "", "supplier": "Supplier B", "factory": "Pabrik 06", "category": "Tas", "kat": "nrb", "status": "Partial", "final": "no", "etd": "2026-09-19", "actual_eta": "", "remarks": "", "amt_usd": 41000, "amt_rmb": 0, "amt_idr": 0, "tt1": "2025-04-17", "tr1_usd": 20500, "tr1_rmb": 0, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0045", "ord": 45, "po": "PO-2600045", "invoice": "INV-0045", "plinv": "", "supplier": "Supplier H", "factory": "Pabrik 02", "category": "Helm", "kat": "rb", "status": "Paid", "final": "yes", "etd": "2025-05-19", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 366000, "amt_idr": 0, "tt1": "2026-08-11", "tr1_usd": 0, "tr1_rmb": 366000, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}, {"_id": "sy0046", "ord": 46, "po": "PO-2600046", "invoice": "INV-0046", "plinv": "", "supplier": "Supplier D", "factory": "Pabrik 03", "category": "Aksesori", "kat": "nrb", "status": "Unpaid", "final": "no", "etd": "2025-05-23", "actual_eta": "", "remarks": "", "amt_usd": 0, "amt_rmb": 259000, "amt_idr": 0, "tt1": "", "tr1_usd": 0, "tr1_rmb": 0, "tr1_idr": 0, "tt2": "", "tr2_usd": 0, "tr2_rmb": 0, "tr2_idr": 0, "tt3": "", "tr3_usd": 0, "tr3_rmb": 0, "tr3_idr": 0}], "shipment": [{"_id": "ss0001", "ord": 1, "po": "PO-2600001", "supplier": "Supplier E", "category": "Tas", "marking": "MARK-05", "amount": "1742", "factory": "Pabrik 05", "china": "2026-12-14", "etd": "2025-05-12", "pl": "PL-0001", "eta": "2026-08-25", "jkt": "2026-11-12", "ctn": 116, "cbm": 8.09, "price": 7542}, {"_id": "ss0002", "ord": 2, "po": "PO-2600002", "supplier": "Supplier F", "category": "Aksesori", "marking": "MARK-04", "amount": "1207", "factory": "Pabrik 02", "china": "2025-04-23", "etd": "2026-03-03", "pl": "PL-0002", "eta": "2026-11-21", "jkt": "2026-07-01", "ctn": 21, "cbm": 1.24, "price": 7451}, {"_id": "ss0003", "ord": 3, "po": "PO-2600003", "supplier": "Supplier A", "category": "Komponen", "marking": "MARK-01", "amount": "1239", "factory": "Pabrik 04", "china": "2025-06-19", "etd": "2026-03-10", "pl": "PL-0003", "eta": "2026-03-26", "jkt": "2026-04-06", "ctn": 68, "cbm": 2.76, "price": 1632}, {"_id": "ss0005", "ord": 5, "po": "PO-2600005", "supplier": "Supplier A", "category": "Aksesori", "marking": "MARK-05", "amount": "926", "factory": "Pabrik 01", "china": "2025-11-12", "etd": "2026-01-11", "pl": "PL-0005", "eta": "2026-08-03", "jkt": "2026-01-20", "ctn": 103, "cbm": 4.35, "price": 567}, {"_id": "ss0006", "ord": 6, "po": "PO-2600006", "supplier": "Supplier E", "category": "Apparel", "marking": "MARK-02", "amount": "789", "factory": "Pabrik 04", "china": "2026-08-19", "etd": "2026-01-12", "pl": "PL-0006", "eta": "2026-03-26", "jkt": "2026-06-06", "ctn": 9, "cbm": 0.43, "price": 2558}, {"_id": "ss0007", "ord": 7, "po": "PO-2600007", "supplier": "Supplier A", "category": "Tas", "marking": "MARK-07", "amount": "1320", "factory": "Pabrik 04", "china": "2025-09-02", "etd": "2025-10-05", "pl": "PL-0007", "eta": "2026-09-13", "jkt": "2026-03-18", "ctn": 102, "cbm": 5.31, "price": 5380}, {"_id": "ss0008", "ord": 8, "po": "PO-2600008", "supplier": "Supplier E", "category": "Aksesori", "marking": "MARK-01", "amount": "274", "factory": "Pabrik 02", "china": "2025-05-13", "etd": "2026-08-13", "pl": "PL-0008", "eta": "2026-03-26", "jkt": "2026-08-10", "ctn": 94, "cbm": 4.19, "price": 560}, {"_id": "ss0009", "ord": 9, "po": "PO-2600009", "supplier": "Supplier A", "category": "Aksesori", "marking": "MARK-08", "amount": "1752", "factory": "Pabrik 09", "china": "2025-01-19", "etd": "2025-08-27", "pl": "PL-0009", "eta": "2026-03-04", "jkt": "2026-10-05", "ctn": 29, "cbm": 1.98, "price": 5534}, {"_id": "ss0010", "ord": 10, "po": "PO-2600010", "supplier": "Supplier B", "category": "Helm", "marking": "MARK-01", "amount": "1220", "factory": "Pabrik 08", "china": "2026-06-21", "etd": "2025-10-02", "pl": "PL-0010", "eta": "2026-04-17", "jkt": "2026-02-12", "ctn": 17, "cbm": 0.72, "price": 2930}, {"_id": "ss0011", "ord": 11, "po": "PO-2600011", "supplier": "Supplier H", "category": "Komponen", "marking": "MARK-07", "amount": "188", "factory": "Pabrik 06", "china": "2026-09-09", "etd": "2026-07-22", "pl": "PL-0011", "eta": "2026-04-22", "jkt": "2026-07-19", "ctn": 109, "cbm": 6.38, "price": 1773}, {"_id": "ss0012", "ord": 12, "po": "PO-2600012", "supplier": "Supplier H", "category": "Aksesori", "marking": "MARK-02", "amount": "1585", "factory": "Pabrik 07", "china": "2025-11-05", "etd": "2025-09-13", "pl": "PL-0012", "eta": "2026-06-06", "jkt": "2026-03-23", "ctn": 31, "cbm": 1.9, "price": 3534}, {"_id": "ss0013", "ord": 13, "po": "PO-2600013", "supplier": "Supplier A", "category": "Komponen", "marking": "MARK-07", "amount": "674", "factory": "Pabrik 01", "china": "2026-05-08", "etd": "2026-05-26", "pl": "PL-0013", "eta": "2026-05-09", "jkt": "2026-02-27", "ctn": 100, "cbm": 3.87, "price": 1884}, {"_id": "ss0014", "ord": 14, "po": "PO-2600014", "supplier": "Supplier C", "category": "Sepeda", "marking": "MARK-08", "amount": "230", "factory": "Pabrik 01", "china": "2025-05-15", "etd": "2025-07-05", "pl": "PL-0014", "eta": "2026-11-17", "jkt": "2026-04-12", "ctn": 51, "cbm": 1.85, "price": 2974}, {"_id": "ss0015", "ord": 15, "po": "PO-2600015", "supplier": "Supplier G", "category": "Sepeda", "marking": "MARK-02", "amount": "1057", "factory": "Pabrik 07", "china": "2026-09-07", "etd": "2025-10-13", "pl": "PL-0015", "eta": "2026-07-26", "jkt": "2026-06-14", "ctn": 81, "cbm": 4.18, "price": 7056}, {"_id": "ss0016", "ord": 16, "po": "PO-2600016", "supplier": "Supplier E", "category": "Helm", "marking": "MARK-06", "amount": "440", "factory": "Pabrik 02", "china": "2026-07-28", "etd": "2025-08-25", "pl": "PL-0016", "eta": "2026-07-25", "jkt": "2026-01-13", "ctn": 59, "cbm": 1.9, "price": 7100}, {"_id": "ss0017", "ord": 17, "po": "PO-2600017", "supplier": "Supplier D", "category": "Helm", "marking": "MARK-08", "amount": "1359", "factory": "Pabrik 04", "china": "2025-04-24", "etd": "2025-01-14", "pl": "PL-0017", "eta": "2026-08-16", "jkt": "2026-07-27", "ctn": 70, "cbm": 2.15, "price": 1182}, {"_id": "ss0018", "ord": 18, "po": "PO-2600018", "supplier": "Supplier D", "category": "Tas", "marking": "MARK-02", "amount": "182", "factory": "Pabrik 05", "china": "2025-07-17", "etd": "2025-04-19", "pl": "PL-0018", "eta": "2026-12-01", "jkt": "2026-10-07", "ctn": 13, "cbm": 0.69, "price": 7887}, {"_id": "ss0019", "ord": 19, "po": "PO-2600019", "supplier": "Supplier F", "category": "Apparel", "marking": "MARK-03", "amount": "590", "factory": "Pabrik 03", "china": "2025-12-25", "etd": "2026-04-18", "pl": "PL-0019", "eta": "2026-10-18", "jkt": "2026-11-26", "ctn": 35, "cbm": 2.3, "price": 2593}, {"_id": "ss0020", "ord": 20, "po": "PO-2600020", "supplier": "Supplier G", "category": "Komponen", "marking": "MARK-03", "amount": "1578", "factory": "Pabrik 06", "china": "2026-10-15", "etd": "2025-08-17", "pl": "PL-0020", "eta": "2026-10-11", "jkt": "2026-02-14", "ctn": 51, "cbm": 1.75, "price": 7204}, {"_id": "ss0021", "ord": 21, "po": "PO-2600021", "supplier": "Supplier B", "category": "Komponen", "marking": "MARK-05", "amount": "974", "factory": "Pabrik 10", "china": "2025-08-01", "etd": "2025-07-17", "pl": "PL-0021", "eta": "2026-08-20", "jkt": "2026-04-21", "ctn": 43, "cbm": 1.39, "price": 2501}, {"_id": "ss0022", "ord": 22, "po": "PO-2600022", "supplier": "Supplier F", "category": "Aksesori", "marking": "MARK-07", "amount": "559", "factory": "Pabrik 01", "china": "2026-12-17", "etd": "2026-04-01", "pl": "PL-0022", "eta": "2026-06-06", "jkt": "2026-04-08", "ctn": 51, "cbm": 3.49, "price": 5110}, {"_id": "ss0023", "ord": 23, "po": "PO-2600023", "supplier": "Supplier F", "category": "Apparel", "marking": "MARK-04", "amount": "1820", "factory": "Pabrik 10", "china": "2026-02-16", "etd": "2025-02-03", "pl": "PL-0023", "eta": "2026-02-11", "jkt": "2026-03-22", "ctn": 93, "cbm": 4.76, "price": 1991}, {"_id": "ss0024", "ord": 24, "po": "PO-2600024", "supplier": "Supplier F", "category": "Komponen", "marking": "MARK-07", "amount": "1032", "factory": "Pabrik 07", "china": "2025-09-05", "etd": "2025-06-21", "pl": "PL-0024", "eta": "2026-11-11", "jkt": "2026-07-19", "ctn": 27, "cbm": 1.16, "price": 7297}, {"_id": "ss0026", "ord": 26, "po": "PO-2600026", "supplier": "Supplier H", "category": "Sepeda", "marking": "MARK-05", "amount": "1816", "factory": "Pabrik 08", "china": "2026-01-16", "etd": "2025-03-19", "pl": "PL-0026", "eta": "2026-08-14", "jkt": "2026-07-04", "ctn": 119, "cbm": 5.11, "price": 821}, {"_id": "ss0027", "ord": 27, "po": "PO-2600027", "supplier": "Supplier E", "category": "Komponen", "marking": "MARK-01", "amount": "964", "factory": "Pabrik 03", "china": "2026-02-21", "etd": "2026-05-07", "pl": "PL-0027", "eta": "2026-08-20", "jkt": "2026-08-02", "ctn": 119, "cbm": 5.94, "price": 5327}, {"_id": "ss0028", "ord": 28, "po": "PO-2600028", "supplier": "Supplier H", "category": "Aksesori", "marking": "MARK-05", "amount": "756", "factory": "Pabrik 03", "china": "2026-10-07", "etd": "2026-10-21", "pl": "PL-0028", "eta": "2026-08-14", "jkt": "2026-12-11", "ctn": 108, "cbm": 6.14, "price": 5061}, {"_id": "ss0030", "ord": 30, "po": "PO-2600030", "supplier": "Supplier C", "category": "Helm", "marking": "MARK-08", "amount": "1118", "factory": "Pabrik 01", "china": "2025-03-06", "etd": "2025-01-22", "pl": "PL-0030", "eta": "2026-09-17", "jkt": "2026-01-09", "ctn": 105, "cbm": 6.48, "price": 3182}, {"_id": "ss0031", "ord": 31, "po": "PO-2600031", "supplier": "Supplier E", "category": "Tas", "marking": "MARK-08", "amount": "1429", "factory": "Pabrik 06", "china": "2026-01-03", "etd": "2025-10-22", "pl": "PL-0031", "eta": "2026-11-09", "jkt": "2026-02-16", "ctn": 90, "cbm": 5.48, "price": 6162}, {"_id": "ss0032", "ord": 32, "po": "PO-2600032", "supplier": "Supplier E", "category": "Helm", "marking": "MARK-07", "amount": "356", "factory": "Pabrik 08", "china": "2025-01-11", "etd": "2025-11-11", "pl": "PL-0032", "eta": "2026-12-18", "jkt": "2026-06-17", "ctn": 35, "cbm": 2.78, "price": 6466}, {"_id": "ss0034", "ord": 34, "po": "PO-2600034", "supplier": "Supplier C", "category": "Apparel", "marking": "MARK-05", "amount": "468", "factory": "Pabrik 03", "china": "2026-01-27", "etd": "2026-11-23", "pl": "PL-0034", "eta": "2026-09-04", "jkt": "2026-11-11", "ctn": 101, "cbm": 5.27, "price": 7882}, {"_id": "ss0035", "ord": 35, "po": "PO-2600035", "supplier": "Supplier H", "category": "Aksesori", "marking": "MARK-07", "amount": "1209", "factory": "Pabrik 04", "china": "2025-10-16", "etd": "2025-02-04", "pl": "PL-0035", "eta": "2026-02-08", "jkt": "2026-02-21", "ctn": 95, "cbm": 6.91, "price": 7985}, {"_id": "ss0036", "ord": 36, "po": "PO-2600036", "supplier": "Supplier B", "category": "Apparel", "marking": "MARK-03", "amount": "568", "factory": "Pabrik 08", "china": "2026-04-11", "etd": "2026-08-20", "pl": "PL-0036", "eta": "2026-06-04", "jkt": "2026-01-08", "ctn": 78, "cbm": 5.19, "price": 5919}, {"_id": "ss0037", "ord": 37, "po": "PO-2600037", "supplier": "Supplier D", "category": "Tas", "marking": "MARK-07", "amount": "743", "factory": "Pabrik 01", "china": "2025-09-11", "etd": "2026-03-18", "pl": "PL-0037", "eta": "2026-05-12", "jkt": "2026-08-01", "ctn": 73, "cbm": 4.75, "price": 1294}, {"_id": "ss0038", "ord": 38, "po": "PO-2600038", "supplier": "Supplier C", "category": "Sepeda", "marking": "MARK-06", "amount": "1146", "factory": "Pabrik 08", "china": "2025-08-19", "etd": "2026-05-24", "pl": "PL-0038", "eta": "2026-04-09", "jkt": "2026-08-24", "ctn": 63, "cbm": 3.9, "price": 8397}, {"_id": "ss0039", "ord": 39, "po": "PO-2600039", "supplier": "Supplier H", "category": "Komponen", "marking": "MARK-06", "amount": "1100", "factory": "Pabrik 05", "china": "2025-03-22", "etd": "2025-12-17", "pl": "PL-0039", "eta": "2026-02-09", "jkt": "2026-12-03", "ctn": 115, "cbm": 8.01, "price": 8502}, {"_id": "ss0041", "ord": 41, "po": "PO-2600041", "supplier": "Supplier D", "category": "Komponen", "marking": "MARK-06", "amount": "1751", "factory": "Pabrik 07", "china": "2026-08-17", "etd": "2025-08-09", "pl": "PL-0041", "eta": "2026-03-26", "jkt": "2026-05-19", "ctn": 54, "cbm": 3.14, "price": 1780}, {"_id": "ss0042", "ord": 42, "po": "PO-2600042", "supplier": "Supplier B", "category": "Helm", "marking": "MARK-06", "amount": "819", "factory": "Pabrik 03", "china": "2026-09-17", "etd": "2026-12-22", "pl": "PL-0042", "eta": "2026-08-10", "jkt": "2026-11-19", "ctn": 21, "cbm": 0.93, "price": 7695}, {"_id": "ss0043", "ord": 43, "po": "PO-2600043", "supplier": "Supplier D", "category": "Helm", "marking": "MARK-01", "amount": "444", "factory": "Pabrik 01", "china": "2026-07-27", "etd": "2025-11-28", "pl": "PL-0043", "eta": "2026-06-28", "jkt": "2026-12-21", "ctn": 47, "cbm": 2.26, "price": 3122}, {"_id": "ss0044", "ord": 44, "po": "PO-2600044", "supplier": "Supplier B", "category": "Tas", "marking": "MARK-05", "amount": "97", "factory": "Pabrik 06", "china": "2025-10-13", "etd": "2025-09-28", "pl": "PL-0044", "eta": "2026-08-12", "jkt": "2026-08-28", "ctn": 9, "cbm": 0.3, "price": 1241}, {"_id": "ss0045", "ord": 45, "po": "PO-2600045", "supplier": "Supplier H", "category": "Helm", "marking": "MARK-06", "amount": "1121", "factory": "Pabrik 02", "china": "2025-05-08", "etd": "2026-06-27", "pl": "PL-0045", "eta": "2026-08-14", "jkt": "2026-10-11", "ctn": 69, "cbm": 3.62, "price": 4078}, {"_id": "ss0046", "ord": 46, "po": "PO-2600046", "supplier": "Supplier D", "category": "Aksesori", "marking": "MARK-01", "amount": "1993", "factory": "Pabrik 03", "china": "2026-11-05", "etd": "2026-10-25", "pl": "PL-0046", "eta": "2026-10-24", "jkt": "2026-08-09", "ctn": 84, "cbm": 6.36, "price": 1826}], "kurs": {"rmb": 2700, "usd": 16500, "rmbusd": 7.2}};
+  try { var raw = localStorage.getItem(KEY); if(raw){ var p = JSON.parse(raw); ['po','payment','shipment'].forEach(function(k){ if(Array.isArray(p[k])) data[k]=p[k]; }); if(p.kurs) data.kurs = p.kurs; } } catch(e){}
+  var subs = { po:[], payment:[], shipment:[], kurs:[] };
+  function persist(){ try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){} }
+  function emit(c){ subs[c].forEach(function(f){ f(c==='kurs' ? Object.assign({}, data.kurs) : data[c].slice()); }); }
+  function sortc(c){ data[c].sort(function(a,b){ return (a.ord||0)-(b.ord||0); }); }
+  return {
+    mode:'local',
+    subscribe:function(c,f){ subs[c].push(f); f(c==='kurs' ? Object.assign({}, data.kurs) : data[c].slice()); },
+    upsert:function(c,id,body){
+      if(id){ var i = data[c].findIndex(function(x){ return x._id===id; }); if(i>=0) data[c][i] = Object.assign({_id:id}, body); }
+      else { data[c].push(Object.assign({_id:'l'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}, body)); }
+      sortc(c); persist(); emit(c); return Promise.resolve();
+    },
+    patch:function(c,id,body){
+      var i = data[c].findIndex(function(x){ return x._id===id; });
+      if(i>=0){ Object.assign(data[c][i], body); sortc(c); persist(); emit(c); }
+      return Promise.resolve();
+    },
+    remove:function(c,id){ data[c] = data[c].filter(function(x){ return x._id!==id; }); persist(); emit(c); return Promise.resolve(); },
+    setKurs:function(k){ data.kurs = Object.assign({}, data.kurs, k); persist(); emit('kurs'); return Promise.resolve(); }
+  };
+}
+
+function cloudStore(db){
+  function onErr(e){ console.warn('db', e); if(e && e.code==='revoked') setSync('lost'); }
+  return {
+    mode:'cloud',
+    subscribe:function(c,f){
+      if(c==='kurs'){
+        db.doc('settings/kurs').onSnapshot(function(s){ f(s.exists ? s.data() : {}); }, onErr);
+        return;
+      }
+      db.collection(c).onSnapshot(function(s){
+        var a = s.docs.map(function(d){ return Object.assign({_id:d.id}, d.data()); });
+        a.sort(function(x,y){ return (x.ord||0)-(y.ord||0); });
+        f(a);
+      }, onErr);
+    },
+    upsert:function(c,id,body){
+      var p = id ? db.collection(c).doc(id).set(body) : db.collection(c).add(body);
+      return p.catch(function(e){ toast(dbMsg(e)); throw e; });
+    },
+    patch:function(c,id,body){ return db.collection(c).doc(id).update(body).catch(function(e){ toast(dbMsg(e)); throw e; }); },
+    remove:function(c,id){ return db.collection(c).doc(id)['delete']().catch(function(e){ toast(dbMsg(e)); throw e; }); },
+    setKurs:function(k){ return db.doc('settings/kurs').set(k).catch(function(e){ toast(dbMsg(e)); throw e; }); }
+  };
+}
+
+function dbMsg(e){
+  var c = e && e.code;
+  if(c==='quota_exceeded') return 'Storage is full - delete some old rows first.';
+  if(c==='resource_exhausted') return 'Too many changes at once. Try again shortly.';
+  if(c==='invalid_argument') return 'Storage rejected the data. Check the fields and save again.';
+  if(c==='revoked' || c==='not_granted') return 'Shared storage is not enabled in this view.';
+  return 'Could not save. Try again.';
+}
+
+function setSync(kind){
+  var pill = $('syncPill'), t = $('syncText');
+  pill.className = 'pill';
+  if(kind==='cloud'){ pill.classList.add('live'); t.textContent = 'Connected \u00b7 shared data'; $('footNote').textContent = 'Saved to shared storage \u2014 everyone who opens this link sees the same data'; }
+  else if(kind==='local'){ pill.classList.add('local'); t.textContent = 'Local mode \u00b7 this browser only'; $('footNote').textContent = 'Shared storage is off in this view \u2014 data stays in this browser only'; }
+  else if(kind==='lost'){ pill.classList.add('local'); t.textContent = 'Connection lost'; }
+  else { t.textContent = 'Connecting\u2026'; }
+}
+
+/* ============================ helpers ============================ */
+var KAT_LABEL = { rb:'Merek A', nrb:'Merek lain', jk:'Forwarder' };
+
+function guessKat(supplier){
+  var s = String(supplier||'').toLowerCase();
+  if(!s) return 'nrb';
+  if(s.indexOf('fasdeli')>=0 || s.indexOf('topfan')>=0 || s.indexOf('ekspedisi')>=0) return 'jk';
+  if(s.indexOf('yiwu rock')>=0 || s.indexOf('rockbros')>=0) return 'rb';
+  return 'nrb';
+}
+function katOf(r){ return r.kat || guessKat(r.supplier); }
+function isJK(r){ return katOf(r)==='jk'; }
+function rowId(r){ return isJK(r) ? (r.plinv || r.po || '') : (r.po || ''); }
+
+function paid(r, cur){ return num(r['tr1_'+cur]) + num(r['tr2_'+cur]) + num(r['tr3_'+cur]); }
+function balOf(r, cur){ return num(r['amt_'+cur]) - paid(r, cur); }
+function primCur(r){
+  if(num(r.amt_usd) > 0) return 'usd';
+  if(num(r.amt_rmb) > 0) return 'rmb';
+  if(num(r.amt_idr) > 0) return 'idr';
+  return null;
+}
+function symOf(c){ return c==='usd' ? '$' : c==='rmb' ? '¥' : 'Rp'; }
+
+function statusOf(r){
+  if(String(r.status||'').trim().toUpperCase()==='CLOSED') return 'closed';
+  var c = primCur(r);
+  if(c && paid(r, c) > 0) return 'partial';
+  if(!c && (paid(r,'usd')||paid(r,'rmb')||paid(r,'idr'))) return 'partial';
+  return 'open';
+}
+function statusTag(r){
+  var s = statusOf(r);
+  if(s==='closed') return '<span class="tag lunas">PAID</span>';
+  if(s==='partial') return '<span class="tag sebagian">PARTIAL</span>';
+  return '<span class="tag belum">UNPAID</span>';
+}
+
+function balCell(r, cur){
+  var amt = num(r['amt_'+cur]), p = paid(r, cur);
+  if(amt===0 && p===0) return '<span class="dash">-</span>';
+  var b = Math.round(amt - p), sym = symOf(cur);
+  if(b > 0) return '<span class="owe">-' + sym + ' ' + nf(b) + '</span>';
+  if(b < 0) return '<span class="over">+' + sym + ' ' + nf(-b) + '</span>';
+  return '<span class="flat">' + sym + ' 0</span>';
+}
+
+function amtCells(r){
+  var c = primCur(r);
+  return '<td class="r">' + (c==='usd' ? money(num(r.amt_usd),'$') : '<span class="dash">-</span>') + '</td>' +
+         '<td class="r">' + (c==='rmb' ? money(num(r.amt_rmb),'¥') : '<span class="dash">-</span>') + '</td>' +
+         '<td class="r">' + (c==='idr' ? money(num(r.amt_idr),'Rp') : '<span class="dash">-</span>') + '</td>';
+}
+function amtLabel(r){
+  if(num(r.amt_usd)>0) return '$ ' + nf(r.amt_usd);
+  if(num(r.amt_rmb)>0) return '¥ ' + nf(r.amt_rmb);
+  if(num(r.amt_idr)>0) return 'Rp ' + nf(r.amt_idr);
+  return '-';
+}
+function shortSup(s){ return String(s||'').replace(/[, ]*(Co\.,?\s?Ltd\.?|Sporting Goods|Technology|Group).*$/i,'').trim() || String(s||''); }
+// PO-number matching across ledgers: must be an exact match (spacing and case ignored).
+// It used to take only the first number, so '#031' and '#031+033+034MQN'
+// were treated as the same PO and overwrote each other on Refresh.
+function poKey(po){
+  return String(po||'').trim().toUpperCase().replace(/\s+/g,' ');
+}
+// PO yang ditandai cancel tidak pernah mengalir ke Recap Payment maupun Recap Shipment.
+function isCancelled(r){ return String(r.remark||'').trim().toLowerCase() === 'cancel'; }
+function nextOrd(coll){
+  return S[coll].reduce(function(m,x){ return Math.max(m, num(x.ord)); }, 0) + 1;
+}
+
+/* ============================ column picker ============================ */
+function colPicker(tableId, btnId, panelId, cols, key){
+  var table = $(tableId), btn = $(btnId), panel = $(panelId);
+  var style = document.createElement('style'), css = '';
+  for(var i=1;i<=cols.length;i++){
+    css += '#'+tableId+'.h'+i+' th:nth-child('+i+'),#'+tableId+'.h'+i+' td:nth-child('+i+'){display:none}';
+  }
+  style.textContent = css; document.head.appendChild(style);
+  function hidden(){ try { return JSON.parse(localStorage.getItem(key)) || []; } catch(e){ return []; } }
+  function apply(){ var h = hidden(); for(var i=1;i<=cols.length;i++) table.classList.toggle('h'+i, h.indexOf(i)>=0); }
+  function build(){
+    var h = hidden();
+    panel.innerHTML = cols.map(function(c, idx){
+      var n = idx+1;
+      return '<label><input type="checkbox" data-col="'+n+'"'+(h.indexOf(n)>=0?'':' checked')+'> '+esc(c)+'</label>';
+    }).join('');
+  }
+  panel.addEventListener('change', function(e){
+    var n = parseInt(e.target.getAttribute('data-col'), 10); if(!n) return;
+    var h = hidden();
+    if(e.target.checked) h = h.filter(function(x){ return x!==n; });
+    else if(h.indexOf(n)<0) h.push(n);
+    try { localStorage.setItem(key, JSON.stringify(h)); } catch(err){}
+    apply();
+  });
+  btn.addEventListener('click', function(e){ e.stopPropagation(); panel.classList.toggle('open'); });
+  build(); apply();
+}
+document.addEventListener('click', function(e){
+  document.querySelectorAll('.colpick-panel.open').forEach(function(p){
+    if(!p.parentNode.contains(e.target)) p.classList.remove('open');
+  });
+});
+
+/* ============================ loading ============================ */
+var loaded = {po:false, payment:false, shipment:false};
+var STATUS_KEY = 'rci_status_filter';
+var statusFilter = [];
+try {
+  var _sf = JSON.parse(localStorage.getItem(STATUS_KEY));
+  if(Array.isArray(_sf)) statusFilter = _sf.filter(function(k){ return ['closed','partial','open'].indexOf(k) >= 0; });
+} catch(e){}
+var busy = 0;
+function setBusy(on){
+  busy = Math.max(0, busy + (on ? 1 : -1));
+  $('loadbar').classList.toggle('on', busy > 0);
+}
+function skeleton(tbodyId, tableId, rows){
+  var cols = document.querySelectorAll('#' + tableId + ' thead th').length;
+  var w = ['70%','45%','85%','55%','75%','40%','60%','50%'];
+  var out = '';
+  for(var i = 0; i < rows; i++){
+    out += '<tr class="skelrow" aria-hidden="true"><td colspan="' + cols + '"><div class="skel" style="width:' + w[i % w.length] + '"></div></td></tr>';
+  }
+  $(tbodyId).innerHTML = out;
+}
+function showLoading(coll){
+  if(coll === 'po'){ skeleton('poBody','poTable',6); $('poEmpty').style.display='none'; $('poTable').style.display=''; $('poCount').textContent='Loading…'; }
+  if(coll === 'payment'){ skeleton('payBody','payTable',8); $('payEmpty').style.display='none'; $('payTable').style.display=''; $('payCount').textContent='Loading…'; }
+  if(coll === 'shipment'){ skeleton('shpBody','shpTable',6); $('shpEmpty').style.display='none'; $('shpTable').style.display=''; $('shpCount').textContent='Loading…'; }
+}
+
+/* ============================ Recap PO ============================ */
+function renderPO(){
+  if(!loaded.po) return showLoading('po');
+  var q = ($('poSearch').value||'').toLowerCase();
+  var body = $('poBody'), rows = S.po, out = [], idxs = [], shown = 0;
+  rows.forEach(function(r, i){
+    var hay = (r.po+' '+(r.po_date||'')+' '+r.supplier+' '+r.factory+' '+(r.category||'')+' '+(r.remark||'')).toLowerCase();
+    if(q && hay.indexOf(q)<0) return;
+    shown++; idxs.push(i);
+    out.push('<tr'+(isCancelled(r) ? ' class="cancelled"' : '')+'>' +
+      '<td class="num">'+(i+1)+'</td>' +
+      '<td class="key">'+txt(r.po)+'</td>' +
+      '<td class="num">'+txt(r.po_date)+'</td>' +
+      '<td>'+txt(shortSup(r.supplier))+'</td>' +
+      '<td>'+txt(r.factory)+'</td>' +
+      '<td>'+txt(r.category)+'</td>' +
+      '<td class="r">'+money(num(r.amt_usd),'$')+'</td>' +
+      '<td class="r">'+money(num(r.amt_rmb),'¥')+'</td>' +
+      '<td class="r">'+money(num(r.amt_idr),'Rp')+'</td>' +
+      '<td><button class="mini '+(r.final==='yes'?'yes':'no')+'" data-fin-po="'+r._id+'">'+(r.final==='yes'?'Final':'Not yet')+'</button></td>' +
+      '<td class="num">'+txt(r.etd)+'</td>' +
+      '<td>'+(isCancelled(r) ? '<span class="tag cancel">CANCEL</span>' : '<span class="dash">&mdash;</span>')+'</td>' +
+      '<td><div class="act">'+moveBtns('po', i)+'<button class="link" data-edit-po="'+r._id+'">Edit</button><button class="link del" data-del-po="'+r._id+'">Delete</button></div></td>' +
+    '</tr>');
+  });
+  body.innerHTML = out.join('');
+  attachDrag(body, 'po', idxs);
+  $('poEmpty').style.display = rows.length ? 'none' : 'block';
+  $('poTable').style.display = rows.length ? '' : 'none';
+  $('poCount').textContent = shown + ' of ' + rows.length + ' POs';
+}
+
+function moveBtns(coll, i){
+  if(i===undefined) return '';
+  return '<span class="grip" title="Drag to move this row" aria-hidden="true">\u283F</span>' +
+         '<button class="mv" data-move="'+coll+':'+i+':-1" title="Move up" aria-label="Move row up">\u25B2</button>' +
+         '<button class="mv" data-move="'+coll+':'+i+':1" title="Move down" aria-label="Move row down">\u25BC</button>';
+}
+
+/* ---------- drag a row to change its order ---------- */
+var drag = null;
+function makeDraggable(tr, coll, i){
+  tr.setAttribute('draggable','true');
+  tr.dataset.coll = coll; tr.dataset.idx = i;
+  tr.addEventListener('dragstart', function(e){
+    drag = {coll: coll, from: i};
+    tr.classList.add('dragging');
+    try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', String(i)); } catch(err){}
+  });
+  tr.addEventListener('dragend', function(){
+    tr.classList.remove('dragging');
+    clearDropHints(); drag = null;
+  });
+  tr.addEventListener('dragover', function(e){
+    if(!drag || drag.coll !== coll) return;
+    e.preventDefault();
+    try { e.dataTransfer.dropEffect = 'move'; } catch(err){}
+    var box = tr.getBoundingClientRect();
+    var after = (e.clientY - box.top) > box.height / 2;
+    clearDropHints();
+    tr.classList.add(after ? 'dropafter' : 'dropbefore');
+  });
+  tr.addEventListener('drop', function(e){
+    if(!drag || drag.coll !== coll) return;
+    e.preventDefault();
+    var box = tr.getBoundingClientRect();
+    var after = (e.clientY - box.top) > box.height / 2;
+    var to = i + (after ? 1 : 0);
+    var from = drag.from;
+    clearDropHints(); drag = null;
+    dropRow(coll, from, to);
+  });
+}
+function attachDrag(body, coll, idxs){
+  var trs = body.querySelectorAll('tr');
+  for(var n = 0; n < trs.length && n < idxs.length; n++) makeDraggable(trs[n], coll, idxs[n]);
+}
+function clearDropHints(){
+  document.querySelectorAll('tr.dropbefore, tr.dropafter').forEach(function(x){
+    x.classList.remove('dropbefore'); x.classList.remove('dropafter');
+  });
+}
+// Move one row to a new position. Only that row is rewritten:
+// its ord is set to a value between its new neighbours.
+function dropRow(coll, from, to){
+  if(!ready()) return;
+  var arr = S[coll];
+  if(from === to || from === to - 1) return;
+  if(from < 0 || from >= arr.length) return;
+  var moved = arr[from];
+  var rest = arr.filter(function(_, k){ return k !== from; });
+  var at = to > from ? to - 1 : to;
+  var before = rest[at - 1], afterRow = rest[at];
+  var lo = before ? num(before.ord) : null;
+  var hi = afterRow ? num(afterRow.ord) : null;
+  var ord;
+  if(lo === null && hi === null) ord = 1;
+  else if(lo === null) ord = hi - 1;
+  else if(hi === null) ord = lo + 1;
+  else ord = (lo + hi) / 2;
+  if((lo !== null && ord <= lo) || (hi !== null && ord >= hi)){
+    // numeric precision exhausted: renumber every row
+    rest.splice(at, 0, moved);
+    var jobs = [];
+    rest.forEach(function(r, k){ if(num(r.ord) !== k + 1) jobs.push(store.patch(coll, r._id, {ord: k + 1})); });
+    Promise.all(jobs);
+    return;
+  }
+  store.patch(coll, moved._id, {ord: ord});
+}
+
+
+/* ============================ Recap PO summary (pivot) ============================ */
+var PV_DIMS = [
+  {k:'none',     label:'- none -'},
+  {k:'po_month', label:'PO Date (month)'},
+  {k:'po_date',  label:'PO Date (day)'},
+  {k:'supplier', label:'Supplier'},
+  {k:'factory',  label:'Factory'},
+  {k:'category', label:'Category'},
+  {k:'final',    label:'Finalised'},
+  {k:'remark',   label:'Remark (cancel)'}
+];
+var PV_VALS = [
+  {k:'count',   label:'Number of POs'},
+  {k:'amt_usd', label:'Amount USD', sym:'$'},
+  {k:'amt_rmb', label:'Amount RMB', sym:'¥'},
+  {k:'amt_idr', label:'Amount IDR', sym:'Rp'}
+];
+var MN_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var PV_SEP = '~||~';
+function pvKey(r, dim){
+  if(dim === 'po_month'){
+    var d = String(r.po_date || '');
+    return d.length < 7 ? '(no PO date)' : d.slice(0,7);
+  }
+  if(dim === 'po_date') return r.po_date || '(no PO date)';
+  if(dim === 'final')   return r.final === 'yes' ? 'Finalised' : 'Not yet';
+  if(dim === 'remark')  return isCancelled(r) ? 'Cancel' : 'Active';
+  var v = String(r[dim] || '').trim();
+  return v || '(blank)';
+}
+function pvLabel(dim, key){
+  if(dim === 'po_month' && /^\d{4}-\d{2}$/.test(key)){
+    var pr = key.split('-');
+    return MN_EN[parseInt(pr[1],10) - 1] + ' ' + pr[0];
+  }
+  if(dim === 'supplier' || dim === 'factory') return shortSup(key);
+  return key;
+}
+function buildPivotControls(){
+  function opts(list, sel){
+    return list.map(function(d){
+      return '<option value="' + d.k + '"' + (d.k === sel ? ' selected' : '') + '>' + esc(d.label) + '</option>';
+    }).join('');
+  }
+  $('pvRow').innerHTML = opts(PV_DIMS.filter(function(d){ return d.k !== 'none'; }), 'supplier');
+  $('pvCol').innerHTML = opts(PV_DIMS, 'none');
+  $('pvValPanel').innerHTML = PV_VALS.map(function(v){
+    return '<label><input type="checkbox" data-pv="' + v.k + '"' +
+           (pvVals.indexOf(v.k) >= 0 ? ' checked' : '') + '> ' + esc(v.label) + '</label>';
+  }).join('') + '<button class="link" id="pvValAll" type="button" style="margin-top:8px">Select all</button>';
+  $('pvValPanel').addEventListener('change', function(e){
+    var k = e.target.getAttribute && e.target.getAttribute('data-pv');
+    if(!k) return;
+    pvVals = PV_VALS.filter(function(v){
+      var box = $('pvValPanel').querySelector('[data-pv="' + v.k + '"]');
+      return box && box.checked;
+    }).map(function(v){ return v.k; });
+    savePvVals(); paintPvVals(); renderPivot();
+  });
+  $('pvValAll').addEventListener('click', function(){
+    PV_VALS.forEach(function(v){ $('pvValPanel').querySelector('[data-pv="' + v.k + '"]').checked = true; });
+    pvVals = PV_VALS.map(function(v){ return v.k; });
+    savePvVals(); paintPvVals(); renderPivot();
+  });
+  $('pvValBtn').addEventListener('click', function(e){
+    e.stopPropagation();
+    var panel = $('pvValPanel');
+    panel.classList.toggle('open');
+    $('pvValBtn').setAttribute('aria-expanded', panel.classList.contains('open') ? 'true' : 'false');
+  });
+  paintPvVals();
+}
+var PV_VALS_KEY = 'rci_pivot_values';
+var pvVals = (function(){
+  try {
+    var v = JSON.parse(localStorage.getItem(PV_VALS_KEY));
+    if(Array.isArray(v) && v.length) return v;
+  } catch(e){}
+  return ['count','amt_usd','amt_rmb','amt_idr'];
+})();
+function savePvVals(){ try { localStorage.setItem(PV_VALS_KEY, JSON.stringify(pvVals)); } catch(e){} }
+function paintPvVals(){
+  var n = pvVals.length;
+  $('pvValLabel').textContent = (n === 0 || n === PV_VALS.length) ? 'All values'
+    : n === 1 ? (PV_VALS.filter(function(v){ return v.k === pvVals[0]; })[0] || {}).label
+    : n + ' values';
+  $('pvValBtn').classList.toggle('active', n > 0 && n < PV_VALS.length);
+}
+function activeVals(){
+  var list = PV_VALS.filter(function(v){ return pvVals.indexOf(v.k) >= 0; });
+  return list.length ? list : PV_VALS.slice();
+}
+function renderPivot(){
+  if(!loaded.po){
+    $('pivotHead').innerHTML = '';
+    $('pivotBody').innerHTML = '<tr><td class="loadnote">Loading the summary…</td></tr>';
+    $('pivotNote').textContent = '';
+    return;
+  }
+  var rowDim = $('pvRow').value, colDim = $('pvCol').value;
+  var vals = activeVals();
+  var from = $('pvFrom').value, to = $('pvTo').value;
+
+  var rows = S.po.filter(function(r){
+    if(!from && !to) return true;
+    var d = r.po_date || '';
+    if(!d) return false;
+    if(from && d < from) return false;
+    if(to && d > to) return false;
+    return true;
+  });
+
+  var rKeys = [], cKeys = [], cell = {}, rTot = {}, cTot = {}, grand = {};
+  function bump(bucket, key, r){
+    var b = bucket[key] || (bucket[key] = {});
+    vals.forEach(function(v){
+      b[v.k] = (b[v.k] || 0) + (v.k === 'count' ? 1 : num(r[v.k]));
+    });
+  }
+  rows.forEach(function(r){
+    var rk = pvKey(r, rowDim);
+    var ck = colDim === 'none' ? 'ALL' : pvKey(r, colDim);
+    if(rKeys.indexOf(rk) < 0) rKeys.push(rk);
+    if(cKeys.indexOf(ck) < 0) cKeys.push(ck);
+    bump(cell, rk + PV_SEP + ck, r);
+    bump(rTot, rk, r); bump(cTot, ck, r); bump({g:grand}, 'g', r);
+  });
+  grand = (function(){ var o = {}; vals.forEach(function(v){ o[v.k] = 0; });
+    rKeys.forEach(function(rk){ vals.forEach(function(v){ o[v.k] += (rTot[rk] || {})[v.k] || 0; }); });
+    return o; })();
+
+  function sortKeys(keys, dim, tot){
+    var byDate = (dim === 'po_month' || dim === 'po_date');
+    var main = vals[0].k;
+    return keys.sort(function(a,b){
+      if(byDate) return a < b ? -1 : a > b ? 1 : 0;
+      var da = (tot[b] || {})[main] || 0, db = (tot[a] || {})[main] || 0;
+      return (da - db) || (a < b ? -1 : 1);
+    });
+  }
+  sortKeys(rKeys, rowDim, rTot);
+  sortKeys(cKeys, colDim, cTot);
+
+  function fmt(bucket, v){
+    var x = (bucket || {})[v.k] || 0;
+    if(!x) return '<span class="zero">-</span>';
+    return v.k === 'count' ? nf(x) : v.sym + ' ' + nf(x);
+  }
+  var rowLabel = (PV_DIMS.filter(function(d){ return d.k === rowDim; })[0] || {}).label || '';
+
+  var head;
+  if(colDim === 'none'){
+    head = '<tr><th>' + esc(rowLabel) + '</th>' +
+      vals.map(function(v){ return '<th class="r">' + esc(v.label) + '</th>'; }).join('') + '</tr>';
+  } else {
+    var h1 = '<tr><th rowspan="2">' + esc(rowLabel) + '</th>';
+    var h2 = '<tr>';
+    cKeys.forEach(function(c){
+      h1 += '<th class="r grp" colspan="' + vals.length + '">' + esc(pvLabel(colDim, c)) + '</th>';
+      vals.forEach(function(v){ h2 += '<th class="r sub">' + esc(v.label) + '</th>'; });
+    });
+    h1 += '<th class="r grp" colspan="' + vals.length + '">Total</th>';
+    vals.forEach(function(v){ h2 += '<th class="r sub">' + esc(v.label) + '</th>'; });
+    head = h1 + '</tr>' + h2 + '</tr>';
+  }
+  $('pivotHead').innerHTML = head;
+
+  if(!rKeys.length){
+    $('pivotBody').innerHTML = '<tr><td class="loadnote">No purchase orders match this date range.</td></tr>';
+    $('pivotNote').textContent = '';
+    return;
+  }
+  var out = rKeys.map(function(rk){
+    var tr = '<tr><td class="rowhead">' + esc(pvLabel(rowDim, rk)) + '</td>';
+    if(colDim === 'none'){
+      vals.forEach(function(v){ tr += '<td class="r">' + fmt(rTot[rk], v) + '</td>'; });
+    } else {
+      cKeys.forEach(function(c){
+        vals.forEach(function(v){ tr += '<td class="r">' + fmt(cell[rk + PV_SEP + c], v) + '</td>'; });
+      });
+      vals.forEach(function(v){ tr += '<td class="r">' + fmt(rTot[rk], v) + '</td>'; });
+    }
+    return tr + '</tr>';
+  });
+  var gt = '<tr class="grand"><td class="rowhead">Grand total</td>';
+  if(colDim === 'none'){
+    vals.forEach(function(v){ gt += '<td class="r">' + fmt(grand, v) + '</td>'; });
+  } else {
+    cKeys.forEach(function(c){
+      vals.forEach(function(v){ gt += '<td class="r">' + fmt(cTot[c], v) + '</td>'; });
+    });
+    vals.forEach(function(v){ gt += '<td class="r">' + fmt(grand, v) + '</td>'; });
+  }
+  out.push(gt + '</tr>');
+  $('pivotBody').innerHTML = out.join('');
+
+  var undated = S.po.filter(function(r){ return !r.po_date; }).length;
+  $('pivotNote').textContent = rows.length + ' of ' + S.po.length + ' purchase orders counted' +
+    (undated ? ' · ' + undated + ' still have no PO Date' : '');
+}
+
+/* ============================ Recap Payment ============================ */
+function renderPay(){
+  if(!loaded.payment) return showLoading('payment');
+  var q = ($('paySearch').value||'').toLowerCase();
+  var body = $('payBody'), rows = S.payment, out = [], idxs = [], shown = 0;
+  rows.forEach(function(r, i){
+    var hay = (r.po+' '+r.supplier+' '+(r.invoice||'')+' '+(r.plinv||'')).toLowerCase();
+    if(q && hay.indexOf(q)<0) return;
+    var st = statusOf(r);
+    if(statusFilter.length && statusFilter.indexOf(st) < 0) return;
+    shown++; idxs.push(i);
+    out.push('<tr>' +
+      '<td class="num">'+(i+1)+'</td>' +
+      '<td>'+txt(shortSup(r.supplier))+'</td>' +
+      '<td>'+txt(r.factory)+'</td>' +
+      '<td class="key">'+txt(rowId(r))+'</td>' +
+      '<td>'+(isJK(r) ? '<span class="dash">forwarder</span>' : txt(r.invoice))+'</td>' +
+      '<td>'+txt(r.plinv)+'</td>' +
+      '<td>'+txt(r.category)+'</td>' +
+      '<td><span class="tag kat">'+KAT_LABEL[katOf(r)]+'</span></td>' +
+      '<td><button class="mini '+(r.final==='yes'?'yes':'no')+'" data-fin-pay="'+r._id+'">'+(r.final==='yes'?'Final':'Not yet')+'</button></td>' +
+      '<td>'+statusTag(r)+'</td>' +
+      '<td class="num">'+txt(r.etd)+'</td>' +
+      '<td class="num">'+txt(r.actual_eta)+'</td>' +
+      '<td class="num">'+txt(shipEta(r))+'</td>' +
+      amtCells(r) +
+      '<td class="num">'+txt(r.tt1)+'</td><td class="r">'+money(num(r.tr1_usd),'$')+'</td><td class="r">'+money(num(r.tr1_rmb),'¥')+'</td><td class="r">'+money(num(r.tr1_idr),'Rp')+'</td>' +
+      '<td class="num">'+txt(r.tt2)+'</td><td class="r">'+money(num(r.tr2_usd),'$')+'</td><td class="r">'+money(num(r.tr2_rmb),'¥')+'</td><td class="r">'+money(num(r.tr2_idr),'Rp')+'</td>' +
+      '<td class="num">'+txt(r.tt3)+'</td><td class="r">'+money(num(r.tr3_usd),'$')+'</td><td class="r">'+money(num(r.tr3_rmb),'¥')+'</td><td class="r">'+money(num(r.tr3_idr),'Rp')+'</td>' +
+      '<td class="r">'+balCell(r,'usd')+'</td><td class="r">'+balCell(r,'rmb')+'</td><td class="r">'+balCell(r,'idr')+'</td>' +
+      '<td><div class="act">'+moveBtns('payment', i)+'<button class="link" data-edit-pay="'+r._id+'">Edit</button><button class="link del" data-del-pay="'+r._id+'">Delete</button></div></td>' +
+    '</tr>');
+  });
+  body.innerHTML = out.join('');
+  attachDrag(body, 'payment', idxs);
+  $('payEmpty').style.display = rows.length ? 'none' : 'block';
+  $('payTable').style.display = rows.length ? '' : 'none';
+  $('payCount').textContent = shown + ' of ' + rows.length + ' rows';
+}
+
+/* ============================ Recap Shipment ============================ */
+function renderShp(){
+  if(!loaded.shipment) return showLoading('shipment');
+  var q = ($('shpSearch').value||'').toLowerCase();
+  var body = $('shpBody'), rows = S.shipment, out = [], idxs = [], shown = 0;
+  rows.forEach(function(r, i){
+    var hay = (r.po+' '+r.supplier+' '+(r.pl||'')).toLowerCase();
+    if(q && hay.indexOf(q)<0) return;
+    shown++; idxs.push(i);
+    out.push('<tr>' +
+      '<td class="num">'+(i+1)+'</td>' +
+      '<td class="key">'+txt(r.po)+'</td>' +
+      '<td>'+txt(shortSup(r.supplier))+'</td>' +
+      '<td>'+txt(r.factory)+'</td>' +
+      '<td>'+txt(r.category)+'</td>' +
+      '<td>'+txt(r.marking)+'</td>' +
+      '<td class="num">'+txt(r.amount)+'</td>' +
+      '<td class="num">'+txt(r.china)+'</td>' +
+      '<td class="num">'+txt(r.etd)+'</td>' +
+      '<td>'+txt(r.pl)+'</td>' +
+      '<td class="num">'+txt(r.eta)+'</td>' +
+      '<td class="num">'+txt(r.jkt)+'</td>' +
+      '<td class="r">'+(num(r.ctn) ? nf(r.ctn) : '<span class="dash">-</span>')+'</td>' +
+      '<td class="r">'+(num(r.cbm) ? nf(r.cbm, 2) : '<span class="dash">-</span>')+'</td>' +
+      '<td class="r">'+money(num(r.price),'Rp')+'</td>' +
+      '<td><div class="act">'+moveBtns('shipment', i)+'<button class="link" data-edit-shp="'+r._id+'">Edit</button><button class="link del" data-del-shp="'+r._id+'">Delete</button></div></td>' +
+    '</tr>');
+  });
+  body.innerHTML = out.join('');
+  attachDrag(body, 'shipment', idxs);
+  $('shpEmpty').style.display = rows.length ? 'none' : 'block';
+  $('shpTable').style.display = rows.length ? '' : 'none';
+  $('shpCount').textContent = shown + ' of ' + rows.length + ' shipments';
+}
+
+/* ============================ ringkasan ============================ */
+function renderRingkasan(){
+  if(!loaded.payment){
+    $('kpis').innerHTML = '<div class="kpi"><div class="k">Loading</div><div class="v"><span class="skel" style="display:block;width:60%;height:26px;margin-top:6px"></span></div><div class="s">fetching data…</div></div>';
+    $('curstrip').innerHTML = '<div class="cur"><div class="loadnote">Loading the summary…</div></div>';
+    return;
+  }
+  var rows = S.payment, total = rows.length;
+  var closed = rows.filter(function(r){ return statusOf(r)==='closed'; }).length;
+  var partial = rows.filter(function(r){ return statusOf(r)==='partial'; }).length;
+  var open = total - closed - partial;
+  var pct = total ? Math.round(closed/total*100) : 0;
+  var sup = {};
+  rows.forEach(function(r){ if(r.supplier) sup[r.supplier] = true; });
+
+  $('kpis').innerHTML =
+    kpi('Total rows', total, 'payment rows', true) +
+    kpi('Paid', closed, total ? pct+'% of all rows' : 'no data yet') +
+    kpi('Outstanding', partial+open, partial ? partial+' partly paid' : 'no transfers yet') +
+    kpi('Suppliers', Object.keys(sup).length, 'active partners');
+
+  var tot = {usd:0, rmb:0, idr:0}, outs = {usd:0, rmb:0, idr:0};
+  rows.forEach(function(r){
+    ['usd','rmb','idr'].forEach(function(c){
+      tot[c] += num(r['amt_'+c]);
+      if(statusOf(r)!=='closed'){ var b = balOf(r, c); if(b > 0) outs[c] += b; }
+    });
+  });
+  $('curstrip').innerHTML =
+    cur('Total USD', '$', tot.usd, outs.usd) +
+    cur('Total RMB', '¥', tot.rmb, outs.rmb) +
+    cur('Total IDR', 'Rp', tot.idr, outs.idr);
+
+  drawCharts(rows);
+}
+function kpi(k, v, s, lead){
+  return '<div class="kpi'+(lead?' lead':'')+'"><div class="k">'+k+'</div><div class="v">'+nf(v)+'</div><div class="s">'+esc(s)+'</div></div>';
+}
+function cur(k, sym, t, o){
+  return '<div class="cur"><div class="k">'+k+'</div><div class="v">'+sym+' '+nf(t)+'</div>' +
+         '<div class="o'+(o?'':' none')+'">'+(o ? 'outstanding '+sym+' '+nf(o) : 'nothing outstanding')+'</div></div>';
+}
+
+function themeColors(){
+  var cs = getComputedStyle(document.documentElement);
+  return {
+    jade: cs.getPropertyValue('--jade').trim(),
+    clay: cs.getPropertyValue('--clay').trim(),
+    gold: cs.getPropertyValue('--gold').trim(),
+    line: cs.getPropertyValue('--line').trim(),
+    muted: cs.getPropertyValue('--muted').trim(),
+    surface: cs.getPropertyValue('--surface').trim()
+  };
+}
+function chartSlot(wrapId, canvasId, has){
+  var w = $(wrapId);
+  if(typeof Chart === 'undefined'){ w.innerHTML = '<div class="chart-empty">Charts cannot be loaded in this view</div>'; return null; }
+  if(!has){ w.innerHTML = '<div class="chart-empty">The chart appears once there is payment data</div>'; return null; }
+  w.innerHTML = '<div class="chartbox"><canvas id="'+canvasId+'"></canvas></div>';
+  return $(canvasId);
+}
+function drawCharts(rows){
+  Object.keys(charts).forEach(function(k){ if(charts[k]) charts[k].destroy(); });
+  charts = {};
+  if(typeof Chart === 'undefined'){
+    ['wrapMonth','wrapStatus','wrapKat','wrapSup'].forEach(function(id){ chartSlot(id, null, false); });
+    return;
+  }
+  var C = themeColors();
+  Chart.defaults.font.family = "'Archivo', sans-serif";
+  Chart.defaults.color = C.muted;
+
+  // per bulan
+  var bm = {};
+  rows.forEach(function(r){
+    ['tt1','tt2','tt3'].forEach(function(k, idx){
+      if(!r[k]) return;
+      var m = String(r[k]).slice(0,7);
+      bm[m] = bm[m] || {n:0, idr:0};
+      bm[m].idr += num(r['tr'+(idx+1)+'_idr']);
+    });
+    if(r.tt1 && statusOf(r)==='closed'){ var m1 = String(r.tt1).slice(0,7); bm[m1] = bm[m1] || {n:0, idr:0}; bm[m1].n++; }
+  });
+  var months = Object.keys(bm).sort();
+  var cv = chartSlot('wrapMonth', 'chMonth', months.length > 0);
+  if(cv){
+    var MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    charts.m = new Chart(cv, {
+      data:{
+        labels: months.map(function(m){ var p = m.split('-'); return MN[parseInt(p[1],10)-1] + " '" + p[0].slice(2); }),
+        datasets:[
+          {type:'bar', label:'Transfers IDR', data: months.map(function(m){ return bm[m].idr; }), backgroundColor:C.jade, yAxisID:'y', maxBarThickness:38, order:2},
+          {type:'line', label:'POs settled', data: months.map(function(m){ return bm[m].n; }), borderColor:C.clay, backgroundColor:C.clay, yAxisID:'y1', tension:.3, pointRadius:4, borderWidth:2.5, order:1}
+        ]
+      },
+      options:{responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{position:'bottom', labels:{boxWidth:12, font:{size:11}}}},
+        scales:{
+          y:{position:'left', grid:{color:C.line}, ticks:{callback:function(v){ return 'Rp ' + (v>=1e9 ? (v/1e9).toFixed(1)+' M' : (v/1e6).toFixed(0)+' M'); }}},
+          y1:{position:'right', grid:{display:false}, ticks:{precision:0}},
+          x:{grid:{display:false}}
+        }}
+    });
+  }
+
+  // status
+  var closed = rows.filter(function(r){ return statusOf(r)==='closed'; }).length;
+  var partial = rows.filter(function(r){ return statusOf(r)==='partial'; }).length;
+  var open = rows.length - closed - partial;
+  var cs = chartSlot('wrapStatus', 'chStatus', rows.length > 0);
+  if(cs){
+    charts.s = new Chart(cs, {
+      type:'doughnut',
+      data:{labels:['Paid','Partial','Unpaid'], datasets:[{data:[closed, partial, open], backgroundColor:[C.jade, C.gold, C.clay], borderWidth:2, borderColor:C.surface}]},
+      options:{responsive:true, maintainAspectRatio:false, cutout:'62%', plugins:{legend:{position:'bottom', labels:{boxWidth:12, font:{size:11}}}}}
+    });
+  }
+
+  // group
+  var bk = {rb:0, nrb:0, jk:0};
+  rows.forEach(function(r){ bk[katOf(r)]++; });
+  var ck = chartSlot('wrapKat', 'chKat', rows.length > 0);
+  if(ck){
+    charts.k = new Chart(ck, {
+      type:'bar',
+      data:{labels:['Merek A','Merek lain','Forwarder'], datasets:[{data:[bk.rb, bk.nrb, bk.jk], backgroundColor:[C.jade, C.gold, C.clay]}]},
+      options:{responsive:true, maintainAspectRatio:false, indexAxis:'y',
+        plugins:{legend:{display:false}}, scales:{x:{grid:{color:C.line}, ticks:{precision:0}}, y:{grid:{display:false}}}}
+    });
+  }
+
+  // supplier RMB
+  var bs = {};
+  rows.forEach(function(r){ if(r.supplier && num(r.amt_rmb) > 0) bs[r.supplier] = (bs[r.supplier]||0) + num(r.amt_rmb); });
+  var sa = Object.keys(bs).map(function(k){ return [k, bs[k]]; }).sort(function(a,b){ return b[1]-a[1]; }).slice(0,7);
+  var csup = chartSlot('wrapSup', 'chSup', sa.length > 0);
+  if(csup){
+    charts.sup = new Chart(csup, {
+      type:'bar',
+      data:{labels: sa.map(function(x){ return shortSup(x[0]).slice(0,18); }), datasets:[{data: sa.map(function(x){ return x[1]; }), backgroundColor:C.jade, maxBarThickness:20}]},
+      options:{responsive:true, maintainAspectRatio:false, indexAxis:'y',
+        plugins:{legend:{display:false}, tooltip:{callbacks:{label:function(c){ return '¥ ' + nf(c.raw); }}}},
+        scales:{x:{grid:{color:C.line}, ticks:{callback:function(v){ return '¥ ' + (v>=1e6 ? (v/1e6).toFixed(1)+' M' : nf(v)); }}}, y:{grid:{display:false}, ticks:{font:{size:10}}}}}
+    });
+  }
+}
+
+/* ============================ kartu pembayaran ============================ */
+function renderKartu(){
+  if(!loaded.payment){
+    ['rb','nrb','jk'].forEach(function(pfx){
+      $(pfx+'Sub').textContent = 'Loading…';
+      $(pfx+'Body').innerHTML = '<div class="loadnote">Loading payment cards…</div>';
+    });
+    return;
+  }
+  var k = S.kurs;
+  if($('rateRmb') !== document.activeElement) $('rateRmb').value = k.rmb;
+  if($('rateUsd') !== document.activeElement) $('rateUsd').value = k.usd;
+  if($('rateRu') !== document.activeElement) $('rateRu').value = k.rmbusd;
+
+  var belum = S.payment.filter(function(r){ return statusOf(r) !== 'closed'; });
+  var g = {rb:[], nrb:[], jk:[]};
+  belum.forEach(function(r){ g[katOf(r)].push(r); });
+  fillCard('rb', g.rb); fillCard('nrb', g.nrb); fillCard('jk', g.jk);
+}
+function sumRmb(a){ return a.reduce(function(s,r){ return s + num(r.amt_rmb); }, 0); }
+function sumUsd(a){ return a.reduce(function(s,r){ return s + num(r.amt_usd); }, 0); }
+function sumIdrEq(a){
+  return a.reduce(function(s,r){
+    if(num(r.amt_usd) > 0) return s + num(r.amt_usd) * num(S.kurs.usd);
+    if(num(r.amt_rmb) > 0) return s + num(r.amt_rmb) * num(S.kurs.rmb);
+    return s + num(r.amt_idr);
+  }, 0);
+}
+function usdCombined(a){
+  var rate = num(S.kurs.rmbusd) || 7.2;
+  return sumUsd(a) + sumRmb(a) / rate;
+}
+function block(title, rows, cls){
+  var h = '<div class="block ' + cls + '"><h4>' + title + '</h4>';
+  if(!rows.length){ h += '<div class="nothing">None</div>'; }
+  else {
+    h += '<table class="rows"><tbody>' + rows.map(function(r){
+      return '<tr><td>' + txt(shortSup(r.supplier)) + '</td><td><b>' + esc(rowId(r)) + '</b></td><td class="r num">' + esc(amtLabel(r)) + '</td></tr>';
+    }).join('') + '</tbody></table>';
+  }
+  h += '<div class="tot"><span>Amount RMB</span><b>¥ ' + nf(Math.round(sumRmb(rows))) + '</b></div>';
+  h += '<div class="tot"><span>USD equivalent</span><b>$ ' + nf(Math.round(usdCombined(rows))) + '</b></div>';
+  return h + '</div>';
+}
+function fillCard(pfx, arr){
+  $(pfx+'Sub').textContent = arr.length ? arr.length + ' POs outstanding' : 'No open bills';
+  var noWH = arr.filter(function(r){ return !r.actual_eta; });
+  var yesWH = arr.filter(function(r){ return !!r.actual_eta; });
+  var h = block('Not yet in the China warehouse', noWH, '') +
+          block('Already in the China warehouse', yesWH, 'arrived') +
+          '<div class="block sum"><h4>Total</h4>' +
+          '<div class="tot"><span>Amount RMB</span><b>¥ ' + nf(Math.round(sumRmb(arr))) + '</b></div>' +
+          '<div class="tot"><span>USD equivalent</span><b>$ ' + nf(Math.round(usdCombined(arr))) + '</b></div>' +
+          '<div class="tot"><span>IDR equivalent</span><b>Rp ' + nf(Math.round(sumIdrEq(arr))) + '</b></div></div>';
+  $(pfx+'Body').innerHTML = h;
+}
+
+/* ============================ datalists ============================ */
+var SUPPLIER_SEED = ["Supplier A", "Supplier B", "Supplier C", "Supplier D", "Supplier E", "Supplier F", "Supplier G", "Supplier H"];
+var FACTORY_SEED = ["Pabrik 01", "Pabrik 02", "Pabrik 03", "Pabrik 04", "Pabrik 05", "Pabrik 06", "Pabrik 07", "Pabrik 08", "Pabrik 09", "Pabrik 10"];
+// Lookup: Actual ETA China WH diambil langsung dari Recap Shipment lewat nomor PO.
+function shipEta(r){
+  if(!r.po) return '';
+  var k = poKey(r.po);
+  var row = S.shipment.find(function(x){ return x.po && poKey(x.po) === k; });
+  return row ? (row.china || '') : '';
+}
+var MARKING_SEED = ["MARK-01", "MARK-02", "MARK-03", "MARK-04", "MARK-05", "MARK-06", "MARK-07", "MARK-08"];
+function refreshLists(){
+  var sup = {}, fac = {};
+  SUPPLIER_SEED.forEach(function(s){ sup[s] = true; });
+  FACTORY_SEED.forEach(function(s){ fac[s] = true; });
+  S.po.concat(S.payment, S.shipment).forEach(function(r){
+    if(r.supplier) sup[r.supplier] = true;
+    if(r.factory) fac[r.factory] = true;
+  });
+  $('supList').innerHTML = Object.keys(sup).sort().map(function(s){ return '<option value="'+esc(s)+'">'; }).join('');
+  $('facList').innerHTML = Object.keys(fac).sort().map(function(s){ return '<option value="'+esc(s)+'">'; }).join('');
+  var mk = {};
+  MARKING_SEED.forEach(function(m){ mk[m] = true; });
+  S.shipment.forEach(function(r){ if(r.marking) mk[r.marking] = true; });
+  $('markList').innerHTML = Object.keys(mk).sort().map(function(m){ return '<option value="'+esc(m)+'">'; }).join('');
+}
+
+/* ============================ render all ============================ */
+function renderAll(){
+  renderPO(); renderPay(); renderShp(); refreshLists();
+  if($('popane-summary').classList.contains('on')) renderPivot();
+  if($('pane-ringkasan').classList.contains('on')) renderRingkasan();
+  if($('pane-kartu').classList.contains('on')) renderKartu();
+}
+
+/* ============================ modals ============================ */
+function askConfirm(title, body, okLabel){
+  return new Promise(function(resolve){
+    $('askTitle').textContent = title;
+    $('askBody').textContent = body || '';
+    $('askOk').textContent = okLabel || 'Continue';
+    var scrim = $('askScrim');
+    function done(v){
+      scrim.classList.remove('open');
+      $('askOk').removeEventListener('click', yes);
+      $('askNo').removeEventListener('click', no);
+      scrim.removeEventListener('click', backdrop);
+      document.removeEventListener('keydown', keys);
+      resolve(v);
+    }
+    function yes(){ done(true); }
+    function no(){ done(false); }
+    function backdrop(e){ if(e.target === scrim) done(false); }
+    function keys(e){ if(e.key === 'Escape') done(false); }
+    $('askOk').addEventListener('click', yes);
+    $('askNo').addEventListener('click', no);
+    scrim.addEventListener('click', backdrop);
+    document.addEventListener('keydown', keys);
+    scrim.classList.add('open');
+    $('askNo').focus();
+  });
+}
+function ready(){
+  if(store) return true;
+  toast('Storage is not ready yet - one moment');
+  return false;
+}
+function openScrim(id){ $(id).classList.add('open'); }
+function closeScrim(id){ $(id).classList.remove('open'); }
+document.addEventListener('click', function(e){
+  var c = e.target.getAttribute && e.target.getAttribute('data-close');
+  if(c) closeScrim(c);
+  if(e.target.classList && e.target.classList.contains('scrim')) e.target.classList.remove('open');
+});
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') document.querySelectorAll('.scrim.open').forEach(function(s){ s.classList.remove('open'); });
+});
+
+function openPO(id){
+  editing.po = id || null;
+  var r = id ? S.po.find(function(x){ return x._id===id; }) || {} : {};
+  $('poModalTitle').textContent = id ? 'Edit PO' : 'Add PO';
+  $('po_no').value = r.po||''; $('po_sup').value = r.supplier||''; $('po_fac').value = r.factory||'';
+  $('po_cat').value = r.category||''; $('po_fin').value = r.final==='yes' ? 'yes' : 'no';
+  $('po_date').value = r.po_date||''; $('po_etd').value = r.etd||''; $('po_eta').value = r.eta_china||'';
+  $('po_remark').value = isCancelled(r) ? 'cancel' : '';
+  $('po_usd').value = num(r.amt_usd); $('po_rmb').value = num(r.amt_rmb); $('po_idr').value = num(r.amt_idr);
+  openScrim('poScrim'); $('po_no').focus();
+}
+function savePO(){
+  if(!ready()) return;
+  var po = $('po_no').value.trim();
+  if(!po){ toast('PO number is required'); $('po_no').focus(); return; }
+  var old = editing.po ? S.po.find(function(x){ return x._id===editing.po; }) : null;
+  var body = {
+    po: po, supplier: $('po_sup').value.trim(), factory: $('po_fac').value.trim(),
+    category: $('po_cat').value.trim(), final: $('po_fin').value,
+    po_date: $('po_date').value, etd: $('po_etd').value, eta_china: $('po_eta').value,
+    remark: $('po_remark').value,
+    actual_eta: (old ? (old.actual_eta||'') : ''),
+    amt_usd: num($('po_usd').value), amt_rmb: num($('po_rmb').value), amt_idr: num($('po_idr').value),
+    ord: old ? num(old.ord) : nextOrd('po')
+  };
+  store.upsert('po', editing.po, body).then(function(){ closeScrim('poScrim'); toast(editing.po ? 'PO updated' : 'PO added'); });
+}
+
+function openPay(id){
+  editing.payment = id || null;
+  var r = id ? S.payment.find(function(x){ return x._id===id; }) || {} : {};
+  $('payModalTitle').textContent = id ? 'Edit payment row' : 'Add payment row';
+  $('pay_po').value = r.po||''; $('pay_inv').value = r.invoice||''; $('pay_pl').value = r.plinv||'';
+  $('pay_sup').value = r.supplier||''; $('pay_fac').value = r.factory||''; $('pay_cat').value = r.category||'';
+  $('pay_kat').value = id ? katOf(r) : 'rb';
+  $('pay_stat').value = r.status||''; $('pay_fin').value = r.final==='yes' ? 'yes' : 'no';
+  $('pay_etd').value = r.etd||''; $('pay_act').value = r.actual_eta||''; $('pay_rem').value = r.remarks||'';
+  $('pay_usd').value = num(r.amt_usd); $('pay_rmb').value = num(r.amt_rmb); $('pay_idr').value = num(r.amt_idr);
+  [1,2,3].forEach(function(n){
+    $('pay_tt'+n).value = r['tt'+n]||'';
+    $('pay_t'+n+'u').value = num(r['tr'+n+'_usd']);
+    $('pay_t'+n+'r').value = num(r['tr'+n+'_rmb']);
+    $('pay_t'+n+'i').value = num(r['tr'+n+'_idr']);
+  });
+  openScrim('payScrim'); $('pay_po').focus();
+}
+function savePay(){
+  if(!ready()) return;
+  var po = $('pay_po').value.trim(), pl = $('pay_pl').value.trim();
+  if(!po && !pl){ toast('Enter a PO# or a forwarder PL number'); $('pay_po').focus(); return; }
+  var old = editing.payment ? S.payment.find(function(x){ return x._id===editing.payment; }) : null;
+  var body = {
+    po: po, invoice: $('pay_inv').value.trim(), plinv: pl,
+    supplier: $('pay_sup').value.trim(), factory: $('pay_fac').value.trim(),
+    category: $('pay_cat').value.trim(), kat: $('pay_kat').value, status: $('pay_stat').value, final: $('pay_fin').value,
+    etd: $('pay_etd').value, actual_eta: $('pay_act').value, remarks: $('pay_rem').value.trim(),
+    amt_usd: num($('pay_usd').value), amt_rmb: num($('pay_rmb').value), amt_idr: num($('pay_idr').value),
+    ord: old ? num(old.ord) : nextOrd('payment')
+  };
+  [1,2,3].forEach(function(n){
+    body['tt'+n] = $('pay_tt'+n).value;
+    body['tr'+n+'_usd'] = num($('pay_t'+n+'u').value);
+    body['tr'+n+'_rmb'] = num($('pay_t'+n+'r').value);
+    body['tr'+n+'_idr'] = num($('pay_t'+n+'i').value);
+  });
+  store.upsert('payment', editing.payment, body).then(function(){ closeScrim('payScrim'); toast(editing.payment ? 'Row updated' : 'Row added'); });
+}
+
+function openShp(id){
+  editing.shipment = id || null;
+  var r = id ? S.shipment.find(function(x){ return x._id===id; }) || {} : {};
+  $('shpModalTitle').textContent = id ? 'Edit shipment' : 'Add shipment';
+  $('shp_po').value = r.po||''; $('shp_sup').value = r.supplier||''; $('shp_cat').value = r.category||'';
+  $('shp_mark').value = r.marking||''; $('shp_amt').value = r.amount||'';
+  $('shp_fac').value = r.factory||''; $('shp_china').value = r.china||'';
+  $('shp_etd').value = r.etd||''; $('shp_pl').value = r.pl||''; $('shp_eta').value = r.eta||''; $('shp_jkt').value = r.jkt||'';
+  $('shp_ctn').value = num(r.ctn); $('shp_cbm').value = num(r.cbm); $('shp_price').value = num(r.price);
+  openScrim('shpScrim'); $('shp_po').focus();
+}
+function saveShp(){
+  if(!ready()) return;
+  var po = $('shp_po').value.trim();
+  if(!po){ toast('PO No is required'); $('shp_po').focus(); return; }
+  var old = editing.shipment ? S.shipment.find(function(x){ return x._id===editing.shipment; }) : null;
+  var body = {
+    po: po, supplier: $('shp_sup').value.trim(), category: $('shp_cat').value.trim(),
+    marking: $('shp_mark').value.trim(), amount: $('shp_amt').value.trim(),
+    factory: $('shp_fac').value.trim(), china: $('shp_china').value,
+    etd: $('shp_etd').value, pl: $('shp_pl').value.trim(), eta: $('shp_eta').value, jkt: $('shp_jkt').value,
+    ctn: num($('shp_ctn').value), cbm: num($('shp_cbm').value), price: num($('shp_price').value),
+    ord: old ? num(old.ord) : nextOrd('shipment')
+  };
+  store.upsert('shipment', editing.shipment, body).then(function(){ closeScrim('shpScrim'); toast(editing.shipment ? 'Shipment updated' : 'Shipment added'); });
+}
+
+/* ============================ sync ============================ */
+function stampRefresh(){
+  var d = new Date(), p = function(n){ return String(n).padStart(2,'0'); };
+  $('refreshStamp').textContent = 'Last refresh ' + p(d.getDate()) + '/' + p(d.getMonth()+1) + '/' + d.getFullYear() + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+function syncBusy(on){
+  var b = $('btnSync');
+  b.classList.toggle('busy', on);
+  b.innerHTML = on ? '<span class="spin">\u21bb</span> Syncing\u2026' : '\u21bb Refresh';
+  setBusy(on);
+}
+// Sebuah baris turunan dianggap masih kosong kalau belum ada jejak kerja di dalamnya.
+function isBlankPayment(x){
+  if(String(x.status||'').trim()) return false;
+  if(x.tt1 || x.tt2 || x.tt3) return false;
+  if(x.invoice || x.plinv || x.remarks) return false;
+  var n = 0;
+  [1,2,3].forEach(function(i){
+    ['usd','rmb','idr'].forEach(function(c){ n += num(x['tr'+i+'_'+c]); });
+  });
+  return n === 0;
+}
+function isBlankShipment(x){
+  if(x.china || x.etd || x.pl || x.eta || x.jkt || x.marking) return false;
+  return num(x.ctn) === 0 && num(x.cbm) === 0 && num(x.price) === 0;
+}
+function sinkron(){
+  var jobs = [], added = 0, updated = 0, addedShp = 0, updShp = 0;
+
+  // ---- Recap PO -> Recap Payment ----------------------------------------
+  // Only the linking columns flow down (PO number, Supplier, Factory,
+  // Category) plus Amount. Every other column in Recap Payment is left alone,
+  // and changes in Recap Payment never travel back up to Recap PO.
+  var skipped = 0, blocked = 0;
+  S.po.forEach(function(p){
+    if(!p.po) return;
+    var k = poKey(p.po);
+
+    // PO yang dibatalkan: jangan buat baris baru, jangan perbarui yang lama.
+    // Turunan yang masih kosong dibersihkan; yang sudah berisi data dibiarkan
+    // dan dilaporkan, karena menghapusnya berarti membuang catatan keuangan.
+    if(isCancelled(p)){
+      skipped++;
+      S.payment.forEach(function(x){
+        if(isJK(x) || poKey(x.po) !== k) return;
+        if(isBlankPayment(x)) jobs.push(store.remove('payment', x._id));
+        else blocked++;
+      });
+      S.shipment.forEach(function(x){
+        if(poKey(x.po) !== k) return;
+        if(isBlankShipment(x)) jobs.push(store.remove('shipment', x._id));
+        else blocked++;
+      });
+      return;
+    }
+
+    var row = S.payment.find(function(x){ return !isJK(x) && poKey(x.po) === k; });
+    if(row){
+      var patch = {
+        po: p.po,
+        supplier: p.supplier || '', factory: p.factory || '', category: p.category || '',
+        amt_usd: num(p.amt_usd), amt_rmb: num(p.amt_rmb), amt_idr: num(p.amt_idr)
+      };
+      var changed = Object.keys(patch).some(function(f){ return row[f] !== patch[f]; });
+      if(changed){ jobs.push(store.patch('payment', row._id, patch)); updated++; }
+    } else {
+      var body = {
+        po: p.po, invoice:'', plinv:'', supplier: p.supplier||'', factory: p.factory||'',
+        category: p.category||'', kat: guessKat(p.supplier), status:'', final:'no',
+        etd:'', actual_eta:'', remarks:'',
+        amt_usd: num(p.amt_usd), amt_rmb: num(p.amt_rmb), amt_idr: num(p.amt_idr),
+        ord: nextOrd('payment') + added
+      };
+      [1,2,3].forEach(function(n){ body['tt'+n]=''; body['tr'+n+'_usd']=0; body['tr'+n+'_rmb']=0; body['tr'+n+'_idr']=0; });
+      jobs.push(store.upsert('payment', null, body)); added++;
+    }
+  });
+
+  // ---- Recap Payment -> Recap Shipment ----------------------------------
+  // Forwarder rows are deliberately excluded: they live only in Recap Payment.
+  var cancelledKeys = {};
+  S.po.forEach(function(p){ if(p.po && isCancelled(p)) cancelledKeys[poKey(p.po)] = true; });
+
+  S.payment.forEach(function(r){
+    if(!r.po || isJK(r)) return;
+    var k = poKey(r.po);
+    if(cancelledKeys[k]) return;
+    var amt = amtLabel(r);
+    if(amt === '-') amt = '';
+    var row = S.shipment.find(function(x){ return poKey(x.po) === k; });
+    if(row){
+      var patch = {
+        po: r.po,
+        supplier: r.supplier || '', factory: r.factory || '', category: r.category || '',
+        amount: amt
+      };
+      var changed = Object.keys(patch).some(function(f){ return row[f] !== patch[f]; });
+      if(changed){ jobs.push(store.patch('shipment', row._id, patch)); updShp++; }
+    } else {
+      jobs.push(store.upsert('shipment', null, {
+        po: r.po, supplier: r.supplier||'', factory: r.factory||'', category: r.category||'',
+        marking:'', amount: amt, china:'', etd:'', pl:'', eta:'', jkt:'',
+        ctn:0, cbm:0, price:0, ord: nextOrd('shipment') + addedShp
+      }));
+      addedShp++;
+    }
+  });
+
+  if(!jobs.length){ stampRefresh(); toast('Everything is already in sync - nothing to change'); return; }
+  syncBusy(true);
+  Promise.all(jobs).then(function(){
+    stampRefresh();
+    var msg = 'Refresh complete - ' + (added + addedShp) + ' new rows, ' + (updated + updShp) + ' updated';
+    if(skipped) msg += ' · ' + skipped + ' cancelled PO' + (skipped > 1 ? 's' : '') + ' skipped';
+    if(blocked) msg += ' · ' + blocked + ' row' + (blocked > 1 ? 's' : '') + ' kept (already has data)';
+    toast(msg);
+  })['catch'](function(){ /* the store has already shown a message */ })
+  .then(function(){ syncBusy(false); });
+}
+
+/* ============================ export ============================ */
+var PAY_EXPORT = [
+  ['__no','No',12], ['supplier','Supplier Name',15], ['factory','Factory Name',14],
+  ['po','PO#',12], ['invoice','Invoice PO#',13], ['plinv','PL/Inv Ekspedisi',18],
+  ['final','Finalisasi Amount',19], ['__status','Payment Status',19],
+  ['etd','ETD/Eta China WH',18], ['actual_eta','Actual Eta China WH',21],
+  ['amt_usd','Amt USD',12], ['amt_rmb','Amt RMB',13], ['amt_idr','Amt IDR',13],
+  ['tt1','TT1 Date',13], ['tr1_usd','TT1 USD',13], ['tr1_rmb','TT1 RMB',13], ['tr1_idr','TT1 IDR',13],
+  ['tt2','TT2 Date',13], ['tr2_usd','TT2 USD',13], ['tr2_rmb','TT2 RMB',13], ['tr2_idr','TT2 IDR',13],
+  ['tt3','TT3 Date',13], ['tr3_usd','TT3 USD',13], ['tr3_rmb','TT3 RMB',13], ['tr3_idr','TT3 IDR',13],
+  ['__bu','Bal USD',13], ['__br','Bal RMB',13], ['__bi','Bal IDR',13]
+];
+// Row background colour follows the supplier group, exactly as in the old export file.
+function supFill(r){
+  var s = String(r.supplier||'').toLowerCase();
+  if(isJK(r) || s.indexOf('fasdeli') >= 0 || s.indexOf('topfan') >= 0) return 'FFC6EFCE'; // forwarder, green
+  if(s.indexOf('muscon') >= 0) return 'FFFFC2D1';                                        // supplier, pink
+  if(s.indexOf('yiwu') >= 0 || katOf(r) === 'rb') return 'FFCCE5FF';                      // Merek A, blue
+  return 'FFFFF2CC';                                                                     // everything else, yellow
+}
+function exportExcel(){
+  if(!S.payment.length){ toast('There is no data to export yet'); return; }
+  if(typeof ExcelJS === 'undefined'){ toast('The Excel module has not loaded yet. Try again shortly.'); return; }
+  var wb = new ExcelJS.Workbook(), ws = wb.addWorksheet('Recap Payment');
+  ws.addRow(PAY_EXPORT.map(function(c){ return c[1]; }));
+  ws.getRow(1).eachCell(function(c){
+    c.font = {bold:true, color:{argb:'FFFFFFFF'}};
+    c.fill = {type:'pattern', pattern:'solid', fgColor:{argb:'FF14211C'}};
+    c.alignment = {vertical:'middle'};
+  });
+  var STAT = {closed:'PAID', partial:'PARTLY PAID', open:'UNPAID'};
+  S.payment.forEach(function(r, i){
+    var closed = statusOf(r) === 'closed';
+    var row = ws.addRow(PAY_EXPORT.map(function(c){
+      var k = c[0];
+      if(k === '__no') return i + 1;
+      if(k === '__status') return STAT[statusOf(r)];
+      if(k === '__bu') return closed ? 0 : balOf(r,'usd');
+      if(k === '__br') return closed ? 0 : balOf(r,'rmb');
+      if(k === '__bi') return closed ? 0 : balOf(r,'idr');
+      return r[k] == null ? '' : r[k];
+    }));
+    var fill = supFill(r);
+    var fc = closed ? 'FF000000' : 'FFFF0000';
+    row.eachCell({includeEmpty:true}, function(c){
+      c.fill = {type:'pattern', pattern:'solid', fgColor:{argb:fill}};
+      c.font = {color:{argb:fc}};
+    });
+    row.getCell(8).font = {color:{argb:fc}, bold:true};
+  });
+  ws.columns.forEach(function(col, i){ col.width = PAY_EXPORT[i][2]; });
+  ws.views = [{state:'frozen', ySplit:1}];
+  ws.autoFilter = {from:{row:1, column:1}, to:{row:1, column:PAY_EXPORT.length}};
+
+  var d = new Date(), pad = function(n){ return String(n).padStart(2,'0'); };
+  var name = 'Recap_Payment_' + d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate()) + '.xlsx';
+
+  wb.xlsx.writeBuffer().then(function(buf){
+    var blob = new Blob([buf], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+    if(downloads){
+      downloads.save({filename:name, data:blob}).then(function(){ toast('Excel file saved'); })['catch'](function(err){
+        if(err && err.code === 'declined') return;
+        toast('Export failed: ' + ((err && err.message) || 'try again'));
+      });
+    } else {
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = name;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1500);
+    }
+  });
+}
+
+/* ============================ events ============================ */
+document.querySelectorAll('.ledgers button').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('.ledgers button').forEach(function(x){ x.setAttribute('aria-selected','false'); });
+    b.setAttribute('aria-selected','true');
+    document.querySelectorAll('.ledger').forEach(function(l){ l.classList.remove('on'); });
+    $('ledger-' + b.getAttribute('data-ledger')).classList.add('on');
+  });
+});
+document.querySelectorAll('.subtabs button[data-pane]').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('.subtabs button[data-pane]').forEach(function(x){ x.setAttribute('aria-selected','false'); });
+    b.setAttribute('aria-selected','true');
+    document.querySelectorAll('.pane').forEach(function(p){ p.classList.remove('on'); });
+    var pane = b.getAttribute('data-pane');
+    $('pane-' + pane).classList.add('on');
+    if(pane==='ringkasan') renderRingkasan();
+    if(pane==='kartu') renderKartu();
+  });
+});
+
+document.querySelectorAll('.subtabs button[data-popane]').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('.subtabs button[data-popane]').forEach(function(x){ x.setAttribute('aria-selected','false'); });
+    b.setAttribute('aria-selected','true');
+    document.querySelectorAll('.popane').forEach(function(x){ x.classList.remove('on'); });
+    var pane = b.getAttribute('data-popane');
+    $('popane-' + pane).classList.add('on');
+    if(pane === 'summary') renderPivot();
+  });
+});
+['pvRow','pvCol','pvFrom','pvTo'].forEach(function(id){
+  $(id).addEventListener('change', renderPivot);
+});
+$('pvReset').addEventListener('click', function(){
+  $('pvRow').value = 'supplier'; $('pvCol').value = 'none';
+  $('pvFrom').value = ''; $('pvTo').value = '';
+  pvVals = PV_VALS.map(function(v){ return v.k; });
+  PV_VALS.forEach(function(v){
+    var box = $('pvValPanel').querySelector('[data-pv="' + v.k + '"]');
+    if(box) box.checked = true;
+  });
+  savePvVals(); paintPvVals(); renderPivot();
+});
+$('poAdd').addEventListener('click', function(){ openPO(); });
+$('poAdd2').addEventListener('click', function(){ openPO(); });
+$('payAdd').addEventListener('click', function(){ openPay(); });
+$('payAdd2').addEventListener('click', function(){ openPay(); });
+$('shpAdd').addEventListener('click', function(){ openShp(); });
+$('shpAdd2').addEventListener('click', function(){ openShp(); });
+$('poSave').addEventListener('click', savePO);
+$('paySave').addEventListener('click', savePay);
+$('shpSave').addEventListener('click', saveShp);
+$('poSearch').addEventListener('input', renderPO);
+$('paySearch').addEventListener('input', renderPay);
+function readStatusFilter(){
+  statusFilter = ['closed','partial','open'].filter(function(k){ return $('fst_'+k).checked; });
+  try { localStorage.setItem(STATUS_KEY, JSON.stringify(statusFilter)); } catch(e){}
+  paintStatusFilter();
+  renderPay();
+}
+function paintStatusFilter(){
+  var names = {closed:'Paid', partial:'Partly paid', open:'Unpaid'};
+  var n = statusFilter.length;
+  $('payFilterLabel').textContent = (n === 0 || n === 3) ? 'All statuses'
+    : n === 1 ? names[statusFilter[0]] : n + ' statuses selected';
+  $('payFilterBtn').classList.toggle('active', n > 0 && n < 3);
+}
+['closed','partial','open'].forEach(function(k){
+  $('fst_'+k).addEventListener('change', readStatusFilter);
+});
+$('payFilterClear').addEventListener('click', function(){
+  ['closed','partial','open'].forEach(function(k){ $('fst_'+k).checked = false; });
+  readStatusFilter();
+});
+$('payFilterBtn').addEventListener('click', function(e){
+  e.stopPropagation();
+  var panel = $('payFilterPanel');
+  panel.classList.toggle('open');
+  $('payFilterBtn').setAttribute('aria-expanded', panel.classList.contains('open') ? 'true' : 'false');
+});
+$('shpSearch').addEventListener('input', renderShp);
+$('payExport').addEventListener('click', exportExcel);
+$('btnSync').addEventListener('click', sinkron);
+
+['rateRmb','rateUsd','rateRu'].forEach(function(id){
+  $(id).addEventListener('input', function(){
+    S.kurs = {rmb: num($('rateRmb').value), usd: num($('rateUsd').value), rmbusd: num($('rateRu').value)};
+    renderKartu();
+    clearTimeout($(id)._t);
+    $(id)._t = setTimeout(function(){ if(store) store.setKurs(S.kurs); }, 600);
+  });
+});
+
+document.addEventListener('click', function(e){
+  var t = e.target;
+  if(!t.getAttribute) return;
+  var v;
+  if((v = t.getAttribute('data-edit-po'))) return openPO(v);
+  if((v = t.getAttribute('data-edit-pay'))) return openPay(v);
+  if((v = t.getAttribute('data-edit-shp'))) return openShp(v);
+  if((v = t.getAttribute('data-del-po'))) return confirmDel('po', v);
+  if((v = t.getAttribute('data-del-pay'))) return confirmDel('payment', v);
+  if((v = t.getAttribute('data-del-shp'))) return confirmDel('shipment', v);
+  if((v = t.getAttribute('data-fin-po'))) return toggleFinal('po', v);
+  if((v = t.getAttribute('data-fin-pay'))) return toggleFinal('payment', v);
+  if((v = t.getAttribute('data-move'))){
+    var p = v.split(':');
+    return moveRow(p[0], parseInt(p[1],10), parseInt(p[2],10));
+  }
+});
+function linkedRows(po){
+  var k = poKey(po);
+  return {
+    pay: S.payment.filter(function(x){ return !isJK(x) && x.po && poKey(x.po) === k; }),
+    shp: S.shipment.filter(function(x){ return x.po && poKey(x.po) === k; }),
+    jk:  S.payment.filter(function(x){ return isJK(x) && x.po && poKey(x.po) === k; })
+  };
+}
+function confirmDel(coll, id){
+  if(!ready()) return;
+  var r = S[coll].find(function(x){ return x._id===id; });
+  if(!r) return;
+  var label = rowId(r) || r.po || 'this row';
+
+  if(coll === 'po'){
+    var L = linkedRows(r.po);
+    var parts = [];
+    if(L.pay.length) parts.push(L.pay.length + ' rows in Recap Payment');
+    if(L.shp.length) parts.push(L.shp.length + ' rows in Recap Shipment');
+    var body = parts.length
+      ? 'Also deleted: ' + parts.join(' and ') + '.'
+      : 'There are no linked rows in Recap Payment or Recap Shipment.';
+    if(L.jk.length){
+      body += ' ' + L.jk.length + ' forwarder row(s) with the same PO number are kept, because they are recorded against a forwarder PL number.';
+    }
+    body += ' Everyone who opens this page loses those rows too, and this cannot be undone.';
+    askConfirm('Delete ' + label + ' and its linked rows?', body, 'Delete all').then(function(ok){
+      if(!ok) return;
+      var jobs = [store.remove('po', id)];
+      L.pay.forEach(function(x){ jobs.push(store.remove('payment', x._id)); });
+      L.shp.forEach(function(x){ jobs.push(store.remove('shipment', x._id)); });
+      Promise.all(jobs).then(function(){
+        toast('PO deleted' + (parts.length ? ' along with ' + (L.pay.length + L.shp.length) + ' linked rows' : ''));
+      })['catch'](function(){});
+    });
+    return;
+  }
+
+  var where = coll === 'payment' ? 'Recap Payment' : 'Recap Shipment';
+  askConfirm('Delete ' + label + '?', 'This row disappears from ' + where + ' for everyone who opens this page. It cannot be undone.', 'Delete row')
+    .then(function(ok){
+      if(!ok) return;
+      store.remove(coll, id).then(function(){ toast('Row deleted'); });
+    });
+}
+function toggleFinal(coll, id){
+  if(!ready()) return;
+  var r = S[coll].find(function(x){ return x._id===id; });
+  if(!r) return;
+  store.patch(coll, id, {final: r.final==='yes' ? 'no' : 'yes'});
+}
+function moveRow(coll, i, dir){
+  if(!ready()) return;
+  var j = i + dir, arr = S[coll];
+  if(j < 0 || j >= arr.length) return;
+  var a = arr[i], b = arr[j];
+  var oa = num(a.ord), ob = num(b.ord);
+  if(oa === ob){ oa = i + 1; ob = j + 1; }
+  Promise.all([ store.patch(coll, a._id, {ord: ob}), store.patch(coll, b._id, {ord: oa}) ]);
+}
+
+/* ============================ boot ============================ */
+colPicker('poTable','poColBtn','poColPanel',
+  ['No','PO Number','PO Date','Supplier','Factory','Category','Amount USD','Amount RMB','Amount IDR','Finalised','ETD Supplier','ETA China WH','Remark'],
+  'rci_cols_po_v4');
+colPicker('payTable','payColBtn','payColPanel',
+  ['No','Supplier','Factory','PO# / PL-INV','Invoice PO#','Forwarder PL/Inv','Category','Group','Finalised','Status',
+   'ETD Supplier','ETA China WH','Actual ETA China WH','Amount USD','Amount RMB','Amount IDR','TT 1','TT1 USD','TT1 RMB','TT1 IDR',
+   'TT 2','TT2 USD','TT2 RMB','TT2 IDR','TT 3','TT3 USD','TT3 RMB','TT3 IDR','Balance USD','Balance RMB','Balance IDR'],
+  'rci_cols_pay_v4');
+colPicker('shpTable','shpColBtn','shpColPanel',
+  ['No','PO No','Supplier','Factory','Category','Marking','Amount','Actual ETA China WH','Forwarder ETD','Forwarder PL No',
+   'ETA Jakarta','Actual ETA Jakarta','Total CTN','Volume (CBM)','Price/ CBM'],
+  'rci_cols_shp_v3');
+
+
+setBusy(true);
+buildPivotControls();
+statusFilter.forEach(function(k){ $('fst_'+k).checked = true; });
+paintStatusFilter();
+$('rateRmb').value = S.kurs.rmb;
+$('rateUsd').value = S.kurs.usd;
+$('rateRu').value = S.kurs.rmbusd;
+renderAll();
+
+function attach(st){
+  store = st;
+  setSync(st.mode);
+  setBusy(false);
+  $('btnSync').disabled = false;
+  ['po','payment','shipment'].forEach(function(c){
+    st.subscribe(c, function(rows){ S[c] = rows; loaded[c] = true; renderAll(); });
+  });
+  st.subscribe('kurs', function(k){
+    if(k && (k.rmb || k.usd || k.rmbusd)){
+      S.kurs = {rmb: num(k.rmb) || S.kurs.rmb, usd: num(k.usd) || S.kurs.usd, rmbusd: num(k.rmbusd) || S.kurs.rmbusd};
+      if($('pane-kartu').classList.contains('on')) renderKartu();
+    }
+  });
+}
+
+if(window.claude && typeof window.claude.use === 'function'){
+  window.claude.use('db').then(function(db){
+    attach(db ? cloudStore(db) : localStore());
+  })['catch'](function(){ attach(localStore()); });
+  window.claude.use('downloads').then(function(d){ downloads = d; })['catch'](function(){});
+} else {
+  attach(localStore());
+}
+
+var mq = window.matchMedia('(prefers-color-scheme: dark)');
+if(mq.addEventListener) mq.addEventListener('change', function(){ if($('pane-ringkasan').classList.contains('on')) renderRingkasan(); });
+
+})();
+</script>
+
+</body></html>

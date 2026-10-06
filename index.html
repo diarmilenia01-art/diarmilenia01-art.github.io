@@ -64,6 +64,11 @@
   .edu{background:linear-gradient(160deg,#F0F6FF,#FFFFFF);border:1px solid var(--line);border-radius:16px;padding:22px 24px}
 
   /* PROYEK */
+  .proj-filter{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+  .proj-filter button{background:var(--card);border:1px solid var(--line);color:var(--muted);
+    padding:9px 16px;min-height:40px;border-radius:999px;cursor:pointer;font-size:13.5px;font-weight:700;font-family:inherit}
+  .proj-filter button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+  .proj-card.hide{display:none}
   .proj-grid{display:grid;grid-template-columns:1fr;gap:16px}
   .proj-card{text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 1px 2px rgba(16,42,71,.04);transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;overflow:hidden}
   .proj-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(16,42,71,.12);border-color:#C9D9EC}
@@ -200,8 +205,14 @@
   <div class="wrap">
     <h2><span data-id>Proyek</span><span data-en>Projects</span></h2>
     <p class="sub"><span data-id>Alat dan dashboard yang saya bangun untuk pekerjaan nyata. Klik untuk membuka.</span><span data-en>Tools and dashboards I built for real work. Click to open.</span></p>
+    <div class="proj-filter">
+      <button class="on" data-cat="all" type="button"><span data-id>Semua</span><span data-en>All</span></button>
+      <button data-cat="forecast" type="button">Forecasting</button>
+      <button data-cat="market" type="button"><span data-id>Marketplace &amp; Harga</span><span data-en>Marketplace &amp; Pricing</span></button>
+      <button data-cat="ops" type="button"><span data-id>Operasional</span><span data-en>Operations</span></button>
+    </div>
     <div class="proj-grid">
-      <a class="proj-card feature" href="tiktok-pengembalian.html" target="_blank" rel="noopener">
+      <a class="proj-card feature" data-cat="market" href="tiktok-pengembalian.html" target="_blank" rel="noopener">
         <div class="proj-preview" aria-hidden="true">
           <div class="pv-top"><span class="pv-dot"></span><span class="pv-dot"></span><span class="pv-dot"></span></div>
           <div class="pv-hero">
@@ -224,7 +235,7 @@
         </div>
       </a>
 
-      <a class="proj-card feature" href="shopee-pengembalian.html" target="_blank" rel="noopener">
+      <a class="proj-card feature" data-cat="market" href="shopee-pengembalian.html" target="_blank" rel="noopener">
         <div class="proj-preview" aria-hidden="true">
           <div class="pv-top"><span class="pv-dot"></span><span class="pv-dot"></span><span class="pv-dot"></span></div>
           <div class="pv-hero">
@@ -247,7 +258,7 @@
         </div>
       </a>
 
-      <a class="proj-card feature" href="forecasting-dashboard.html" target="_blank" rel="noopener">
+      <a class="proj-card feature" data-cat="forecast" href="forecasting-dashboard.html" target="_blank" rel="noopener">
         <div class="proj-preview" aria-hidden="true">
           <div class="pv-top"><span class="pv-dot"></span><span class="pv-dot"></span><span class="pv-dot"></span></div>
           <svg class="pv-chart" viewBox="0 0 320 128" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -268,6 +279,98 @@
           <div class="title">Defensible Forecasting</div>
           <p class="desc"><span data-id>Forecasting sering dipertanyakan saat sidang atau rapat: kenapa model ini, bukan yang lain? Skill ini membuat pilihannya bisa dipertanggungjawabkan.</span><span data-en>Forecasts get challenged in meetings and defenses: why this model, not another? This skill makes the choice defensible.</span></p>
           <p class="desc" style="color:var(--muted)"><span data-id>Dashboard interaktif menetapkan target GMV tiga marketplace, dengan validasi akurasi MAPE sekitar 9%, ekspor Excel dan PDF. Punya dua tampilan: Owner untuk ringkasan keputusan dan Analis untuk metodologi lengkap. Metodologi saya kemas jadi skill Claude open-source, tombol ke GitHub ada di dalam dashboard. Angka pada demo ini dummy.</span><span data-en>An interactive dashboard that sets GMV targets across three marketplaces, with MAPE accuracy around 9%, Excel and PDF export. It has two views: Owner for the decision summary and Analyst for the full methodology. The methodology is packaged as an open-source Claude skill, with a GitHub link inside the dashboard. Figures in this demo are dummy.</span></p>
+          <span class="open"><span data-id>Buka dashboard &rarr;</span><span data-en>Open dashboard &rarr;</span></span>
+        </div>
+      </a>
+
+      <a class="proj-card feature" data-cat="ops" href="cycling-payment.html" target="_blank" rel="noopener">
+        <div class="proj-preview" aria-hidden="true">
+          <div class="pv-top"><span class="pv-dot"></span><span class="pv-dot"></span><span class="pv-dot"></span></div>
+          <div class="pv-hero">
+            <div class="pv-hero-lbl"><span data-id>PO dipantau</span><span data-en>POs tracked</span></div>
+            <div class="pv-hero-val">46</div>
+          </div>
+          <div class="pv-stats">
+            <div class="pv-stat"><b>3</b><span><span data-id>Mata uang</span><span data-en>Currencies</span></span></div>
+            <div class="pv-stat"><b>38</b><span><span data-id>Pembayaran</span><span data-en>Payments</span></span></div>
+            <div class="pv-stat"><b>41</b><span><span data-id>Pengiriman</span><span data-en>Shipments</span></span></div>
+            <div class="pv-stat"><b>2</b><span><span data-id>Merek</span><span data-en>Brands</span></span></div>
+          </div>
+        </div>
+        <div class="proj-body">
+          <span class="proj-tag">Procurement &middot; Pembayaran</span>
+          <div class="title"><span data-id>Tracker Pembayaran Supplier</span><span data-en>Supplier Payment Tracker</span></div>
+          <p class="desc"><span data-id>Memantau PO, pembayaran bertermin, dan pengiriman lintas banyak supplier dan tiga mata uang (RMB, USD, IDR) itu mudah tercecer.</span><span data-en>Tracking POs, staged payments, and shipments across many suppliers and three currencies (RMB, USD, IDR) is easy to lose track of.</span></p>
+          <p class="desc" style="color:var(--muted)"><span data-id>Satu sistem untuk PO, pembayaran, dan pengiriman: cari, filter, konversi mata uang, dan ekspor Excel. Angka pada demo ini dummy.</span><span data-en>One system for POs, payments, and shipments: search, filter, currency conversion, and Excel export. Figures in this demo are dummy.</span></p>
+          <span class="open"><span data-id>Buka dashboard &rarr;</span><span data-en>Open dashboard &rarr;</span></span>
+        </div>
+      </a>
+
+      <a class="proj-card feature" data-cat="market" href="gmv-iklan.html" target="_blank" rel="noopener">
+        <div class="proj-preview" aria-hidden="true">
+          <div class="pv-top"><span class="pv-dot"></span><span class="pv-dot"></span><span class="pv-dot"></span></div>
+          <div class="pv-hero">
+            <div class="pv-hero-lbl"><span data-id>GMV bersih bulanan</span><span data-en>Monthly net GMV</span></div>
+            <div class="pv-hero-val">Rp 4,33 M</div>
+          </div>
+          <div class="pv-stats">
+            <div class="pv-stat"><b>4</b><span>Marketplace</span></div>
+            <div class="pv-stat"><b>6,0</b><span>ROAS</span></div>
+            <div class="pv-stat"><b>30</b><span><span data-id>Hari</span><span data-en>Days</span></span></div>
+            <div class="pv-stat"><b>125</b><span>SKU</span></div>
+          </div>
+        </div>
+        <div class="proj-body">
+          <span class="proj-tag">GMV &middot; Iklan</span>
+          <div class="title"><span data-id>Dashboard GMV dan Iklan</span><span data-en>GMV and Ads Dashboard</span></div>
+          <p class="desc"><span data-id>Penjualan dan belanja iklan tersebar di empat marketplace dengan format laporan yang berbeda-beda, jadi sulit dibandingkan.</span><span data-en>Sales and ad spend sit in four marketplaces with different report formats, so they are hard to compare.</span></p>
+          <p class="desc" style="color:var(--muted)"><span data-id>Menyatukan laporan harian jadi satu tampilan: pencapaian terhadap target, ROAS per kanal, dan performa per produk. Angka pada demo ini dummy.</span><span data-en>It merges daily reports into one view: progress against target, ROAS per channel, and per-product performance. Figures in this demo are dummy.</span></p>
+          <span class="open"><span data-id>Buka dashboard &rarr;</span><span data-en>Open dashboard &rarr;</span></span>
+        </div>
+      </a>
+
+      <a class="proj-card feature" data-cat="market" href="rockbros-master.html" target="_blank" rel="noopener">
+        <div class="proj-preview" aria-hidden="true">
+          <div class="pv-top"><span class="pv-dot"></span><span class="pv-dot"></span><span class="pv-dot"></span></div>
+          <div class="pv-hero">
+            <div class="pv-hero-lbl"><span data-id>Produk dipantau</span><span data-en>Products tracked</span></div>
+            <div class="pv-hero-val">5.916</div>
+          </div>
+          <div class="pv-stats">
+            <div class="pv-stat"><b>2</b><span><span data-id>Toko</span><span data-en>Stores</span></span></div>
+            <div class="pv-stat"><b>9</b><span><span data-id>Kategori</span><span data-en>Categories</span></span></div>
+            <div class="pv-stat"><b>82</b><span>Bundling</span></div>
+            <div class="pv-stat"><b>900</b><span><span data-id>Di dua toko</span><span data-en>In both</span></span></div>
+          </div>
+        </div>
+        <div class="proj-body">
+          <span class="proj-tag"><span data-id>Harga &middot; HPP</span><span data-en>Pricing &middot; COGS</span></span>
+          <div class="title"><span data-id>Master Data Harga dan HPP</span><span data-en>Pricing and COGS Master Data</span></div>
+          <p class="desc"><span data-id>Harga jual dan HPP ribuan produk tersebar di banyak berkas, sehingga margin sulit dipantau dan mudah salah hitung.</span><span data-en>Selling prices and COGS for thousands of products are scattered across files, making margins hard to monitor and easy to miscalculate.</span></p>
+          <p class="desc" style="color:var(--muted)"><span data-id>Satu sumber kebenaran untuk 5.916 produk dua toko: HPP, harga jual, margin, riwayat perubahan harga, dan ekspor Excel. Semua angka dan nama pada demo ini dummy.</span><span data-en>One source of truth for 5,916 products across two stores: COGS, prices, margin, price-change history, and Excel export. All figures and names in this demo are dummy.</span></p>
+          <span class="open"><span data-id>Buka dashboard &rarr;</span><span data-en>Open dashboard &rarr;</span></span>
+        </div>
+      </a>
+
+      <a class="proj-card feature" data-cat="ops" href="absensi-lembur.html" target="_blank" rel="noopener">
+        <div class="proj-preview" aria-hidden="true">
+          <div class="pv-top"><span class="pv-dot"></span><span class="pv-dot"></span><span class="pv-dot"></span></div>
+          <div class="pv-hero">
+            <div class="pv-hero-lbl"><span data-id>Baris absensi diproses</span><span data-en>Attendance rows processed</span></div>
+            <div class="pv-hero-val">630</div>
+          </div>
+          <div class="pv-stats">
+            <div class="pv-stat"><b>25</b><span><span data-id>Karyawan</span><span data-en>Staff</span></span></div>
+            <div class="pv-stat"><b>4</b><span>Tim</span></div>
+            <div class="pv-stat"><b>4</b><span><span data-id>Lokasi</span><span data-en>Sites</span></span></div>
+            <div class="pv-stat"><b>1</b><span><span data-id>Periode</span><span data-en>Period</span></span></div>
+          </div>
+        </div>
+        <div class="proj-body">
+          <span class="proj-tag"><span data-id>Operasional &middot; Lembur</span><span data-en>Operations &middot; Overtime</span></span>
+          <div class="title"><span data-id>Rekap Absensi dan Lembur</span><span data-en>Attendance and Overtime Recap</span></div>
+          <p class="desc"><span data-id>Menghitung keterlambatan, potongan, dan lembur dari ekspor mesin absensi secara manual itu lama dan mudah berbeda hasil antar orang.</span><span data-en>Computing lateness, deductions, and overtime from attendance-machine exports by hand is slow and inconsistent between people.</span></p>
+          <p class="desc" style="color:var(--muted)"><span data-id>Aturan ditulis sekali, lalu diterapkan seragam ke semua tim: jadwal sif, toleransi telat, potongan, uang makan, dan tarif lembur. Nama, gaji, dan angka pada demo ini seluruhnya dummy.</span><span data-en>Rules are written once and applied uniformly across teams: shift schedules, lateness tolerance, deductions, meal allowance, and overtime rates. Names, salaries, and figures in this demo are entirely dummy.</span></p>
           <span class="open"><span data-id>Buka dashboard &rarr;</span><span data-en>Open dashboard &rarr;</span></span>
         </div>
       </a>
@@ -304,6 +407,15 @@ function setLang(l){
   document.getElementById('bEN').classList.toggle('active', l==='en');
   document.documentElement.lang = l;
 }
+document.querySelectorAll('.proj-filter button').forEach(function(b){
+  b.addEventListener('click',function(){
+    var c=b.dataset.cat;
+    document.querySelectorAll('.proj-filter button').forEach(function(x){x.classList.toggle('on',x===b);});
+    document.querySelectorAll('.proj-card').forEach(function(card){
+      card.classList.toggle('hide', c!=='all' && card.dataset.cat!==c);
+    });
+  });
+});
 document.getElementById('bID').addEventListener('click',function(){setLang('id');});
 document.getElementById('bEN').addEventListener('click',function(){setLang('en');});
 </script>
