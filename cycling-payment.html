@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px 'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:#F6F8FB;color:#122A43}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px 'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:#06101D;color:#EAF0F7}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Cycling Payment</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -7,22 +7,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 <style>
 :root{
-  --ground:#EDF1F7;
-  --surface:#FFFFFF;
-  --surface-2:#F0F4FA;
-  --ink:#122A43;
-  --ink-soft:#4A5B6E;
-  --muted:#6E8098;
-  --line:#D9E2EC;
-  --line-strong:#C2CFDB;
-  --jade:#2563EB;
-  --jade-ink:#1D4ED8;
-  --jade-soft:#E7EFFF;
-  --clay:#D97706;
-  --clay-soft:#FEF0DC;
-  --gold:#6366F1;
-  --gold-soft:#EAEBFE;
-  --shadow:0 1px 2px rgba(16,42,71,.06), 0 8px 24px -18px rgba(16,42,71,.5);
+  --ground:#06101D;
+  --surface:#0B1A2E;
+  --surface-2:#102540;
+  --ink:#EAF0F7;
+  --ink-soft:#A5B8CC;
+  --muted:#7E93AB;
+  --line:#1E3049;
+  --line-strong:#2A3E5E;
+  --jade:#3B82F6;
+  --jade-ink:#93C5FD;
+  --jade-soft:#16314E;
+  --clay:#E8B04B;
+  --clay-soft:#3B2B0E;
+  --gold:#818CF8;
+  --gold-soft:#232B5C;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.6);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
@@ -2110,4 +2110,28 @@ if(mq.addEventListener) mq.addEventListener('change', function(){ if($('pane-rin
 })();
 </script>
 
+
+<style>
+#nebula{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.tw{transform-box:fill-box;transform-origin:center;animation:tw var(--dur) ease-in-out infinite both;animation-delay:var(--dly)}
+@keyframes tw{0%{opacity:.08;transform:scale(.5)}40%{opacity:.95;transform:scale(1)}62%{opacity:.22;transform:scale(.66)}80%{opacity:.7;transform:scale(.92)}100%{opacity:.08;transform:scale(.5)}}
+@media (prefers-reduced-motion:reduce){.tw{animation:none;opacity:.6;transform:scale(.85)}}
+</style>
+<div id="nebula" aria-hidden="true"></div>
+<script>
+(function(){
+function __rnd(seed){return function(){seed=(seed*1664525+1013904223)%4294967296;return seed/4294967296;};}
+function __spark(s){var a=(s*0.2).toFixed(1),h=(s*0.11).toFixed(1);
+ return 'M0,-'+s+' C'+h+',-'+a+' '+a+',-'+h+' '+s+',0 C'+a+','+h+' '+h+','+a+' 0,'+s+' C-'+h+','+a+' -'+a+','+h+' -'+s+',0 C-'+a+',-'+h+' -'+h+',-'+a+' 0,-'+s+' Z';}
+function __starSvg(n,seed,W,H,id){var r=__rnd(seed),p='';
+ for(var i=0;i<n;i++){var x=(r()*W).toFixed(1),y=(r()*H).toFixed(1),dur=(6+r()*6).toFixed(2),dly=(r()*9).toFixed(2);
+  var inner=r()<0.38?'<path d="'+__spark((2.4+r()*2.4).toFixed(1))+'" fill="#fff"/>':'<circle r="'+(0.6+r()*0.8).toFixed(2)+'" fill="#fff"/>';
+  p+='<g transform="translate('+x+' '+y+')"><g class="tw" style="--dur:'+dur+'s;--dly:'+dly+'s">'+inner+'</g></g>';}
+ return '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="width:100%;height:100%">'+
+  '<defs><filter id="'+id+'" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="0.8" result="b"/>'+
+  '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'+
+  '<g filter="url(#'+id+')" opacity=".85">'+p+'</g></svg>';}
+document.getElementById('nebula').innerHTML=__starSvg(44,20261008,1600,900,'nebg');
+})();
+</script>
 </body></html>

@@ -12,47 +12,31 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 :root{
-  --bg:#F6F8FB;
-  --bg-2:#E8F0FB;
-  --card:#FFFFFF;
-  --ink:#17304A;
-  --ink-soft:#4A5B6E;
-  --muted:#6E8098;
-  --line:#E3E9F0;
-  --orange:#3B82F6;
-  --orange-deep:#2563EB;
-  --orange-soft:#EAF2FF;
-  --grad-a:#2563EB;
-  --grad-b:#4F97F5;
-  --yellow:#FFF3BF;
-  --yellow-line:#F0DC8A;
-  --green:#1CA672;
-  --green-soft:#E4F7EF;
-  --red:#D0011B;
-  --shadow:0 10px 30px rgba(16,42,71,.13);
-  --shadow-sm:0 4px 14px rgba(16,42,71,.10);
+  --bg:#06101D;
+  --bg-2:#0B1A2E;
+  --card:#0C1C31;
+  --ink:#EAF0F7;
+  --ink-soft:#A5B8CC;
+  --muted:#7E93AB;
+  --line:#1E3049;
+  --orange:#60A5FA;
+  --orange-deep:#3B82F6;
+  --orange-soft:#13294A;
+  --grad-a:#0D2038;
+  --grad-b:#1C3E66;
+  --yellow:#3D3517;
+  --yellow-line:#6B5E2A;
+  --green:#3FD2A4;
+  --green-soft:#163B30;
+  --red:#F07A73;
+  --shadow:0 10px 30px rgba(0,0,0,.4);
+  --shadow-sm:0 4px 14px rgba(0,0,0,.32);
   --r-lg:26px;
   --r-md:18px;
   --r-sm:12px;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0E1E30; --bg-2:#13263B; --card:#16293D; --ink:#EAF2FB;
-    --ink-soft:#AFC2D6; --muted:#8198B0; --line:#284056; --orange:#60A5FA;
-    --orange-deep:#3B82F6; --orange-soft:#16314E; --yellow:#514A22;
-    --yellow-line:#7A6E2E; --green:#3FD2A4; --green-soft:#1E3B33;
-    --shadow:0 10px 30px rgba(0,0,0,.4); --shadow-sm:0 4px 14px rgba(0,0,0,.32);
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0E1E30; --bg-2:#13263B; --card:#16293D; --ink:#EAF2FB;
-  --ink-soft:#AFC2D6; --muted:#8198B0; --line:#284056; --orange:#60A5FA;
-  --orange-deep:#3B82F6; --orange-soft:#16314E; --yellow:#514A22;
-  --yellow-line:#7A6E2E; --green:#3FD2A4; --green-soft:#1E3B33;
-  --shadow:0 10px 30px rgba(0,0,0,.4); --shadow-sm:0 4px 14px rgba(0,0,0,.32);
 }
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
@@ -253,10 +237,7 @@ input[type=text]:focus{outline:none;border-color:var(--orange)}
       <p>Paket kembali Shopee &middot; DS &amp; Non-DS</p>
     </div>
     <button class="reset-text" id="resetBtn" title="Mulai lagi untuk toko lain">Proses Dokumen Lain</button>
-    <button class="theme-btn" id="themeBtn" title="Ganti tema" aria-label="Ganti tema">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-    </button>
-  </div>
+      </div>
 
   <!-- step 1: toko -->
   <section class="card" id="cardToko">
@@ -418,16 +399,6 @@ input[type=text]:focus{outline:none;border-color:var(--orange)}
 </div>
 
 <script>
-/* ===================== tema ===================== */
-const root=document.documentElement;
-document.getElementById('themeBtn').addEventListener('click',()=>{
-  const cur=root.getAttribute('data-theme');
-  const dark=cur? cur==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-  root.setAttribute('data-theme',dark?'light':'dark');
-  try{localStorage.setItem('lp-theme',dark?'light':'dark')}catch(e){}
-});
-try{const t=localStorage.getItem('lp-theme'); if(t) root.setAttribute('data-theme',t);}catch(e){}
-
 /* ===================== state ===================== */
 const S={toko:'',tipe:'',tipeTouched:false,files1:[],wb2:null,n2:'',result:null};
 const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
@@ -926,6 +897,30 @@ $('resetBtn').addEventListener('click',resetAll);
 $('resetBtn2').addEventListener('click',resetAll);
 
 sync();
+</script>
+
+<style>
+#nebula{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.tw{transform-box:fill-box;transform-origin:center;animation:tw var(--dur) ease-in-out infinite both;animation-delay:var(--dly)}
+@keyframes tw{0%{opacity:.08;transform:scale(.5)}40%{opacity:.95;transform:scale(1)}62%{opacity:.22;transform:scale(.66)}80%{opacity:.7;transform:scale(.92)}100%{opacity:.08;transform:scale(.5)}}
+@media (prefers-reduced-motion:reduce){.tw{animation:none;opacity:.6;transform:scale(.85)}}
+</style>
+<div id="nebula" aria-hidden="true"></div>
+<script>
+(function(){
+function __rnd(seed){return function(){seed=(seed*1664525+1013904223)%4294967296;return seed/4294967296;};}
+function __spark(s){var a=(s*0.2).toFixed(1),h=(s*0.11).toFixed(1);
+ return 'M0,-'+s+' C'+h+',-'+a+' '+a+',-'+h+' '+s+',0 C'+a+','+h+' '+h+','+a+' 0,'+s+' C-'+h+','+a+' -'+a+','+h+' -'+s+',0 C-'+a+',-'+h+' -'+h+',-'+a+' 0,-'+s+' Z';}
+function __starSvg(n,seed,W,H,id){var r=__rnd(seed),p='';
+ for(var i=0;i<n;i++){var x=(r()*W).toFixed(1),y=(r()*H).toFixed(1),dur=(6+r()*6).toFixed(2),dly=(r()*9).toFixed(2);
+  var inner=r()<0.38?'<path d="'+__spark((2.4+r()*2.4).toFixed(1))+'" fill="#fff"/>':'<circle r="'+(0.6+r()*0.8).toFixed(2)+'" fill="#fff"/>';
+  p+='<g transform="translate('+x+' '+y+')"><g class="tw" style="--dur:'+dur+'s;--dly:'+dly+'s">'+inner+'</g></g>';}
+ return '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="width:100%;height:100%">'+
+  '<defs><filter id="'+id+'" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="0.8" result="b"/>'+
+  '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'+
+  '<g filter="url(#'+id+')" opacity=".85">'+p+'</g></svg>';}
+document.getElementById('nebula').innerHTML=__starSvg(44,20261008,1600,900,'nebg');
+})();
 </script>
 </body>
 </html>

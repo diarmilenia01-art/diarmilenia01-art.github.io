@@ -20,161 +20,220 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>&#128202;</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#0E2A47; --navy2:#13385E; --blue:#3B82F6; --blue-soft:#60A5FA;
-    --ink:#1A2B3C; --muted:#5B6B7B; --line:#E3E9F0; --bg:#F6F8FB; --card:#FFFFFF;
+    --ink:#0B1420; --paper:#F7F8FA; --muted:#5E6B7A; --line:#E2E7EE;
+    --ember:#E0712F; --sky:#5FB7E8;
+    --night:#06101D; --night2:#0B1A2E; --n-line:#1A2B42; --n-ink:#EAF0F7; --n-mut:#8EA3BC;
+    --c-act:#D9762F; --c-fc:#3A8FCC; --c-ok:#2E9E6B;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
-  a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:8px}
+  body{font-family:'Inter Tight',system-ui,sans-serif;background:var(--paper);color:var(--ink);
+    line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+  .read{max-width:660px}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--sky);outline-offset:3px;border-radius:6px}
 
-  /* HERO (dark) */
-  .hero{background:linear-gradient(160deg,var(--navy),var(--navy2));color:#EAF2FB;padding:72px 0 56px;position:relative;overflow:hidden}
-  .hero::after{content:"";position:absolute;right:-120px;top:-120px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.35),transparent 70%);pointer-events:none;z-index:0}
-  .hero .wrap{position:relative;z-index:2}
-  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px;position:relative;z-index:3}
-  .brand{font-weight:800;letter-spacing:1.5px;font-size:15px}
-  .toggle{display:flex;gap:4px;background:rgba(255,255,255,.08);padding:4px;border-radius:999px;border:1px solid rgba(255,255,255,.15)}
-  .toggle button{background:none;border:none;color:#cfe0f5;padding:9px 18px;min-height:44px;border-radius:999px;cursor:pointer;font-size:14px;font-weight:700;font-family:inherit;display:flex;align-items:center}
-  .toggle button.active{background:var(--blue);color:#fff}
-  .hero h1{font-size:44px;line-height:1.12;margin-bottom:16px;font-weight:800;letter-spacing:-.02em;max-width:760px}
-  .hero .role{color:var(--blue-soft);font-weight:800}
-  .hero p.lead{max-width:620px;color:#C6D6EA;font-size:17px;margin-bottom:38px}
-  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:relative;z-index:2}
-  .metric{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px}
-  .metric .num{font-size:28px;font-weight:800;color:#fff;letter-spacing:-.01em}
-  .metric .lbl{font-size:12px;color:#A9C1DC;margin-top:4px;line-height:1.4}
-  .metric .hint{font-size:11px;color:var(--blue-soft);margin-top:7px;font-weight:700}
+  /* ---------- HERO UTUH ---------- */
+  .hero{position:relative;min-height:clamp(440px,64vh,660px);display:flex;flex-direction:column;
+    justify-content:center;background:#04080F;overflow:hidden}
+  .hero .bg{position:absolute;inset:0;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201200%20440%22%20preserveAspectRatio%3D%22xMidYMid%20slice%22%3E%0A%3Cdefs%3E%0A%3ClinearGradient%20id%3D%22sky%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23040A14%22%2F%3E%3Cstop%20offset%3D%220.45%22%20stop-color%3D%22%23071A2E%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230B2744%22%2F%3E%0A%3C%2FlinearGradient%3E%0A%3CradialGradient%20id%3D%22glowA%22%20cx%3D%220.26%22%20cy%3D%220.86%22%20r%3D%220.5%22%3E%0A%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23FF8A3C%22%20stop-opacity%3D%220.55%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23FF8A3C%22%20stop-opacity%3D%220%22%2F%3E%0A%3C%2FradialGradient%3E%0A%3CradialGradient%20id%3D%22glowB%22%20cx%3D%220.78%22%20cy%3D%220.92%22%20r%3D%220.45%22%3E%0A%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23FFB15C%22%20stop-opacity%3D%220.4%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23FFB15C%22%20stop-opacity%3D%220%22%2F%3E%0A%3C%2FradialGradient%3E%0A%3ClinearGradient%20id%3D%22r1%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%3Cstop%20offset%3D%220%22%20stop-color%3D%22%232D5C86%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%2313314E%22%2F%3E%3C%2FlinearGradient%3E%0A%3ClinearGradient%20id%3D%22r2%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23C2572A%22%2F%3E%3Cstop%20offset%3D%220.55%22%20stop-color%3D%22%237E2F1E%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%232A1220%22%2F%3E%3C%2FlinearGradient%3E%0A%3ClinearGradient%20id%3D%22r3%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%0A%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23FF9A42%22%2F%3E%3Cstop%20offset%3D%220.5%22%20stop-color%3D%22%23A33B20%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23140A14%22%2F%3E%3C%2FlinearGradient%3E%0A%3Cfilter%20id%3D%22soft%22%20x%3D%22-20%25%22%20y%3D%22-40%25%22%20width%3D%22140%25%22%20height%3D%22200%25%22%3E%3CfeGaussianBlur%20stdDeviation%3D%2216%22%2F%3E%3C%2Ffilter%3E%0A%3Cfilter%20id%3D%22rim%22%20x%3D%22-10%25%22%20y%3D%22-40%25%22%20width%3D%22120%25%22%20height%3D%22200%25%22%3E%3CfeGaussianBlur%20stdDeviation%3D%223.2%22%2F%3E%3C%2Ffilter%3E%0A%3C%2Fdefs%3E%0A%3Crect%20width%3D%221200%22%20height%3D%22440%22%20fill%3D%22url%28%23sky%29%22%2F%3E%0A%3Ccircle%20cx%3D%22142.9%22%20cy%3D%22150.8%22%20r%3D%221.10%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.27%22%2F%3E%3Ccircle%20cx%3D%221143.5%22%20cy%3D%22265.2%22%20r%3D%221.10%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.16%22%2F%3E%3Ccircle%20cx%3D%22504.7%22%20cy%3D%22171.8%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.28%22%2F%3E%3Ccircle%20cx%3D%22589.1%22%20cy%3D%22231.9%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.12%22%2F%3E%3Ccircle%20cx%3D%22737.0%22%20cy%3D%2233.2%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.32%22%2F%3E%3Ccircle%20cx%3D%22977.7%22%20cy%3D%22205.6%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.15%22%2F%3E%3Ccircle%20cx%3D%22476.7%22%20cy%3D%22104.3%22%20r%3D%220.80%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.36%22%2F%3E%3Ccircle%20cx%3D%221199.6%22%20cy%3D%22154.1%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.29%22%2F%3E%3Ccircle%20cx%3D%22107.6%22%20cy%3D%22161.4%22%20r%3D%220.80%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%221051.8%22%20cy%3D%22211.2%22%20r%3D%221.10%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.15%22%2F%3E%3Ccircle%20cx%3D%221017.4%22%20cy%3D%22110.7%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%3Ccircle%20cx%3D%22478.5%22%20cy%3D%22175.7%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.30%22%2F%3E%3Ccircle%20cx%3D%22510.5%22%20cy%3D%22240.8%22%20r%3D%221.10%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%22477.8%22%20cy%3D%22157.4%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%3Ccircle%20cx%3D%221178.7%22%20cy%3D%22153.9%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%3Ccircle%20cx%3D%22919.0%22%20cy%3D%22245.4%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.16%22%2F%3E%3Ccircle%20cx%3D%22804.6%22%20cy%3D%22215.2%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.18%22%2F%3E%3Ccircle%20cx%3D%22578.5%22%20cy%3D%2268.7%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.35%22%2F%3E%3Ccircle%20cx%3D%22548.2%22%20cy%3D%22140.8%22%20r%3D%221.10%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.18%22%2F%3E%3Ccircle%20cx%3D%22482.5%22%20cy%3D%22299.5%22%20r%3D%221.10%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.14%22%2F%3E%3Ccircle%20cx%3D%22602.3%22%20cy%3D%22143.7%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.23%22%2F%3E%3Ccircle%20cx%3D%22353.2%22%20cy%3D%2280.7%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.19%22%2F%3E%3Ccircle%20cx%3D%221058.5%22%20cy%3D%22288.2%22%20r%3D%221.10%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.17%22%2F%3E%3Ccircle%20cx%3D%22431.9%22%20cy%3D%2260.0%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.31%22%2F%3E%3Ccircle%20cx%3D%22613.5%22%20cy%3D%22247.9%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.16%22%2F%3E%3Ccircle%20cx%3D%221088.7%22%20cy%3D%22249.4%22%20r%3D%220.80%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.15%22%2F%3E%3Ccircle%20cx%3D%22974.3%22%20cy%3D%22131.5%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.33%22%2F%3E%3Ccircle%20cx%3D%22618.2%22%20cy%3D%22135.9%22%20r%3D%220.70%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.37%22%2F%3E%3Ccircle%20cx%3D%221010.9%22%20cy%3D%22143.7%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.28%22%2F%3E%3Ccircle%20cx%3D%221083.9%22%20cy%3D%22111.0%22%20r%3D%220.70%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.34%22%2F%3E%3Ccircle%20cx%3D%22493.6%22%20cy%3D%22134.8%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.15%22%2F%3E%3Ccircle%20cx%3D%22541.5%22%20cy%3D%22164.0%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%3Ccircle%20cx%3D%22238.6%22%20cy%3D%2236.2%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.42%22%2F%3E%3Ccircle%20cx%3D%221147.6%22%20cy%3D%22200.5%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.17%22%2F%3E%3Ccircle%20cx%3D%226.2%22%20cy%3D%22199.4%22%20r%3D%221.10%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.25%22%2F%3E%3Ccircle%20cx%3D%221139.9%22%20cy%3D%22147.6%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.35%22%2F%3E%3Ccircle%20cx%3D%22655.0%22%20cy%3D%22141.9%22%20r%3D%220.70%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.36%22%2F%3E%3Ccircle%20cx%3D%221051.2%22%20cy%3D%22151.4%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%22192.1%22%20cy%3D%2240.6%22%20r%3D%221.10%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.27%22%2F%3E%3Ccircle%20cx%3D%22494.4%22%20cy%3D%22242.4%22%20r%3D%221.10%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.21%22%2F%3E%3Ccircle%20cx%3D%22451.2%22%20cy%3D%22287.6%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.17%22%2F%3E%3Ccircle%20cx%3D%2261.7%22%20cy%3D%22104.1%22%20r%3D%220.80%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.40%22%2F%3E%3Ccircle%20cx%3D%221134.1%22%20cy%3D%227.7%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.30%22%2F%3E%3Ccircle%20cx%3D%22364.4%22%20cy%3D%2297.8%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.28%22%2F%3E%3Ccircle%20cx%3D%22559.9%22%20cy%3D%22185.6%22%20r%3D%220.70%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.13%22%2F%3E%3Ccircle%20cx%3D%22623.5%22%20cy%3D%22130.1%22%20r%3D%220.80%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.24%22%2F%3E%3Ccircle%20cx%3D%22280.0%22%20cy%3D%22213.3%22%20r%3D%221.10%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.17%22%2F%3E%3Ccircle%20cx%3D%22234.6%22%20cy%3D%22276.4%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.15%22%2F%3E%3Ccircle%20cx%3D%221117.1%22%20cy%3D%2214.5%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.24%22%2F%3E%3Ccircle%20cx%3D%22853.1%22%20cy%3D%22263.3%22%20r%3D%220.70%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.16%22%2F%3E%3Ccircle%20cx%3D%22262.5%22%20cy%3D%22264.8%22%20r%3D%220.70%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.12%22%2F%3E%3Ccircle%20cx%3D%221013.2%22%20cy%3D%22117.0%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.27%22%2F%3E%3Ccircle%20cx%3D%221041.7%22%20cy%3D%22115.0%22%20r%3D%220.70%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.23%22%2F%3E%3Ccircle%20cx%3D%22316.1%22%20cy%3D%22149.3%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.19%22%2F%3E%3Ccircle%20cx%3D%22212.4%22%20cy%3D%22155.8%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.14%22%2F%3E%3Ccircle%20cx%3D%22955.9%22%20cy%3D%22239.0%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%22277.6%22%20cy%3D%22286.1%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.14%22%2F%3E%3Ccircle%20cx%3D%22489.6%22%20cy%3D%22235.0%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.12%22%2F%3E%3Ccircle%20cx%3D%2232.6%22%20cy%3D%22254.0%22%20r%3D%220.80%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.16%22%2F%3E%3Ccircle%20cx%3D%22686.8%22%20cy%3D%22161.5%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.26%22%2F%3E%3Ccircle%20cx%3D%22336.6%22%20cy%3D%22225.4%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.12%22%2F%3E%3Ccircle%20cx%3D%22353.6%22%20cy%3D%2280.4%22%20r%3D%221.10%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.19%22%2F%3E%3Ccircle%20cx%3D%22937.8%22%20cy%3D%2228.9%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.23%22%2F%3E%3Ccircle%20cx%3D%22821.5%22%20cy%3D%22227.7%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%22775.1%22%20cy%3D%2231.9%22%20r%3D%220.80%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.26%22%2F%3E%3Ccircle%20cx%3D%221004.9%22%20cy%3D%2287.3%22%20r%3D%220.80%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.19%22%2F%3E%3Ccircle%20cx%3D%22307.3%22%20cy%3D%224.2%22%20r%3D%220.80%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.33%22%2F%3E%3Ccircle%20cx%3D%2218.5%22%20cy%3D%2228.9%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.27%22%2F%3E%3Ccircle%20cx%3D%22112.6%22%20cy%3D%22168.4%22%20r%3D%220.80%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.18%22%2F%3E%3Ccircle%20cx%3D%22547.3%22%20cy%3D%22187.7%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.23%22%2F%3E%3Ccircle%20cx%3D%221109.7%22%20cy%3D%2294.8%22%20r%3D%220.70%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.31%22%2F%3E%3Ccircle%20cx%3D%22511.3%22%20cy%3D%22202.8%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.23%22%2F%3E%3Ccircle%20cx%3D%221033.6%22%20cy%3D%22204.4%22%20r%3D%220.80%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.17%22%2F%3E%3Ccircle%20cx%3D%221136.5%22%20cy%3D%22106.9%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.33%22%2F%3E%3Ccircle%20cx%3D%221054.1%22%20cy%3D%2284.4%22%20r%3D%220.80%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.23%22%2F%3E%3Ccircle%20cx%3D%221149.9%22%20cy%3D%22240.0%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.13%22%2F%3E%3Ccircle%20cx%3D%22500.0%22%20cy%3D%22175.7%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.23%22%2F%3E%3Ccircle%20cx%3D%22411.0%22%20cy%3D%22168.3%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.33%22%2F%3E%3Ccircle%20cx%3D%22194.5%22%20cy%3D%2236.8%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.21%22%2F%3E%3Ccircle%20cx%3D%22424.8%22%20cy%3D%22194.4%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.16%22%2F%3E%3Ccircle%20cx%3D%22509.7%22%20cy%3D%2237.9%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.29%22%2F%3E%3Ccircle%20cx%3D%22287.2%22%20cy%3D%22126.3%22%20r%3D%220.70%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.33%22%2F%3E%3Ccircle%20cx%3D%22220.2%22%20cy%3D%228.5%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.52%22%2F%3E%3Ccircle%20cx%3D%22820.5%22%20cy%3D%22119.1%22%20r%3D%220.80%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.34%22%2F%3E%3Ccircle%20cx%3D%22273.9%22%20cy%3D%225.0%22%20r%3D%221.10%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.35%22%2F%3E%3Ccircle%20cx%3D%22316.6%22%20cy%3D%2294.4%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.31%22%2F%3E%3Ccircle%20cx%3D%221007.5%22%20cy%3D%22165.9%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.31%22%2F%3E%3Ccircle%20cx%3D%22988.5%22%20cy%3D%22246.0%22%20r%3D%220.80%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.18%22%2F%3E%3Ccircle%20cx%3D%22905.4%22%20cy%3D%2295.2%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.38%22%2F%3E%3Ccircle%20cx%3D%22753.4%22%20cy%3D%2272.8%22%20r%3D%220.60%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.45%22%2F%3E%3Ccircle%20cx%3D%22815.0%22%20cy%3D%22258.6%22%20r%3D%221.30%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.21%22%2F%3E%3Ccircle%20cx%3D%22478.9%22%20cy%3D%22292.9%22%20r%3D%220.70%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.12%22%2F%3E%3Ccircle%20cx%3D%22330.9%22%20cy%3D%22258.4%22%20r%3D%220.80%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.12%22%2F%3E%3Ccircle%20cx%3D%22764.4%22%20cy%3D%22164.6%22%20r%3D%220.90%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.32%22%2F%3E%3Ccircle%20cx%3D%22808.1%22%20cy%3D%2293.7%22%20r%3D%220.70%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.32%22%2F%3E%0A%3Crect%20width%3D%221200%22%20height%3D%22440%22%20fill%3D%22url%28%23glowA%29%22%2F%3E%0A%3Crect%20width%3D%221200%22%20height%3D%22440%22%20fill%3D%22url%28%23glowB%29%22%2F%3E%0A%3Cpath%20d%3D%22M744.0%2C258.0%20L794.7%2C241.0%20L845.3%2C235.8%20L896.0%2C227.2%20L946.7%2C221.0%20L997.3%2C220.0%20L1048.0%2C220.5%20L1098.7%2C216.9%20L1149.3%2C209.0%20L1200.0%2C202.1%20L1200.0%2C254.1%20L1149.3%2C258.8%20L1098.7%2C264.5%20L1048.0%2C265.8%20L997.3%2C263.1%20L946.7%2C261.9%20L896.0%2C265.9%20L845.3%2C272.2%20L794.7%2C275.2%20L744.0%2C258.0%20Z%22%20fill%3D%22%236FD2FF%22%20opacity%3D%220.13%22%2F%3E%0A%3Cpath%20d%3D%22M744.0%2C258.0%20L794.7%2C258.1%20L845.3%2C254.0%20L896.0%2C246.6%20L946.7%2C241.5%20L997.3%2C241.6%20L1048.0%2C243.1%20L1098.7%2C240.7%20L1149.3%2C233.9%20L1200.0%2C228.1%22%20fill%3D%22none%22%20stroke%3D%22%239FE3FF%22%20stroke-width%3D%222.4%22%20stroke-dasharray%3D%229%207%22%20opacity%3D%220.95%22%20filter%3D%22url%28%23rim%29%22%2F%3E%0A%3Cpath%20d%3D%22M744.0%2C258.0%20L794.7%2C258.1%20L845.3%2C254.0%20L896.0%2C246.6%20L946.7%2C241.5%20L997.3%2C241.6%20L1048.0%2C243.1%20L1098.7%2C240.7%20L1149.3%2C233.9%20L1200.0%2C228.1%22%20fill%3D%22none%22%20stroke%3D%22%23E8F7FF%22%20stroke-width%3D%221.5%22%20stroke-dasharray%3D%229%207%22%2F%3E%0A%3Cpath%20d%3D%22M0.0%2C325.9%20L26.1%2C330.5%20L52.2%2C327.0%20L78.3%2C328.9%20L104.3%2C325.8%20L130.4%2C311.6%20L156.5%2C304.2%20L182.6%2C310.4%20L208.7%2C294.5%20L234.8%2C289.1%20L260.9%2C298.7%20L287.0%2C290.6%20L313.0%2C299.6%20L339.1%2C299.4%20L365.2%2C309.1%20L391.3%2C308.5%20L417.4%2C322.8%20L443.5%2C331.4%20L469.6%2C328.3%20L495.7%2C332.0%20L521.7%2C329.3%20L547.8%2C316.7%20L573.9%2C325.0%20L600.0%2C320.0%20L626.1%2C314.3%20L652.2%2C310.3%20L678.3%2C325.3%20L704.3%2C320.9%20L730.4%2C326.3%20L756.5%2C329.0%20L782.6%2C324.3%20L808.7%2C323.0%20L834.8%2C307.5%20L860.9%2C305.3%20L887.0%2C290.0%20L913.0%2C288.6%20L939.1%2C279.9%20L965.2%2C261.9%20L991.3%2C260.0%20L1017.4%2C261.5%20L1043.5%2C276.0%20L1069.6%2C271.3%20L1095.7%2C278.5%20L1121.7%2C276.9%20L1147.8%2C282.4%20L1173.9%2C281.1%20L1200.0%2C279.8%20L1200.0%2C460.0%20L0%2C460.0%20Z%22%20fill%3D%22url%28%23r1%29%22%20opacity%3D%220.55%22%2F%3E%0A%3Cpath%20d%3D%22M0.0%2C394.0%20L20.0%2C389.9%20L40.0%2C405.6%20L60.0%2C384.6%20L80.0%2C396.0%20L100.0%2C385.9%20L120.0%2C370.9%20L140.0%2C380.6%20L160.0%2C361.1%20L180.0%2C370.6%20L200.0%2C356.5%20L220.0%2C355.8%20L240.0%2C366.1%20L260.0%2C379.1%20L280.0%2C356.2%20L300.0%2C358.8%20L320.0%2C370.4%20L340.0%2C378.0%20L360.0%2C361.9%20L380.0%2C350.5%20L400.0%2C362.6%20L420.0%2C325.1%20L440.0%2C343.8%20L460.0%2C318.2%20L480.0%2C307.3%20L500.0%2C301.7%20L520.0%2C305.0%20L540.0%2C320.7%20L560.0%2C301.4%20L580.0%2C317.5%20L600.0%2C323.9%20L620.0%2C320.8%20L640.0%2C332.2%20L660.0%2C322.0%20L680.0%2C326.5%20L700.0%2C334.8%20L720.0%2C352.2%20L740.0%2C344.7%20L760.0%2C340.5%20L780.0%2C347.9%20L800.0%2C341.7%20L820.0%2C334.9%20L840.0%2C349.6%20L860.0%2C345.9%20L880.0%2C331.6%20L900.0%2C343.8%20L920.0%2C344.6%20L940.0%2C358.8%20L960.0%2C357.1%20L980.0%2C345.2%20L1000.0%2C369.2%20L1020.0%2C341.3%20L1040.0%2C349.3%20L1060.0%2C356.6%20L1080.0%2C331.4%20L1100.0%2C335.3%20L1120.0%2C312.4%20L1140.0%2C324.0%20L1160.0%2C318.3%20L1180.0%2C304.0%20L1200.0%2C306.9%20L1200.0%2C460.0%20L0%2C460.0%20Z%22%20fill%3D%22url%28%23r2%29%22%20opacity%3D%220.92%22%2F%3E%0A%3Cg%20filter%3D%22url%28%23soft%29%22%3E%3Cpath%20d%3D%22M0.0%2C394.0%20L20.0%2C389.9%20L40.0%2C405.6%20L60.0%2C384.6%20L80.0%2C396.0%20L100.0%2C385.9%20L120.0%2C370.9%20L140.0%2C380.6%20L160.0%2C361.1%20L180.0%2C370.6%20L200.0%2C356.5%20L220.0%2C355.8%20L240.0%2C366.1%20L260.0%2C379.1%20L280.0%2C356.2%20L300.0%2C358.8%20L320.0%2C370.4%20L340.0%2C378.0%20L360.0%2C361.9%20L380.0%2C350.5%20L400.0%2C362.6%20L420.0%2C325.1%20L440.0%2C343.8%20L460.0%2C318.2%20L480.0%2C307.3%20L500.0%2C301.7%20L520.0%2C305.0%20L540.0%2C320.7%20L560.0%2C301.4%20L580.0%2C317.5%20L600.0%2C323.9%20L620.0%2C320.8%20L640.0%2C332.2%20L660.0%2C322.0%20L680.0%2C326.5%20L700.0%2C334.8%20L720.0%2C352.2%20L740.0%2C344.7%20L760.0%2C340.5%20L780.0%2C347.9%20L800.0%2C341.7%20L820.0%2C334.9%20L840.0%2C349.6%20L860.0%2C345.9%20L880.0%2C331.6%20L900.0%2C343.8%20L920.0%2C344.6%20L940.0%2C358.8%20L960.0%2C357.1%20L980.0%2C345.2%20L1000.0%2C369.2%20L1020.0%2C341.3%20L1040.0%2C349.3%20L1060.0%2C356.6%20L1080.0%2C331.4%20L1100.0%2C335.3%20L1120.0%2C312.4%20L1140.0%2C324.0%20L1160.0%2C318.3%20L1180.0%2C304.0%20L1200.0%2C306.9%20L1200.0%2C460.0%20L0%2C460.0%20Z%22%20fill%3D%22%23FF7A2E%22%20opacity%3D%220.30%22%2F%3E%3C%2Fg%3E%0A%3Cpath%20d%3D%22M0.0%2C390.5%20L16.2%2C390.9%20L32.4%2C400.3%20L48.6%2C383.3%20L64.9%2C383.8%20L81.1%2C386.4%20L97.3%2C374.3%20L113.5%2C387.3%20L129.7%2C394.3%20L145.9%2C403.5%20L162.2%2C384.8%20L178.4%2C396.3%20L194.6%2C393.9%20L210.8%2C422.0%20L227.0%2C422.0%20L243.2%2C403.5%20L259.5%2C436.8%20L275.7%2C437.4%20L291.9%2C427.5%20L308.1%2C425.7%20L324.3%2C409.3%20L340.5%2C402.7%20L356.8%2C417.4%20L373.0%2C399.6%20L389.2%2C401.7%20L405.4%2C401.4%20L421.6%2C392.9%20L437.8%2C406.2%20L454.1%2C404.9%20L470.3%2C418.1%20L486.5%2C407.8%20L502.7%2C412.4%20L518.9%2C408.4%20L535.1%2C414.2%20L551.4%2C407.4%20L567.6%2C401.0%20L583.8%2C423.4%20L600.0%2C421.3%20L616.2%2C413.1%20L632.4%2C405.0%20L648.6%2C387.5%20L664.9%2C379.6%20L681.1%2C376.1%20L697.3%2C363.5%20L713.5%2C381.2%20L729.7%2C364.3%20L745.9%2C375.0%20L762.2%2C356.6%20L778.4%2C373.3%20L794.6%2C368.7%20L810.8%2C340.8%20L827.0%2C348.8%20L843.2%2C373.8%20L859.5%2C361.9%20L875.7%2C381.7%20L891.9%2C365.7%20L908.1%2C358.1%20L924.3%2C379.3%20L940.5%2C386.5%20L956.8%2C371.4%20L973.0%2C366.5%20L989.2%2C375.0%20L1005.4%2C395.6%20L1021.6%2C388.2%20L1037.8%2C366.3%20L1054.1%2C369.6%20L1070.3%2C364.0%20L1086.5%2C362.2%20L1102.7%2C386.5%20L1118.9%2C366.7%20L1135.1%2C380.5%20L1151.4%2C378.7%20L1167.6%2C372.6%20L1183.8%2C393.2%20L1200.0%2C376.3%20L1200.0%2C460.0%20L0%2C460.0%20Z%22%20fill%3D%22url%28%23r3%29%22%2F%3E%0A%3Cg%20filter%3D%22url%28%23rim%29%22%3E%3Cpath%20d%3D%22M0.0%2C390.5%20L16.2%2C390.9%20L32.4%2C400.3%20L48.6%2C383.3%20L64.9%2C383.8%20L81.1%2C386.4%20L97.3%2C374.3%20L113.5%2C387.3%20L129.7%2C394.3%20L145.9%2C403.5%20L162.2%2C384.8%20L178.4%2C396.3%20L194.6%2C393.9%20L210.8%2C422.0%20L227.0%2C422.0%20L243.2%2C403.5%20L259.5%2C436.8%20L275.7%2C437.4%20L291.9%2C427.5%20L308.1%2C425.7%20L324.3%2C409.3%20L340.5%2C402.7%20L356.8%2C417.4%20L373.0%2C399.6%20L389.2%2C401.7%20L405.4%2C401.4%20L421.6%2C392.9%20L437.8%2C406.2%20L454.1%2C404.9%20L470.3%2C418.1%20L486.5%2C407.8%20L502.7%2C412.4%20L518.9%2C408.4%20L535.1%2C414.2%20L551.4%2C407.4%20L567.6%2C401.0%20L583.8%2C423.4%20L600.0%2C421.3%20L616.2%2C413.1%20L632.4%2C405.0%20L648.6%2C387.5%20L664.9%2C379.6%20L681.1%2C376.1%20L697.3%2C363.5%20L713.5%2C381.2%20L729.7%2C364.3%20L745.9%2C375.0%20L762.2%2C356.6%20L778.4%2C373.3%20L794.6%2C368.7%20L810.8%2C340.8%20L827.0%2C348.8%20L843.2%2C373.8%20L859.5%2C361.9%20L875.7%2C381.7%20L891.9%2C365.7%20L908.1%2C358.1%20L924.3%2C379.3%20L940.5%2C386.5%20L956.8%2C371.4%20L973.0%2C366.5%20L989.2%2C375.0%20L1005.4%2C395.6%20L1021.6%2C388.2%20L1037.8%2C366.3%20L1054.1%2C369.6%20L1070.3%2C364.0%20L1086.5%2C362.2%20L1102.7%2C386.5%20L1118.9%2C366.7%20L1135.1%2C380.5%20L1151.4%2C378.7%20L1167.6%2C372.6%20L1183.8%2C393.2%20L1200.0%2C376.3%20L1200.0%2C460.0%20L0%2C460.0%20Z%22%20fill%3D%22%23FFB05A%22%20opacity%3D%220.22%22%2F%3E%3C%2Fg%3E%0A%3C%2Fsvg%3E");
+    background-size:cover;background-position:center bottom;background-repeat:no-repeat}
+  .hero .tws{position:absolute;inset:0;width:100%;height:100%}
+  .hero .veil{position:absolute;inset:0;
+    background:radial-gradient(ellipse 70% 55% at 50% 42%, rgba(4,8,15,.62), rgba(4,8,15,0) 70%)}
+  .hero .fade{position:absolute;left:0;right:0;bottom:0;height:120px;
+    background:linear-gradient(to bottom, rgba(4,8,15,0), #04080F)}
 
-  /* SECTIONS (light) */
-  section.block{padding:56px 0;border-bottom:1px solid var(--line)}
-  h2{font-size:26px;margin-bottom:8px;letter-spacing:-.01em}
-  .sub{color:var(--muted);margin-bottom:28px;font-size:14px}
-  .exp{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px;box-shadow:0 1px 2px rgba(16,42,71,.04)}
-  .exp .h{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:2px}
-  .exp .title{font-weight:700;font-size:17px}
-  .exp .co{color:var(--blue);font-weight:700;font-size:14px}
-  .exp .meta{color:var(--muted);font-size:13px}
-  .exp .stat{display:inline-block;background:#EAF2FF;color:var(--blue);font-weight:700;font-size:12px;padding:4px 11px;border-radius:999px;margin-top:8px}
-  .exp ul{margin:14px 0 0 18px}
-  .exp li{margin-bottom:6px;font-size:14px;color:#33475B}
-  .edu{background:linear-gradient(160deg,#F0F6FF,#FFFFFF);border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+  .topbar{position:absolute;top:0;left:0;right:0;z-index:6;
+    display:flex;justify-content:space-between;align-items:center;
+    max-width:1120px;margin:0 auto;padding:18px 28px}
+  .brand{font-weight:700;letter-spacing:.14em;font-size:14px;color:#DCE8F5}
+  .toggle{display:flex;gap:4px;background:rgba(255,255,255,.07);padding:4px;border-radius:999px;border:1px solid rgba(255,255,255,.16)}
+  .toggle button{background:none;border:none;color:#C4D6E8;padding:8px 16px;min-height:40px;border-radius:999px;
+    cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;display:flex;align-items:center}
+  .toggle button.active{background:#fff;color:#0B1A2E}
 
-  /* PROYEK */
-  .proj-filter{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
-  .proj-filter button{background:var(--card);border:1px solid var(--line);color:var(--muted);
-    padding:9px 16px;min-height:40px;border-radius:999px;cursor:pointer;font-size:13.5px;font-weight:700;font-family:inherit}
-  .proj-filter button.on{background:var(--blue);border-color:var(--blue);color:#fff}
-  .proj-card.hide{display:none}
-  .proj-grid{display:grid;grid-template-columns:1fr;gap:16px}
-  .proj-card{text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 1px 2px rgba(16,42,71,.04);transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;overflow:hidden}
-  .proj-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(16,42,71,.12);border-color:#C9D9EC}
-  .proj-card.feature{display:grid;grid-template-columns:minmax(0,0.82fr) minmax(0,1.18fr)}
-  .proj-preview{background:linear-gradient(160deg,#2563EB,#4F97F5);padding:18px;display:flex;flex-direction:column;gap:11px;justify-content:center}
-  .pv-top{display:flex;gap:6px}
-  .pv-dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.55)}
-  .pv-hero{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:13px;padding:12px 14px}
-  .pv-hero-lbl{color:#E7E2FF;font-size:10px;font-weight:600}
-  .pv-hero-val{color:#fff;font-size:20px;font-weight:800;margin-top:2px;letter-spacing:-.01em}
-  .pv-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-  .pv-stat{background:rgba(255,255,255,.12);border-radius:9px;padding:7px 3px;text-align:center}
-  .pv-stat b{display:block;color:#fff;font-size:14px;font-weight:800}
-  .pv-stat span{color:#E0DAFB;font-size:9px;letter-spacing:.2px}
-  .pv-chart{width:100%;height:auto;display:block;margin:2px 0 4px}
-  .pv-tags{display:flex;flex-wrap:wrap;gap:6px}
-  .pv-tags span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);color:#EAF2FB;font-size:10px;font-weight:600;padding:4px 9px;border-radius:999px}
-  .proj-body{padding:26px}
-  .proj-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--blue);background:#EAF2FF;padding:4px 10px;border-radius:999px;margin-bottom:12px}
-  .proj-body .title{font-weight:800;font-size:18px;margin-bottom:8px}
-  .proj-body .desc{font-size:14px;color:#33475B;margin-bottom:12px}
-  .proj-body .open{font-size:13px;font-weight:700;color:var(--blue)}
-  .proj-body .links{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-  .proj-body .alt{font-size:13px;font-weight:700;color:var(--muted);border-bottom:1px solid var(--line)}
-
-  /* CONTACT */
-  .contact{background:var(--navy);color:#EAF2FB;padding:52px 0;text-align:center}
-  .contact a{color:var(--blue-soft);text-decoration:none;font-weight:700}
-  .btns{display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap}
-  .btns a{background:var(--blue);color:#fff;padding:12px 24px;min-height:44px;display:inline-flex;align-items:center;border-radius:999px;font-size:14px}
-  .btns a.ghost{background:transparent;border:1px solid rgba(255,255,255,.3)}
-
-  /* bilingual */
-  [data-en]{display:none}
-  body.en [data-id]{display:none}
-  body.en [data-en]{display:block}
-  body.en .inln[data-en]{display:inline}
-  li[data-en]{display:none}
-  body.en li[data-id]{display:none}
-  body.en li[data-en]{display:list-item}
-
-  @media(max-width:680px){
-    .hero{padding:56px 0 44px}
-    .hero h1{font-size:31px}
-    .metrics{grid-template-columns:repeat(2,1fr)}
-    .proj-card.feature{grid-template-columns:1fr}
+  .tw{transform-box:fill-box;transform-origin:center;
+    animation:tw var(--dur) ease-in-out infinite both;animation-delay:var(--dly)}
+  @keyframes tw{
+    0%{opacity:.08;transform:scale(.5)} 40%{opacity:.95;transform:scale(1)}
+    62%{opacity:.22;transform:scale(.66)} 80%{opacity:.7;transform:scale(.92)}
+    100%{opacity:.08;transform:scale(.5)}
   }
+  @media (prefers-reduced-motion:reduce){.tw{animation:none;opacity:.6;transform:scale(.85)}}
+
+  .mark{position:relative;z-index:4;text-align:center;padding:64px 24px 0}
+  .mark b{display:block;font-size:clamp(34px,7.6vw,96px);font-weight:600;letter-spacing:.13em;color:#fff;line-height:1;
+    text-shadow:0 2px 30px rgba(0,0,0,.65),0 0 90px rgba(8,26,54,.9)}
+  .mark .role{display:block;margin-top:14px;font-size:clamp(11px,1.4vw,15px);font-weight:500;letter-spacing:.22em;color:#B6CBDE}
+  .mark .note{display:block;margin:26px auto 0;max-width:62ch;font-size:clamp(14px,1.6vw,16.5px);
+    letter-spacing:0;color:#9FB4C9;font-weight:400}
+  .mark .note i{font-style:normal;color:#fff;font-weight:500}
+
+  /* ---------- lapisan kosmik (dipakai ulang di tiap bidang gelap) ---------- */
+  .cosmos{position:relative;isolation:isolate}
+  .cosmos > .stars{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+  .cosmos > *:not(.stars){position:relative;z-index:1}
+
+  /* ---------- pita angka ---------- */
+  .figures{background:#04080F;padding:6px 0 64px}
+  .figrow{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #15283C}
+  .figrow > div{padding:26px 20px;border-right:1px solid #15283C}
+  .figrow > div:last-child{border-right:0}
+  .figrow b{display:block;font-size:clamp(26px,3.4vw,40px);font-weight:600;letter-spacing:-.025em;color:#fff;line-height:1}
+  .figrow .lbl{display:block;margin-top:9px;font-size:13px;color:#8FA6BC}
+  .figrow em{display:block;margin-top:6px;font-style:normal;font-size:12px;color:#E89B5F}
+  @media(max-width:720px){.figrow{grid-template-columns:repeat(2,1fr)}.figrow > div{border-bottom:1px solid #15283C}}
+
+  /* ---------- bagian terang ---------- */
+  section{padding:76px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:clamp(22px,2.4vw,27px);font-weight:600;letter-spacing:-.02em;margin-bottom:10px}
+  .lead{color:var(--muted);margin-bottom:30px;font-size:15px;max-width:62ch}
+  p+p{margin-top:14px}
+  .body{font-size:16.5px}
+  .item{padding:22px 0;border-top:1px solid var(--line)}
+  .item:first-child{border-top:0}
+  .item .when{font-size:13px;color:var(--muted);margin-bottom:7px}
+  .item h3{font-size:17.5px;font-weight:600;margin-bottom:4px}
+  .item .org{font-size:14px;color:var(--ember);font-weight:500;margin-bottom:9px}
+  .item p,.item li{font-size:15.5px;color:#36465A}
+  .item ul{margin:8px 0 0 18px}
+  .item li{margin-bottom:5px}
+
+  /* ---------- panggung proyek ---------- */
+  .pfil{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+  .pfil button{font-family:inherit;font-size:12.5px;font-weight:600;color:var(--muted);
+    background:transparent;border:1px dashed var(--line);border-radius:999px;padding:8px 14px;min-height:38px;cursor:pointer}
+  .pfil button.on{border-style:solid;border-color:var(--ink);color:var(--ink)}
+  .pick{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+  .pick button{font-family:inherit;font-size:13px;font-weight:600;color:var(--muted);
+    background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 16px;min-height:42px;cursor:pointer;
+    transition:background .18s,color .18s,border-color .18s}
+  .pick button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+  .pick button.hide{display:none}
+
+  .stage{background:linear-gradient(160deg,var(--night),var(--night2));color:var(--n-ink);
+    border-radius:20px;padding:clamp(24px,3.4vw,42px);box-shadow:0 26px 56px rgba(6,16,29,.26);overflow:hidden}
+  .pane[hidden]{display:none}
+  .pane{animation:fade .36s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.pane{animation:none}}
+
+  .duo{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.5fr);gap:clamp(22px,4vw,54px);align-items:center}
+  @media(max-width:760px){.duo{grid-template-columns:1fr;gap:26px}}
+  .fig .lab{font-size:12.5px;color:var(--n-mut)}
+  .fig .num{font-size:clamp(36px,5.6vw,60px);font-weight:600;letter-spacing:-.035em;line-height:1;margin:7px 0 10px}
+  .fig .note{font-size:13.5px;color:var(--n-mut);max-width:38ch}
+  .fig .strip{display:flex;gap:22px;margin-top:20px;padding-top:16px;border-top:1px solid var(--n-line)}
+  .fig .strip > div b{display:block;font-size:17px;font-weight:600}
+  .fig .strip > div span{display:block;font-size:11px;color:var(--n-mut);margin-top:2px}
+  .golinks{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+  .go{display:inline-block;margin-top:18px;font-size:13.5px;font-weight:600;color:#8CCBF2;
+    border-bottom:1.5px solid currentColor;padding-bottom:2px;text-decoration:none}
+  .go.alt{color:var(--n-mut)}
+  .legend{display:flex;gap:15px;font-size:11px;color:var(--n-mut);margin-top:10px;flex-wrap:wrap}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .legend i{width:14px;height:2.5px;border-radius:2px;display:block}
+
+  .edu{padding:22px 0}
+  .edu .when{font-size:13px;color:var(--muted);margin-bottom:7px}
+  .edu h3{font-size:17.5px;font-weight:600;margin-bottom:4px}
+  .edu .org{font-size:14px;color:var(--ember);font-weight:500;margin-bottom:9px}
+  .edu p{font-size:15.5px;color:#36465A}
+
+  /* ---------- kontak ---------- */
+  .foot{background:linear-gradient(165deg,var(--night),#04080F);color:#9FB4C9;padding:56px 0;text-align:center}
+  .foot b{display:block;color:#fff;font-size:20px;font-weight:600;margin-bottom:8px}
+  .btns{display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap}
+  .btns a{color:#EAF2FB;text-decoration:none;font-size:14px;font-weight:600;
+    padding:11px 24px;min-height:44px;display:inline-flex;align-items:center;border-radius:999px;border:1px solid rgba(255,255,255,.28)}
+  .btns a.main{background:#fff;color:#0B1A2E;border-color:#fff}
+
+  /* ---------- dwibahasa ---------- */
+  [data-en]{display:none!important}
+  body.en [data-id]{display:none!important}
+  body.en span[data-en],body.en i[data-en],body.en em[data-en],body.en b[data-en]{display:inline!important}
+  body.en p[data-en],body.en div[data-en]{display:block!important}
+  body.en li[data-en]{display:list-item!important}
+  body.en svg tspan[data-en]{display:inline!important}
 </style>
 </head>
 <body>
 
 <header class="hero">
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand">DIAR AZARI</div>
-      <div class="toggle">
-        <button id="bID" class="active" type="button">ID</button>
-        <button id="bEN" type="button">EN</button>
-      </div>
-    </div>
-    <h1><span data-id>Data Analyst <span class="role">yang membangun sistem, bukan sekadar laporan</span></span><span data-en>Data Analyst <span class="role">who builds systems, not just reports</span></span></h1>
-    <p class="lead">
-      <span data-id>Saya merancang model forecasting, otomasi procurement, dan dashboard yang mengubah data mentah menjadi keputusan. Metodologi saya rancang sendiri; implementasinya cepat lewat Python.</span>
-      <span data-en>I design forecasting models, procurement automation, and dashboards that turn raw data into decisions. The methodology is mine; implementation ships fast via Python.</span>
-    </p>
-    <div class="metrics">
-      <div class="metric"><div class="num">9%</div><div class="lbl">MAPE forecasting GMV</div><div class="hint"><span data-id>makin kecil makin baik</span><span data-en>lower is better</span></div></div>
-      <div class="metric"><div class="num"><span class="inln" data-id>5.916</span><span class="inln" data-en>5,916</span></div><div class="lbl"><span data-id>produk di dashboard</span><span data-en>products tracked</span></div></div>
-      <div class="metric"><div class="num">3</div><div class="lbl">marketplace</div></div>
-      <div class="metric"><div class="num">194</div><div class="lbl"><span data-id>PO lintas 3 mata uang</span><span data-en>POs, 3 currencies</span></div></div>
+  <div class="bg"></div>
+  <svg class="tws" viewBox="0 0 1200 440" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs><filter id="gl" x="-120%" y="-120%" width="340%" height="340%">
+      <feGaussianBlur stdDeviation="1.0" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+    <g filter="url(#gl)"><g transform="translate(492.5 70.8)"><g class="tw" style="--dur:2.67s;--dly:3.42s"><circle r="0.93" fill="#fff"/></g></g><g transform="translate(321.3 111.8)"><g class="tw" style="--dur:3.34s;--dly:4.22s"><circle r="1.28" fill="#fff"/></g></g><g transform="translate(588.0 120.4)"><g class="tw" style="--dur:2.60s;--dly:4.06s"><circle r="1.23" fill="#fff"/></g></g><g transform="translate(458.9 112.9)"><g class="tw" style="--dur:2.45s;--dly:2.97s"><circle r="1.28" fill="#fff"/></g></g><g transform="translate(992.0 101.9)"><g class="tw" style="--dur:3.32s;--dly:3.49s"><circle r="1.46" fill="#fff"/></g></g><g transform="translate(565.3 116.2)"><g class="tw" style="--dur:2.12s;--dly:0.92s"><circle r="0.99" fill="#fff"/></g></g><g transform="translate(1148.3 145.7)"><g class="tw" style="--dur:4.17s;--dly:2.72s"><circle r="1.12" fill="#fff"/></g></g><g transform="translate(1133.9 106.1)"><g class="tw" style="--dur:4.22s;--dly:0.72s"><circle r="0.95" fill="#fff"/></g></g><g transform="translate(926.9 159.4)"><g class="tw" style="--dur:4.27s;--dly:2.97s"><circle r="1.49" fill="#fff"/></g></g><g transform="translate(81.5 31.2)"><g class="tw" style="--dur:3.99s;--dly:0.37s"><circle r="1.13" fill="#fff"/></g></g><g transform="translate(516.5 45.3)"><g class="tw" style="--dur:2.11s;--dly:1.48s"><circle r="1.02" fill="#fff"/></g></g><g transform="translate(626.2 71.0)"><g class="tw" style="--dur:2.23s;--dly:0.95s"><circle r="1.35" fill="#fff"/></g></g><g transform="translate(328.5 116.5)"><g class="tw" style="--dur:2.91s;--dly:3.13s"><circle r="1.33" fill="#fff"/></g></g><g transform="translate(1072.9 55.3)"><g class="tw" style="--dur:3.48s;--dly:3.36s"><circle r="1.40" fill="#fff"/></g></g><g transform="translate(721.0 117.5)"><g class="tw" style="--dur:2.43s;--dly:0.78s"><circle r="0.87" fill="#fff"/></g></g><g transform="translate(239.0 58.6)"><g class="tw" style="--dur:3.39s;--dly:3.47s"><circle r="0.95" fill="#fff"/></g></g><g transform="translate(921.8 204.1)"><g class="tw" style="--dur:2.90s;--dly:4.11s"><path d="M0,-9 C1.0,-1.8 1.8,-1.0 9,0 C1.8,1.0 1.0,1.8 0,9 C-1.0,1.8 -1.8,1.0 -9,0 C-1.8,-1.0 -1.0,-1.8 0,-9 Z" fill="#fff"/><circle r="1.3" fill="#fff"/></g></g><g transform="translate(260.8 48.6)"><g class="tw" style="--dur:3.35s;--dly:2.93s"><path d="M0,-6 C0.7,-1.2 1.2,-0.7 6,0 C1.2,0.7 0.7,1.2 0,6 C-0.7,1.2 -1.2,0.7 -6,0 C-1.2,-0.7 -0.7,-1.2 0,-6 Z" fill="#fff"/><circle r="0.9" fill="#fff"/></g></g><g transform="translate(111.5 77.5)"><g class="tw" style="--dur:3.64s;--dly:4.11s"><path d="M0,-5 C0.6,-1.0 1.0,-0.6 5,0 C1.0,0.6 0.6,1.0 0,5 C-0.6,1.0 -1.0,0.6 -5,0 C-1.0,-0.6 -0.6,-1.0 0,-5 Z" fill="#fff"/><circle r="0.8" fill="#fff"/></g></g><g transform="translate(491.4 117.2)"><g class="tw" style="--dur:3.56s;--dly:0.46s"><path d="M0,-10 C1.1,-2.0 2.0,-1.1 10,0 C2.0,1.1 1.1,2.0 0,10 C-1.1,2.0 -2.0,1.1 -10,0 C-2.0,-1.1 -1.1,-2.0 0,-10 Z" fill="#fff"/><circle r="1.5" fill="#fff"/></g></g><g transform="translate(1009.9 219.5)"><g class="tw" style="--dur:4.48s;--dly:1.99s"><path d="M0,-7 C0.8,-1.4 1.4,-0.8 7,0 C1.4,0.8 0.8,1.4 0,7 C-0.8,1.4 -1.4,0.8 -7,0 C-1.4,-0.8 -0.8,-1.4 0,-7 Z" fill="#fff"/><circle r="1.1" fill="#fff"/></g></g><g transform="translate(539.5 96.6)"><g class="tw" style="--dur:4.30s;--dly:3.27s"><path d="M0,-4.5 C0.5,-0.9 0.9,-0.5 4.5,0 C0.9,0.5 0.5,0.9 0,4.5 C-0.5,0.9 -0.9,0.5 -4.5,0 C-0.9,-0.5 -0.5,-0.9 0,-4.5 Z" fill="#fff"/><circle r="0.8" fill="#fff"/></g></g><g transform="translate(395.5 209.7)"><g class="tw" style="--dur:4.47s;--dly:1.09s"><path d="M0,-8 C0.9,-1.6 1.6,-0.9 8,0 C1.6,0.9 0.9,1.6 0,8 C-0.9,1.6 -1.6,0.9 -8,0 C-1.6,-0.9 -0.9,-1.6 0,-8 Z" fill="#fff"/><circle r="1.2" fill="#fff"/></g></g><g transform="translate(934.0 169.5)"><g class="tw" style="--dur:3.25s;--dly:1.48s"><path d="M0,-11 C1.2,-2.2 2.2,-1.2 11,0 C2.2,1.2 1.2,2.2 0,11 C-1.2,2.2 -2.2,1.2 -11,0 C-2.2,-1.2 -1.2,-2.2 0,-11 Z" fill="#fff"/><circle r="1.6" fill="#fff"/></g></g><g transform="translate(871.6 50.1)"><g class="tw" style="--dur:3.74s;--dly:4.82s"><path d="M0,-5.5 C0.6,-1.1 1.1,-0.6 5.5,0 C1.1,0.6 0.6,1.1 0,5.5 C-0.6,1.1 -1.1,0.6 -5.5,0 C-1.1,-0.6 -0.6,-1.1 0,-5.5 Z" fill="#fff"/><circle r="0.8" fill="#fff"/></g></g><g transform="translate(336.7 135.1)"><g class="tw" style="--dur:4.96s;--dly:4.37s"><path d="M0,-4.5 C0.5,-0.9 0.9,-0.5 4.5,0 C0.9,0.5 0.5,0.9 0,4.5 C-0.5,0.9 -0.9,0.5 -4.5,0 C-0.9,-0.5 -0.5,-0.9 0,-4.5 Z" fill="#fff"/><circle r="0.8" fill="#fff"/></g></g><g transform="translate(911.3 141.2)"><g class="tw" style="--dur:5.02s;--dly:1.28s"><path d="M0,-7.5 C0.8,-1.5 1.5,-0.8 7.5,0 C1.5,0.8 0.8,1.5 0,7.5 C-0.8,1.5 -1.5,0.8 -7.5,0 C-1.5,-0.8 -0.8,-1.5 0,-7.5 Z" fill="#fff"/><circle r="1.1" fill="#fff"/></g></g><g transform="translate(1012.1 116.3)"><g class="tw" style="--dur:4.31s;--dly:3.06s"><path d="M0,-5 C0.6,-1.0 1.0,-0.6 5,0 C1.0,0.6 0.6,1.0 0,5 C-0.6,1.0 -1.0,0.6 -5,0 C-1.0,-0.6 -0.6,-1.0 0,-5 Z" fill="#fff"/><circle r="0.8" fill="#fff"/></g></g></g>
+  </svg>
+  <div class="veil"></div>
+  <div class="topbar">
+    <div class="brand">DIAR AZARI</div>
+    <div class="toggle" role="group" aria-label="Bahasa">
+      <button id="bID" class="active" type="button">ID</button>
+      <button id="bEN" type="button">EN</button>
     </div>
   </div>
+  <div class="mark">
+    <b>DIAR AZARI</b>
+    <span class="role">DATA ANALYST</span>
+    <span class="note">
+      <span data-id>Garis bergerigi yang bercahaya di belakang ini bukan pemandangan. Itu <i>GMV harian tiga marketplace</i>, dan garis putus-putus yang memanjang ke kanan adalah ramalan bulan depan.</span>
+      <span data-en>The glowing jagged line behind this is not scenery. It is <i>daily GMV across three marketplaces</i>, and the dashed line reaching right is next month's forecast.</span>
+    </span>
+  </div>
+  <div class="fade"></div>
 </header>
 
-<section class="block">
-  <div class="wrap">
+<div class="figures cosmos" data-stars="20">
+  <div class="wrap"><div class="figrow">
+    <div><b>9,1%</b><span class="lbl"><span data-id>galat rata-rata ramalan</span><span data-en>average forecast error</span></span><em><span data-id>makin kecil makin baik</span><span data-en>lower is better</span></em></div>
+    <div><b><span data-id>5.916</span><span data-en>5,916</span></b><span class="lbl"><span data-id>produk terpantau harga dan HPP</span><span data-en>products tracked for price and COGS</span></span></div>
+    <div><b>194</b><span class="lbl"><span data-id>purchase order, tiga mata uang</span><span data-en>purchase orders, three currencies</span></span></div>
+    <div><b>22</b><span class="lbl"><span data-id>model dibandingkan tiap siklus</span><span data-en>models compared each cycle</span></span></div>
+  </div></div>
+</div>
+
+<section>
+  <div class="wrap read">
     <h2><span data-id>Tentang</span><span data-en>About</span></h2>
-    <p class="sub"><span data-id>Latar Matematika, minor Statistika.</span><span data-en>Mathematics degree, minor in Statistics.</span></p>
-    <p data-id>Saya membangun sistem data yang dipakai perusahaan sehari-hari. Di Rockbros Cycling Indonesia, saya merancang dan kini memiliki sebagian besar sistem analitik internal dari nol: forecasting GMV lintas tiga marketplace, pipeline procurement 8 tahap, hingga klasifikasi performa ribuan SKU dan dashboard harga serta kompetitor. Saya tidak sekadar menjalankan analisis. Saya yang menentukan metodologinya, memvalidasi angkanya, dan memastikan setiap hasil tetap kokoh saat dipertanyakan.</p>
-    <p data-en>I build the internal systems a company runs on day to day. At Rockbros Cycling Indonesia, I designed and now own most of the internal analytics from the ground up: GMV forecasting across three marketplaces, an 8-stage procurement pipeline, SKU performance classification, and pricing and competitor dashboards. I don't just run the analysis. I decide the methodology, validate the numbers, and make sure every result holds up when questioned.</p>
+    <p class="lead"><span data-id>Latar Matematika, minor Statistika.</span><span data-en>Mathematics degree, minor in Statistics.</span></p>
+    <div class="body">
+      <p data-id>Saya membangun sistem data yang dipakai perusahaan sehari-hari: menetapkan target penjualan, memutuskan kapan barang harus dipesan ulang, dan menjaga harga tetap masuk akal terhadap biayanya.</p>
+      <p data-en>I build the data systems a company runs on day to day: setting sales targets, deciding when stock should be reordered, and keeping prices sensible against their costs.</p>
+      <p data-id>Setiap sistem dirancang untuk menjawab satu keputusan tertentu: forecast, reorder, klasifikasi, rekonsiliasi, atau harga. Yang saya tentukan bukan hanya hasilnya, tapi cara hasil itu sampai, supaya angkanya tetap berdiri saat dipertanyakan.</p>
+      <p data-en>Each system is designed to answer one specific decision: forecast, reorder, classification, reconciliation, or pricing. I decide not just the result but how the result is reached, so the numbers still stand when questioned.</p>
+    </div>
   </div>
 </section>
 
-<section class="block">
-  <div class="wrap">
+<section>
+  <div class="wrap read">
     <h2><span data-id>Pengalaman</span><span data-en>Experience</span></h2>
-    <p class="sub"><span data-id>Empat peran, dari internship statistik hingga memiliki sistem data satu perusahaan.</span><span data-en>Four roles, from a statistics internship to owning a company's data systems.</span></p>
+    <p class="lead"><span data-id>Empat peran, dari internship statistik hingga memegang sistem data satu perusahaan.</span><span data-en>Four roles, from a statistics internship to holding a company's data systems.</span></p>
 
-    <div class="exp">
-      <div class="h"><span class="title">Data Analyst <span class="co">Rockbros Cycling Indonesia</span></span><span class="meta">Apr 2026 - <span class="inln" data-id>sekarang</span><span class="inln" data-en>present</span></span></div>
-      <div class="stat">MAPE 9% &middot; target IDR 4.9B/mo</div>
+    <div class="item">
+      <div class="when">Apr 2026, <span data-id>sekarang</span><span data-en>present</span></div>
+      <h3>Data Analyst</h3><div class="org">Rockbros Cycling Indonesia</div>
       <ul>
-        <li data-id>Sistem forecasting GMV tiga marketplace, MAPE serendah 9%, rolling-origin CV pada 12 kandidat model dengan koreksi bias.</li>
-        <li data-en>GMV forecasting system across three marketplaces, MAPE as low as 9%, rolling-origin CV over 12 candidate models with bias correction.</li>
+        <li data-id>Sistem forecasting GMV tiga marketplace, galat rata-rata 9,1%, rolling-origin CV pada 22 kandidat model dengan koreksi bias.</li>
+        <li data-en>GMV forecasting system across three marketplaces, 9.1% average error, rolling-origin CV over 22 candidate models with bias correction.</li>
         <li data-id>Pipeline procurement "Lifetime Monitoring" 8 tahap yang menghasilkan rekomendasi reorder per SKU dan PO siap kirim.</li>
         <li data-en>8-stage "Lifetime Monitoring" procurement pipeline producing per-SKU reorder recommendations and ready-to-send POs.</li>
         <li data-id>Memperbaiki bias ranking yang membuat produk murah 20x lebih mungkin salah dinilai sebagai top performer.</li>
         <li data-en>Fixed a ranking bias that made low-price products 20x more likely to be misranked as top performers.</li>
-        <li data-id>Tracker 10 kompetitor dan dashboard harga serta COGS mencakup 5.916 produk, plus tracker 194 PO lintas tiga mata uang.</li>
-        <li data-en>10-competitor tracker and a pricing and COGS dashboard covering 5,916 products, plus a 194-PO tracker across three currencies.</li>
+        <li data-id>Dashboard harga serta HPP mencakup 5.916 produk di dua toko, plus tracker 194 PO lintas tiga mata uang.</li>
+        <li data-en>Pricing and COGS dashboard covering 5,916 products in two stores, plus a 194-PO tracker across three currencies.</li>
       </ul>
     </div>
 
-    <div class="exp">
-      <div class="h"><span class="title">Data Analyst <span class="co">PT Technovelle Karya Digital</span></span><span class="meta">Jan 2025 - Feb 2026</span></div>
-      <div class="stat">Rating 4.4 &rarr; 4.6 &middot; ~10k SKU</div>
+    <div class="item">
+      <div class="when">Jan 2025, Feb 2026</div>
+      <h3>Data Analyst</h3><div class="org">PT Technovelle Karya Digital</div>
       <ul>
         <li data-id>Merekonstruksi lima tahun catatan keuangan tak terdokumentasi menjadi basis analisis yang andal.</li>
         <li data-en>Reconstructed five years of undocumented financial records into a reliable base for analysis.</li>
@@ -185,16 +244,18 @@
       </ul>
     </div>
 
-    <div class="exp">
-      <div class="h"><span class="title">Sales &amp; Finance Administrator <span class="co">PT Terbit Sinar Gemilang</span></span><span class="meta">Feb 2024 - Jan 2025</span></div>
+    <div class="item">
+      <div class="when">Feb 2024, Jan 2025</div>
+      <h3>Sales &amp; Finance Administrator</h3><div class="org">PT Terbit Sinar Gemilang</div>
       <ul>
         <li data-id>Mengelola dan memvalidasi database penjualan, pemakaian material, dan payroll; merekonsiliasi setoran kolektor.</li>
         <li data-en>Managed and validated sales, material-usage, and payroll databases; reconciled collector deposits.</li>
       </ul>
     </div>
 
-    <div class="exp">
-      <div class="h"><span class="title">Data Analyst (Internship) <span class="co">Dinas Bina Marga Lampung</span></span><span class="meta">Jun - Jul 2022</span></div>
+    <div class="item">
+      <div class="when">Jun, Jul 2022</div>
+      <h3>Data Analyst (Internship)</h3><div class="org">Dinas Bina Marga Lampung</div>
       <ul>
         <li data-id>Regresi linear berganda dengan uji asumsi klasik lengkap untuk mengevaluasi faktor hasil proyek.</li>
         <li data-en>Multiple linear regression with full classical assumption tests to evaluate project outcome factors.</li>
@@ -203,229 +264,351 @@
   </div>
 </section>
 
-<section class="block">
+<section>
   <div class="wrap">
     <h2><span data-id>Proyek</span><span data-en>Projects</span></h2>
-    <p class="sub"><span data-id>Alat dan dashboard yang saya bangun untuk pekerjaan nyata. Klik untuk membuka.</span><span data-en>Tools and dashboards I built for real work. Click to open.</span></p>
-    <div class="proj-filter">
+    <p class="lead"><span data-id>Tujuh sistem berbagi satu panggung. Pilih namanya, isinya berganti. Seluruh angka dan nama pada demo adalah dummy.</span><span data-en>Seven systems share one stage. Pick a name and the content changes. All figures and names in the demos are dummy.</span></p>
+
+    <div class="pfil" role="group" aria-label="Filter proyek">
       <button class="on" data-cat="all" type="button"><span data-id>Semua</span><span data-en>All</span></button>
       <button data-cat="forecast" type="button">Forecasting</button>
       <button data-cat="market" type="button"><span data-id>Marketplace &amp; Harga</span><span data-en>Marketplace &amp; Pricing</span></button>
       <button data-cat="ops" type="button"><span data-id>Operasional</span><span data-en>Operations</span></button>
     </div>
-    <div class="proj-grid">
-      <a class="proj-card feature" data-cat="forecast" href="forecasting-dashboard.html" target="_blank" rel="noopener">
-        <div class="proj-preview" aria-hidden="true">
-          <div class="pv-top"><span class="pv-dot"></span><span class="pv-dot"></span><span class="pv-dot"></span></div>
-          <svg class="pv-chart" viewBox="0 0 320 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M190,62 L230,50 L270,43 L310,32 L310,58 L270,58 L230,60 Z" fill="rgba(255,255,255,.18)"/>
-            <line x1="190" y1="16" x2="190" y2="110" stroke="rgba(255,255,255,.35)" stroke-width="1" stroke-dasharray="3 3"/>
-            <path d="M10,96 L40,82 L70,88 L100,69 L130,74 L160,57 L190,62" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M190,62 L230,54 L270,49 L310,45" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4"/>
-            <circle cx="190" cy="62" r="3.6" fill="#fff"/>
+
+    <div class="pick" role="tablist" aria-label="Pilih proyek">
+      <button role="tab" aria-selected="true"  aria-controls="p1" id="t1" data-cat="forecast"><span data-id>Target &amp; Forecasting GMV</span><span data-en>GMV Target &amp; Forecasting</span></button>
+      <button role="tab" aria-selected="false" aria-controls="p2" id="t2" data-cat="market"><span data-id>Harga &amp; Margin</span><span data-en>Pricing &amp; Margin</span></button>
+      <button role="tab" aria-selected="false" aria-controls="p3" id="t3" data-cat="market"><span data-id>GMV &amp; Iklan</span><span data-en>GMV &amp; Ads</span></button>
+      <button role="tab" aria-selected="false" aria-controls="p4" id="t4" data-cat="ops"><span data-id>Pembayaran Supplier</span><span data-en>Supplier Payments</span></button>
+      <button role="tab" aria-selected="false" aria-controls="p5" id="t5" data-cat="market"><span data-id>Retur TikTok</span><span data-en>TikTok Returns</span></button>
+      <button role="tab" aria-selected="false" aria-controls="p6" id="t6" data-cat="market"><span data-id>Retur Shopee</span><span data-en>Shopee Returns</span></button>
+      <button role="tab" aria-selected="false" aria-controls="p7" id="t7" data-cat="ops"><span data-id>Absensi &amp; Lembur</span><span data-en>Attendance &amp; Overtime</span></button>
+    </div>
+
+    <div class="stage cosmos" data-stars="26">
+
+      <!-- 1 Forecasting -->
+      <div class="pane" id="p1" role="tabpanel" aria-labelledby="t1"><div class="duo">
+        <div class="fig">
+          <div class="lab"><span data-id>Target Oktober 2026</span><span data-en>October 2026 target</span></div>
+          <div class="num">Rp 4,68 M</div>
+          <div class="note"><span data-id>Realisasi Rp 4,33 M, tercapai 92,6% pada hari ke-21. Dua tampilan: Owner untuk keputusan, Analis untuk metodologi lengkap.</span><span data-en>Realized Rp 4.33 B, 92.6% reached by day 21. Two views: Owner for decisions, Analyst for the full methodology.</span></div>
+          <div class="strip">
+            <div><b>9,1%</b><span><span data-id>galat ramalan</span><span data-en>forecast error</span></span></div>
+            <div><b>22</b><span><span data-id>model diadu</span><span data-en>models compared</span></span></div>
+            <div><b>3</b><span>marketplace</span></div>
+          </div>
+          <span class="golinks">
+            <a class="go" href="forecasting-dashboard.html" target="_blank" rel="noopener"><span data-id>Buka dashboard</span><span data-en>Open dashboard</span></a>
+            <a class="go alt" href="metodologi-forecasting.html" target="_blank" rel="noopener"><span data-id>Lihat metodologi</span><span data-en>View methodology</span></a>
+          </span>
+        </div>
+        <div>
+          <svg viewBox="0 0 560 180" style="width:100%;height:auto" role="img" aria-label="Garis aktual naik lalu dilanjutkan garis ramalan putus-putus">
+            <g stroke="#17293F" stroke-width="1">
+              <line x1="0" y1="34" x2="560" y2="34"/><line x1="0" y1="86" x2="560" y2="86"/><line x1="0" y1="138" x2="560" y2="138"/>
+            </g>
+            <path d="M6,146 L56,133 L106,139 L156,110 L206,117 L256,89 L306,97 L356,70 L386,62"
+                  fill="none" stroke="#D9762F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M386,62 L434,51 L482,41 L530,29 L556,22" fill="none" stroke="#3A8FCC"
+                  stroke-width="2.8" stroke-dasharray="8 6" stroke-linecap="round"/>
+            <circle cx="386" cy="62" r="4.5" fill="#D9762F" stroke="#0B1A2E" stroke-width="2.5"/>
+            <line x1="386" y1="62" x2="386" y2="158" stroke="#2A4360" stroke-width="1" stroke-dasharray="3 4"/>
+            <text x="356" y="174" fill="#6F86A3" font-size="11"><tspan data-id>hari ini</tspan><tspan data-en>today</tspan></text>
           </svg>
-          <div class="pv-tags">
-            <span><span data-id>20+ model dibacktest</span><span data-en>20+ models backtested</span></span>
-            <span>Rolling-origin CV</span>
-            <span><span data-id>3 pengaman anti-overfit</span><span data-en>3 anti-overfit safeguards</span></span>
-          </div>
+          <div class="legend"><span><i style="background:#D9762F"></i><span data-id>aktual</span><span data-en>actual</span></span><span><i style="background:#3A8FCC"></i><span data-id>ramalan</span><span data-en>forecast</span></span></div>
         </div>
-        <div class="proj-body">
-          <span class="proj-tag"><span data-id>Forecasting &middot; Sistem Keputusan</span><span data-en>Forecasting &middot; Decision System</span></span>
-          <div class="title"><span data-id>Sistem Target &amp; Forecasting GMV</span><span data-en>GMV Target &amp; Forecasting System</span></div>
-          <p class="desc"><span data-id>Forecasting sering dipertanyakan saat sidang atau rapat: kenapa model ini, bukan yang lain? Skill ini membuat pilihannya bisa dipertanggungjawabkan.</span><span data-en>Forecasts get challenged in meetings and defenses: why this model, not another? This skill makes the choice defensible.</span></p>
-          <p class="desc" style="color:var(--muted)"><span data-id>Dashboard interaktif menetapkan target GMV tiga marketplace, dengan validasi akurasi MAPE sekitar 9%, ekspor Excel dan PDF. Punya dua tampilan: Owner untuk ringkasan keputusan dan Analis untuk metodologi lengkap. Metodologi saya kemas jadi skill Claude open-source, tombol ke GitHub ada di dalam dashboard. Angka pada demo ini dummy.</span><span data-en>An interactive dashboard that sets GMV targets across three marketplaces, with MAPE accuracy around 9%, Excel and PDF export. It has two views: Owner for the decision summary and Analyst for the full methodology. The methodology is packaged as an open-source Claude skill, with a GitHub link inside the dashboard. Figures in this demo are dummy.</span></p>
-          <span class="links"><span class="open"><span data-id>Buka dashboard &rarr;</span><span data-en>Open dashboard &rarr;</span></span><span class="alt" data-nav="metodologi-forecasting.html"><span data-id>Lihat metodologi</span><span data-en>View methodology</span></span></span>
-        </div>
-      </a>
-      <a class="proj-card feature" data-cat="market" href="rockbros-master.html" target="_blank" rel="noopener">
-        <div class="proj-preview" aria-hidden="true">
-          <div class="pv-top"><span class="pv-dot"></span><span class="pv-dot"></span><span class="pv-dot"></span></div>
-          <div class="pv-hero">
-            <div class="pv-hero-lbl"><span data-id>Produk dipantau</span><span data-en>Products tracked</span></div>
-            <div class="pv-hero-val">5.916</div>
-          </div>
-          <div class="pv-stats">
-            <div class="pv-stat"><b>2</b><span><span data-id>Toko</span><span data-en>Stores</span></span></div>
-            <div class="pv-stat"><b>9</b><span><span data-id>Kategori</span><span data-en>Categories</span></span></div>
-            <div class="pv-stat"><b>82</b><span>Bundling</span></div>
-            <div class="pv-stat"><b>900</b><span><span data-id>Di dua toko</span><span data-en>In both</span></span></div>
-          </div>
-        </div>
-        <div class="proj-body">
-          <span class="proj-tag"><span data-id>Harga &middot; HPP</span><span data-en>Pricing &middot; COGS</span></span>
-          <div class="title"><span data-id>Sistem Harga &amp; Margin Lintas Toko</span><span data-en>Cross-Store Pricing &amp; Margin System</span></div>
-          <p class="desc"><span data-id>Harga jual dan HPP ribuan produk tersebar di banyak berkas, sehingga margin sulit dipantau dan mudah salah hitung.</span><span data-en>Selling prices and COGS for thousands of products are scattered across files, making margins hard to monitor and easy to miscalculate.</span></p>
-          <p class="desc" style="color:var(--muted)"><span data-id>Satu sumber kebenaran untuk 5.916 produk dua toko: HPP, harga jual, margin, riwayat perubahan harga, dan ekspor Excel. Semua angka dan nama pada demo ini dummy.</span><span data-en>One source of truth for 5,916 products across two stores: COGS, prices, margin, price-change history, and Excel export. All figures and names in this demo are dummy.</span></p>
-          <span class="open"><span data-id>Buka dashboard &rarr;</span><span data-en>Open dashboard &rarr;</span></span>
-        </div>
-      </a>
-      <a class="proj-card feature" data-cat="market" href="gmv-iklan.html" target="_blank" rel="noopener">
-        <div class="proj-preview" aria-hidden="true">
-          <div class="pv-top"><span class="pv-dot"></span><span class="pv-dot"></span><span class="pv-dot"></span></div>
-          <div class="pv-hero">
-            <div class="pv-hero-lbl"><span data-id>GMV bersih bulanan</span><span data-en>Monthly net GMV</span></div>
-            <div class="pv-hero-val">Rp 4,33 M</div>
-          </div>
-          <div class="pv-stats">
-            <div class="pv-stat"><b>4</b><span>Marketplace</span></div>
-            <div class="pv-stat"><b>6,0</b><span>ROAS</span></div>
-            <div class="pv-stat"><b>30</b><span><span data-id>Hari</span><span data-en>Days</span></span></div>
-            <div class="pv-stat"><b>125</b><span>SKU</span></div>
-          </div>
-        </div>
-        <div class="proj-body">
-          <span class="proj-tag">GMV &middot; Iklan</span>
-          <div class="title"><span data-id>Sistem Pemantauan Target &amp; Efektivitas Iklan</span><span data-en>Target Tracking &amp; Ad Effectiveness System</span></div>
-          <p class="desc"><span data-id>Penjualan dan belanja iklan tersebar di empat marketplace dengan format laporan yang berbeda-beda, jadi sulit dibandingkan.</span><span data-en>Sales and ad spend sit in four marketplaces with different report formats, so they are hard to compare.</span></p>
-          <p class="desc" style="color:var(--muted)"><span data-id>Menyatukan laporan harian jadi satu tampilan: pencapaian terhadap target, ROAS per kanal, dan performa per produk. Angka pada demo ini dummy.</span><span data-en>It merges daily reports into one view: progress against target, ROAS per channel, and per-product performance. Figures in this demo are dummy.</span></p>
-          <span class="open"><span data-id>Buka dashboard &rarr;</span><span data-en>Open dashboard &rarr;</span></span>
-        </div>
-      </a>
-      <a class="proj-card feature" data-cat="ops" href="cycling-payment.html" target="_blank" rel="noopener">
-        <div class="proj-preview" aria-hidden="true">
-          <div class="pv-top"><span class="pv-dot"></span><span class="pv-dot"></span><span class="pv-dot"></span></div>
-          <div class="pv-hero">
-            <div class="pv-hero-lbl"><span data-id>PO dipantau</span><span data-en>POs tracked</span></div>
-            <div class="pv-hero-val">46</div>
-          </div>
-          <div class="pv-stats">
-            <div class="pv-stat"><b>3</b><span><span data-id>Mata uang</span><span data-en>Currencies</span></span></div>
-            <div class="pv-stat"><b>38</b><span><span data-id>Pembayaran</span><span data-en>Payments</span></span></div>
-            <div class="pv-stat"><b>41</b><span><span data-id>Pengiriman</span><span data-en>Shipments</span></span></div>
-            <div class="pv-stat"><b>2</b><span><span data-id>Merek</span><span data-en>Brands</span></span></div>
-          </div>
-        </div>
-        <div class="proj-body">
-          <span class="proj-tag">Procurement &middot; Pembayaran</span>
-          <div class="title"><span data-id>Sistem Kendali Pembayaran Supplier</span><span data-en>Supplier Payment Control System</span></div>
-          <p class="desc"><span data-id>Memantau PO, pembayaran bertermin, dan pengiriman lintas banyak supplier dan tiga mata uang (RMB, USD, IDR) itu mudah tercecer.</span><span data-en>Tracking POs, staged payments, and shipments across many suppliers and three currencies (RMB, USD, IDR) is easy to lose track of.</span></p>
-          <p class="desc" style="color:var(--muted)"><span data-id>Satu sistem untuk PO, pembayaran, dan pengiriman: cari, filter, konversi mata uang, dan ekspor Excel. Angka pada demo ini dummy.</span><span data-en>One system for POs, payments, and shipments: search, filter, currency conversion, and Excel export. Figures in this demo are dummy.</span></p>
-          <span class="open"><span data-id>Buka dashboard &rarr;</span><span data-en>Open dashboard &rarr;</span></span>
-        </div>
-      </a>
-      <a class="proj-card feature" data-cat="market" href="tiktok-pengembalian.html" target="_blank" rel="noopener">
-        <div class="proj-preview" aria-hidden="true">
-          <div class="pv-top"><span class="pv-dot"></span><span class="pv-dot"></span><span class="pv-dot"></span></div>
-          <div class="pv-hero">
-            <div class="pv-hero-lbl"><span data-id>Nilai pengembalian</span><span data-en>Return value</span></div>
-            <div class="pv-hero-val">Rp 6.257.000</div>
-          </div>
-          <div class="pv-stats">
-            <div class="pv-stat"><b>32</b><span>Order</span></div>
-            <div class="pv-stat"><b>22</b><span><span data-id>Diterima</span><span data-en>Received</span></span></div>
-            <div class="pv-stat"><b>10</b><span><span data-id>Belum</span><span data-en>Pending</span></span></div>
-            <div class="pv-stat"><b>14</b><span><span data-id>Bisa dijual</span><span data-en>Resalable</span></span></div>
-          </div>
-        </div>
-        <div class="proj-body">
-          <span class="proj-tag">TikTok Shop</span>
-          <div class="title"><span data-id>Sistem Rekonsiliasi Retur TikTok</span><span data-en>TikTok Return Reconciliation System</span></div>
-          <p class="desc"><span data-id>Menghitung nilai barang retur dari ekspor TikTok Shop secara manual itu lambat dan rawan salah.</span><span data-en>Calculating returned-item value from TikTok Shop exports by hand is slow and error-prone.</span></p>
-          <p class="desc" style="color:var(--muted)"><span data-id>Dua file Excel diolah langsung di browser menjadi laporan retur siap unduh. Ada data contoh, jadi bisa langsung dicoba.</span><span data-en>Two Excel files processed in-browser into a ready-to-download returns report. Sample data included, so you can try it right away.</span></p>
-          <span class="open"><span data-id>Buka alat &rarr;</span><span data-en>Open tool &rarr;</span></span>
-        </div>
-      </a>
-      <a class="proj-card feature" data-cat="market" href="shopee-pengembalian.html" target="_blank" rel="noopener">
-        <div class="proj-preview" aria-hidden="true">
-          <div class="pv-top"><span class="pv-dot"></span><span class="pv-dot"></span><span class="pv-dot"></span></div>
-          <div class="pv-hero">
-            <div class="pv-hero-lbl"><span data-id>Nilai pengembalian</span><span data-en>Return value</span></div>
-            <div class="pv-hero-val">Rp 5.382.000</div>
-          </div>
-          <div class="pv-stats">
-            <div class="pv-stat"><b>30</b><span>Order</span></div>
-            <div class="pv-stat"><b>20</b><span><span data-id>Diterima</span><span data-en>Received</span></span></div>
-            <div class="pv-stat"><b>10</b><span><span data-id>Belum</span><span data-en>Pending</span></span></div>
-            <div class="pv-stat"><b>13</b><span><span data-id>Bisa dijual</span><span data-en>Resalable</span></span></div>
-          </div>
-        </div>
-        <div class="proj-body">
-          <span class="proj-tag">Shopee</span>
-          <div class="title"><span data-id>Sistem Rekonsiliasi Retur Shopee</span><span data-en>Shopee Return Reconciliation System</span></div>
-          <p class="desc"><span data-id>Ekspor Shopee bisa terpecah jadi banyak part dan punya dua format (DS dan Non-DS), jadi rekap retur manualnya rumit.</span><span data-en>Shopee exports split into many parts and come in two formats (DS and Non-DS), making manual returns recaps messy.</span></p>
-          <p class="desc" style="color:var(--muted)"><span data-id>Alat ini menyatukan part, mengenali kedua format, lalu menghasilkan laporan retur siap unduh. Ada data contoh, bisa langsung dicoba.</span><span data-en>It merges the parts, handles both formats, then produces a ready-to-download returns report. Sample data included, so you can try it right away.</span></p>
-          <span class="open"><span data-id>Buka alat &rarr;</span><span data-en>Open tool &rarr;</span></span>
-        </div>
-      </a>
-      <a class="proj-card feature" data-cat="ops" href="absensi-lembur.html" target="_blank" rel="noopener">
-        <div class="proj-preview" aria-hidden="true">
-          <div class="pv-top"><span class="pv-dot"></span><span class="pv-dot"></span><span class="pv-dot"></span></div>
-          <div class="pv-hero">
-            <div class="pv-hero-lbl"><span data-id>Baris absensi diproses</span><span data-en>Attendance rows processed</span></div>
-            <div class="pv-hero-val">630</div>
-          </div>
-          <div class="pv-stats">
-            <div class="pv-stat"><b>25</b><span><span data-id>Karyawan</span><span data-en>Staff</span></span></div>
-            <div class="pv-stat"><b>4</b><span>Tim</span></div>
-            <div class="pv-stat"><b>4</b><span><span data-id>Lokasi</span><span data-en>Sites</span></span></div>
-            <div class="pv-stat"><b>1</b><span><span data-id>Periode</span><span data-en>Period</span></span></div>
-          </div>
-        </div>
-        <div class="proj-body">
-          <span class="proj-tag"><span data-id>Operasional &middot; Lembur</span><span data-en>Operations &middot; Overtime</span></span>
-          <div class="title"><span data-id>Sistem Perhitungan Absensi &amp; Lembur</span><span data-en>Attendance &amp; Overtime Calculation System</span></div>
-          <p class="desc"><span data-id>Menghitung keterlambatan, potongan, dan lembur dari ekspor mesin absensi secara manual itu lama dan mudah berbeda hasil antar orang.</span><span data-en>Computing lateness, deductions, and overtime from attendance-machine exports by hand is slow and inconsistent between people.</span></p>
-          <p class="desc" style="color:var(--muted)"><span data-id>Aturan ditulis sekali, lalu diterapkan seragam ke semua tim: jadwal sif, toleransi telat, potongan, uang makan, dan tarif lembur. Nama, gaji, dan angka pada demo ini seluruhnya dummy.</span><span data-en>Rules are written once and applied uniformly across teams: shift schedules, lateness tolerance, deductions, meal allowance, and overtime rates. Names, salaries, and figures in this demo are entirely dummy.</span></p>
-          <span class="open"><span data-id>Buka dashboard &rarr;</span><span data-en>Open dashboard &rarr;</span></span>
-        </div>
-      </a>
+      </div></div>
 
+      <!-- 2 Harga & Margin -->
+      <div class="pane" id="p2" role="tabpanel" aria-labelledby="t2" hidden><div class="duo">
+        <div class="fig">
+          <div class="lab"><span data-id>Produk terpantau harga dan HPP</span><span data-en>Products tracked for price and COGS</span></div>
+          <div class="num"><span data-id>5.916</span><span data-en>5,916</span></div>
+          <div class="note"><span data-id>Satu sumber kebenaran untuk dua toko: HPP, harga jual, margin, dan riwayat perubahan harga. 184 produk bermargin di bawah 15% dan perlu ditinjau.</span><span data-en>One source of truth for two stores: COGS, price, margin, and price-change history. 184 products sit below 15% margin and need review.</span></div>
+          <div class="strip">
+            <div><b>31,4%</b><span><span data-id>margin rata-rata</span><span data-en>average margin</span></span></div>
+            <div><b>2</b><span><span data-id>toko</span><span data-en>stores</span></span></div>
+            <div><b>9</b><span><span data-id>kategori</span><span data-en>categories</span></span></div>
+          </div>
+          <a class="go" href="rockbros-master.html" target="_blank" rel="noopener"><span data-id>Buka dashboard</span><span data-en>Open dashboard</span></a>
+        </div>
+        <div>
+          <svg viewBox="0 0 560 180" style="width:100%;height:auto" role="img" aria-label="Batang sebaran margin dari tipis sampai sehat">
+            <g stroke="#17293F" stroke-width="1"><line x1="0" y1="142" x2="560" y2="142"/></g>
+            <rect x="18" y="110" width="62" height="32" rx="5" fill="#D9762F"/>
+            <rect x="106" y="72" width="62" height="70" rx="5" fill="#D9762F" opacity=".7"/>
+            <rect x="194" y="42" width="62" height="100" rx="5" fill="#3A8FCC" opacity=".55"/>
+            <rect x="282" y="22" width="62" height="120" rx="5" fill="#3A8FCC"/>
+            <rect x="370" y="58" width="62" height="84" rx="5" fill="#2E9E6B" opacity=".7"/>
+            <rect x="458" y="98" width="62" height="44" rx="5" fill="#2E9E6B"/>
+            <g fill="#6F86A3" font-size="11" text-anchor="middle">
+              <text x="49" y="164">&lt;5%</text><text x="137" y="164">5-15</text><text x="225" y="164">15-25</text>
+              <text x="313" y="164">25-35</text><text x="401" y="164">35-45</text><text x="489" y="164">&gt;45%</text>
+            </g>
+          </svg>
+          <div class="legend">
+            <span><i style="background:#D9762F"></i><span data-id>perlu ditinjau</span><span data-en>needs review</span></span>
+            <span><i style="background:#3A8FCC"></i><span data-id>wajar</span><span data-en>fair</span></span>
+            <span><i style="background:#2E9E6B"></i><span data-id>sehat</span><span data-en>healthy</span></span>
+          </div>
+        </div>
+      </div></div>
 
+      <!-- 3 GMV & Iklan -->
+      <div class="pane" id="p3" role="tabpanel" aria-labelledby="t3" hidden><div class="duo">
+        <div class="fig">
+          <div class="lab"><span data-id>GMV bersih 30 hari</span><span data-en>Net GMV, 30 days</span></div>
+          <div class="num">Rp 4,33 M</div>
+          <div class="note"><span data-id>Laporan harian empat marketplace disatukan: pencapaian terhadap target, ROAS per kanal, dan performa per produk.</span><span data-en>Daily reports from four marketplaces merged: progress against target, ROAS per channel, and per-product performance.</span></div>
+          <div class="strip">
+            <div><b>4</b><span>marketplace</span></div>
+            <div><b>6,0</b><span><span data-id>ROAS gabungan</span><span data-en>blended ROAS</span></span></div>
+            <div><b>125</b><span>SKU</span></div>
+          </div>
+          <a class="go" href="gmv-iklan.html" target="_blank" rel="noopener"><span data-id>Buka dashboard</span><span data-en>Open dashboard</span></a>
+        </div>
+        <div>
+          <svg viewBox="0 0 560 180" style="width:100%;height:auto" role="img" aria-label="Batang GMV per marketplace dengan garis target">
+            <g stroke="#17293F" stroke-width="1"><line x1="0" y1="142" x2="560" y2="142"/></g>
+            <rect x="40" y="38" width="86" height="104" rx="5" fill="#3A8FCC"/>
+            <rect x="166" y="58" width="86" height="84" rx="5" fill="#3A8FCC" opacity=".75"/>
+            <rect x="292" y="88" width="86" height="54" rx="5" fill="#3A8FCC" opacity=".55"/>
+            <rect x="418" y="108" width="86" height="34" rx="5" fill="#3A8FCC" opacity=".4"/>
+            <line x1="20" y1="46" x2="540" y2="46" stroke="#D9762F" stroke-width="2" stroke-dasharray="7 6"/>
+            <g fill="#6F86A3" font-size="11" text-anchor="middle">
+              <text x="83" y="164">Shopee</text><text x="209" y="164">TikTok</text>
+              <text x="335" y="164">Lazada</text><text x="461" y="164">Tokopedia</text>
+            </g>
+          </svg>
+          <div class="legend"><span><i style="background:#3A8FCC"></i>GMV</span><span><i style="background:#D9762F"></i><span data-id>garis target</span><span data-en>target line</span></span></div>
+        </div>
+      </div></div>
 
+      <!-- 4 Pembayaran Supplier -->
+      <div class="pane" id="p4" role="tabpanel" aria-labelledby="t4" hidden><div class="duo">
+        <div class="fig">
+          <div class="lab"><span data-id>PO dipantau pada demo</span><span data-en>POs tracked in the demo</span></div>
+          <div class="num">46</div>
+          <div class="note"><span data-id>Pembayaran bertermin dan pengiriman lintas supplier dalam RMB, USD, dan IDR, dengan konversi mata uang dan ekspor Excel.</span><span data-en>Staged payments and shipments across suppliers in RMB, USD, and IDR, with currency conversion and Excel export.</span></div>
+          <div class="strip">
+            <div><b>3</b><span><span data-id>mata uang</span><span data-en>currencies</span></span></div>
+            <div><b>38</b><span><span data-id>pembayaran</span><span data-en>payments</span></span></div>
+            <div><b>41</b><span><span data-id>pengiriman</span><span data-en>shipments</span></span></div>
+          </div>
+          <a class="go" href="cycling-payment.html" target="_blank" rel="noopener"><span data-id>Buka dashboard</span><span data-en>Open dashboard</span></a>
+        </div>
+        <div>
+          <svg viewBox="0 0 560 180" style="width:100%;height:auto" role="img" aria-label="Status pembayaran purchase order">
+            <g font-size="11.5" fill="#8EA3BC">
+              <text x="0" y="34"><tspan data-id>lunas 28</tspan><tspan data-en>paid 28</tspan></text>
+              <text x="0" y="94"><tspan data-id>sebagian 10</tspan><tspan data-en>partial 10</tspan></text>
+              <text x="0" y="154"><tspan data-id>belum 8</tspan><tspan data-en>unpaid 8</tspan></text>
+            </g>
+            <rect x="130" y="20" width="400" height="22" rx="7" fill="#2E9E6B"/>
+            <rect x="130" y="80" width="143" height="22" rx="7" fill="#3A8FCC"/>
+            <rect x="130" y="140" width="114" height="22" rx="7" fill="#D9762F"/>
+          </svg>
+          <div class="legend">
+            <span><i style="background:#2E9E6B"></i><span data-id>lunas</span><span data-en>paid</span></span>
+            <span><i style="background:#3A8FCC"></i><span data-id>sebagian</span><span data-en>partial</span></span>
+            <span><i style="background:#D9762F"></i><span data-id>belum dibayar</span><span data-en>unpaid</span></span>
+          </div>
+        </div>
+      </div></div>
 
+      <!-- 5 Retur TikTok -->
+      <div class="pane" id="p5" role="tabpanel" aria-labelledby="t5" hidden><div class="duo">
+        <div class="fig">
+          <div class="lab"><span data-id>Nilai barang retur yang dihitung ulang</span><span data-en>Returned-item value, recalculated</span></div>
+          <div class="num">Rp 6,26 jt</div>
+          <div class="note"><span data-id>Dua file ekspor TikTok Shop diolah langsung di browser menjadi laporan retur siap unduh. Ada data contoh, bisa langsung dicoba.</span><span data-en>Two TikTok Shop export files processed in-browser into a ready-to-download returns report. Sample data included, try it right away.</span></div>
+          <div class="strip">
+            <div><b>32</b><span><span data-id>order dicek</span><span data-en>orders checked</span></span></div>
+            <div><b>22</b><span><span data-id>sudah kembali</span><span data-en>received back</span></span></div>
+            <div><b>14</b><span><span data-id>bisa dijual</span><span data-en>resalable</span></span></div>
+          </div>
+          <a class="go" href="tiktok-pengembalian.html" target="_blank" rel="noopener"><span data-id>Buka alat</span><span data-en>Open tool</span></a>
+        </div>
+        <div>
+          <svg viewBox="0 0 560 180" style="width:100%;height:auto" role="img" aria-label="Penyusutan dari order masuk sampai barang yang bisa dijual lagi">
+            <g font-size="11.5" fill="#8EA3BC">
+              <text x="0" y="24"><tspan data-id>masuk 100</tspan><tspan data-en>incoming 100</tspan></text>
+              <text x="0" y="70"><tspan data-id>perlu dicek 32</tspan><tspan data-en>to check 32</tspan></text>
+              <text x="0" y="116"><tspan data-id>sudah kembali 22</tspan><tspan data-en>received 22</tspan></text>
+              <text x="0" y="162"><tspan data-id>bisa dijual 14</tspan><tspan data-en>resalable 14</tspan></text>
+            </g>
+            <rect x="170" y="10" width="380" height="20" rx="6" fill="#3A8FCC" opacity=".35"/>
+            <rect x="170" y="56" width="122" height="20" rx="6" fill="#3A8FCC"/>
+            <rect x="170" y="102" width="84" height="20" rx="6" fill="#D9762F"/>
+            <rect x="170" y="148" width="53" height="20" rx="6" fill="#2E9E6B"/>
+          </svg>
+          <div class="legend">
+            <span><i style="background:#3A8FCC"></i><span data-id>alur order</span><span data-en>order flow</span></span>
+            <span><i style="background:#D9762F"></i><span data-id>sudah kembali</span><span data-en>received back</span></span>
+            <span><i style="background:#2E9E6B"></i><span data-id>bisa dijual</span><span data-en>resalable</span></span>
+          </div>
+        </div>
+      </div></div>
 
+      <!-- 6 Retur Shopee -->
+      <div class="pane" id="p6" role="tabpanel" aria-labelledby="t6" hidden><div class="duo">
+        <div class="fig">
+          <div class="lab"><span data-id>Nilai barang retur yang dihitung ulang</span><span data-en>Returned-item value, recalculated</span></div>
+          <div class="num">Rp 5,38 jt</div>
+          <div class="note"><span data-id>Ekspor Shopee yang terpecah banyak part dan dua format (DS dan Non-DS) disatukan otomatis jadi laporan retur siap unduh.</span><span data-en>Shopee exports split into parts and two formats (DS and Non-DS), merged automatically into a ready-to-download returns report.</span></div>
+          <div class="strip">
+            <div><b>30</b><span><span data-id>order dicek</span><span data-en>orders checked</span></span></div>
+            <div><b>20</b><span><span data-id>sudah kembali</span><span data-en>received back</span></span></div>
+            <div><b>13</b><span><span data-id>bisa dijual</span><span data-en>resalable</span></span></div>
+          </div>
+          <a class="go" href="shopee-pengembalian.html" target="_blank" rel="noopener"><span data-id>Buka alat</span><span data-en>Open tool</span></a>
+        </div>
+        <div>
+          <svg viewBox="0 0 560 180" style="width:100%;height:auto" role="img" aria-label="Penyusutan dari order masuk sampai barang yang bisa dijual lagi">
+            <g font-size="11.5" fill="#8EA3BC">
+              <text x="0" y="24"><tspan data-id>masuk 100</tspan><tspan data-en>incoming 100</tspan></text>
+              <text x="0" y="70"><tspan data-id>perlu dicek 30</tspan><tspan data-en>to check 30</tspan></text>
+              <text x="0" y="116"><tspan data-id>sudah kembali 20</tspan><tspan data-en>received 20</tspan></text>
+              <text x="0" y="162"><tspan data-id>bisa dijual 13</tspan><tspan data-en>resalable 13</tspan></text>
+            </g>
+            <rect x="170" y="10" width="380" height="20" rx="6" fill="#3A8FCC" opacity=".35"/>
+            <rect x="170" y="56" width="114" height="20" rx="6" fill="#3A8FCC"/>
+            <rect x="170" y="102" width="76" height="20" rx="6" fill="#D9762F"/>
+            <rect x="170" y="148" width="49" height="20" rx="6" fill="#2E9E6B"/>
+          </svg>
+          <div class="legend">
+            <span><i style="background:#3A8FCC"></i><span data-id>alur order</span><span data-en>order flow</span></span>
+            <span><i style="background:#D9762F"></i><span data-id>sudah kembali</span><span data-en>received back</span></span>
+            <span><i style="background:#2E9E6B"></i><span data-id>bisa dijual</span><span data-en>resalable</span></span>
+          </div>
+        </div>
+      </div></div>
+
+      <!-- 7 Absensi & Lembur -->
+      <div class="pane" id="p7" role="tabpanel" aria-labelledby="t7" hidden><div class="duo">
+        <div class="fig">
+          <div class="lab"><span data-id>Baris absensi diproses</span><span data-en>Attendance rows processed</span></div>
+          <div class="num">630</div>
+          <div class="note"><span data-id>Aturan ditulis sekali lalu diterapkan seragam: jadwal sif, toleransi telat, potongan, uang makan, dan tarif lembur. Nama dan gaji pada demo seluruhnya dummy.</span><span data-en>Rules written once and applied uniformly: shift schedules, lateness tolerance, deductions, meal allowance, and overtime rates. Names and salaries in the demo are entirely dummy.</span></div>
+          <div class="strip">
+            <div><b>25</b><span><span data-id>karyawan</span><span data-en>staff</span></span></div>
+            <div><b>4</b><span><span data-id>tim</span><span data-en>teams</span></span></div>
+            <div><b>4</b><span><span data-id>lokasi</span><span data-en>sites</span></span></div>
+          </div>
+          <a class="go" href="absensi-lembur.html" target="_blank" rel="noopener"><span data-id>Buka dashboard</span><span data-en>Open dashboard</span></a>
+        </div>
+        <div>
+          <svg viewBox="0 0 560 180" style="width:100%;height:auto" role="img" aria-label="Jam lembur per tim">
+            <g stroke="#17293F" stroke-width="1"><line x1="0" y1="142" x2="560" y2="142"/></g>
+            <rect x="40" y="52" width="86" height="90" rx="5" fill="#3A8FCC"/>
+            <rect x="166" y="76" width="86" height="66" rx="5" fill="#3A8FCC" opacity=".75"/>
+            <rect x="292" y="96" width="86" height="46" rx="5" fill="#3A8FCC" opacity=".55"/>
+            <rect x="418" y="116" width="86" height="26" rx="5" fill="#3A8FCC" opacity=".4"/>
+            <g fill="#6F86A3" font-size="11" text-anchor="middle">
+              <text x="83" y="164">Tim A</text><text x="209" y="164">Tim B</text>
+              <text x="335" y="164">Tim C</text><text x="461" y="164">Tim D</text>
+            </g>
+          </svg>
+          <div class="legend"><span><i style="background:#3A8FCC"></i><span data-id>jam lembur per tim</span><span data-en>overtime hours per team</span></span></div>
+        </div>
+      </div></div>
 
     </div>
   </div>
 </section>
 
-<section class="block">
-  <div class="wrap">
+<section>
+  <div class="wrap read">
     <h2><span data-id>Pendidikan &amp; Skripsi</span><span data-en>Education &amp; Thesis</span></h2>
     <div class="edu">
-      <div class="h" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px"><span class="title" style="font-weight:700;font-size:17px">Universitas Lampung <span class="co" style="color:var(--blue);font-weight:700;font-size:14px">S1 Matematika</span></span><span class="meta" style="color:var(--muted);font-size:13px">2019 - 2024 | IPK 3,35</span></div>
-      <p style="margin-top:12px;font-size:14px;color:#33475B" data-id>Skripsi: perbandingan Holt-Winters additive vs multiplicative untuk peramalan penumpang kereta Jabodetabek, data BPS 2006-2023, model terbaik dipilih via RMSE dan MAPE (serendah ~7,9%).</p>
-      <p style="margin-top:12px;font-size:14px;color:#33475B" data-en>Thesis: comparing additive vs multiplicative Holt-Winters for forecasting Jabodetabek railway passengers, BPS data 2006-2023, best model selected via RMSE and MAPE (as low as ~7.9%).</p>
+      <div class="when">2019 - 2024 &middot; IPK 3,35</div>
+      <h3>Universitas Lampung</h3><div class="org">S1 Matematika</div>
+      <p data-id>Skripsi: perbandingan Holt-Winters additive vs multiplicative untuk peramalan penumpang kereta Jabodetabek, data BPS 2006-2023, model terbaik dipilih via RMSE dan MAPE (serendah sekitar 7,9%).</p>
+      <p data-en>Thesis: comparing additive vs multiplicative Holt-Winters for forecasting Jabodetabek railway passengers, BPS data 2006-2023, best model selected via RMSE and MAPE (as low as about 7.9%).</p>
     </div>
   </div>
 </section>
 
-<footer class="contact">
+<footer class="foot cosmos" data-stars="18">
   <div class="wrap">
-    <h2 style="color:#fff"><span data-id>Mari terhubung</span><span data-en>Let's connect</span></h2>
-    <p style="color:#B9CDE6;margin-top:8px"><span data-id>Terbuka untuk peluang di Data Analytics, Business Analytics, dan Business Improvement.</span><span data-en>Open to opportunities in Data Analytics, Business Analytics, and Business Improvement.</span></p>
+    <b><span data-id>Mari terhubung</span><span data-en>Let's connect</span></b>
+    <p><span data-id>Terbuka untuk peluang di Data Analytics, Business Analytics, dan Business Improvement.</span><span data-en>Open to opportunities in Data Analytics, Business Analytics, and Business Improvement.</span></p>
     <div class="btns">
-      <a href="https://linkedin.com/in/diarazari" target="_blank" rel="noopener">LinkedIn</a>
-      <a class="ghost" href="https://github.com/diarmilenia01-art" target="_blank" rel="noopener">GitHub</a>
+      <a class="main" href="https://linkedin.com/in/diarazari" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/diarmilenia01-art" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 </footer>
 
 <script>
-function setLang(l){
-  document.body.classList.toggle('en', l==='en');
-  document.getElementById('bID').classList.toggle('active', l==='id');
-  document.getElementById('bEN').classList.toggle('active', l==='en');
-  document.documentElement.lang = l;
-}
-document.querySelectorAll('[data-nav]').forEach(function(el){
-  el.addEventListener('click',function(ev){
-    ev.preventDefault(); ev.stopPropagation();
-    window.open(el.dataset.nav,'_blank','noopener');
+(function(){
+  /* bintang kecil berkedip lambat di tiap bidang gelap */
+  function rnd(seed){ return function(){ seed=(seed*1664525+1013904223)%4294967296; return seed/4294967296; }; }
+  function spark(s){
+    var a=(s*0.2).toFixed(1), h=(s*0.11).toFixed(1);
+    return 'M0,-'+s+' C'+h+',-'+a+' '+a+',-'+h+' '+s+',0 C'+a+','+h+' '+h+','+a+' 0,'+s+
+           ' C-'+h+','+a+' -'+a+','+h+' -'+s+',0 C-'+a+',-'+h+' -'+h+',-'+a+' 0,-'+s+' Z';
+  }
+  document.querySelectorAll('.cosmos').forEach(function(host,idx){
+    var n=parseInt(host.dataset.stars||'20',10), r=rnd(97+idx*31);
+    var W=1200,H=420,p='';
+    for(var i=0;i<n;i++){
+      var x=(r()*W).toFixed(1), y=(r()*H).toFixed(1);
+      var dur=(6+r()*6).toFixed(2), dly=(r()*9).toFixed(2);
+      var isSpark = r()<0.38;
+      var inner = isSpark
+        ? '<path d="'+spark((2.6+r()*2.6).toFixed(1))+'" fill="#fff"/>'
+        : '<circle r="'+(0.6+r()*0.8).toFixed(2)+'" fill="#fff"/>';
+      p+='<g transform="translate('+x+' '+y+')"><g class="tw" style="--dur:'+dur+'s;--dly:'+dly+'s">'+inner+'</g></g>';
+    }
+    var svg='<svg class="stars" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'+
+      '<defs><filter id="g'+idx+'" x="-200%" y="-200%" width="500%" height="500%">'+
+      '<feGaussianBlur stdDeviation="0.8" result="b"/><feMerge><feMergeNode in="b"/>'+
+      '<feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'+
+      '<g filter="url(#g'+idx+')">'+p+'</g></svg>';
+    host.insertAdjacentHTML('afterbegin', svg);
   });
-});
-document.querySelectorAll('.proj-filter button').forEach(function(b){
-  b.addEventListener('click',function(){
-    var c=b.dataset.cat;
-    document.querySelectorAll('.proj-filter button').forEach(function(x){x.classList.toggle('on',x===b);});
-    document.querySelectorAll('.proj-card').forEach(function(card){
-      card.classList.toggle('hide', c!=='all' && card.dataset.cat!==c);
+
+  /* panggung: tab berganti isi */
+  var tabs=[].slice.call(document.querySelectorAll('.pick button'));
+  function activate(b){
+    tabs.forEach(function(x){
+      var on=x===b;
+      x.setAttribute('aria-selected',on?'true':'false');
+      document.getElementById(x.getAttribute('aria-controls')).hidden=!on;
+    });
+  }
+  tabs.forEach(function(b){ b.addEventListener('click',function(){ activate(b); }); });
+
+  /* filter kategori: menyaring daftar nama di atas panggung */
+  var fils=[].slice.call(document.querySelectorAll('.pfil button'));
+  fils.forEach(function(f){
+    f.addEventListener('click',function(){
+      var c=f.dataset.cat;
+      fils.forEach(function(x){ x.classList.toggle('on',x===f); });
+      var firstVisible=null, activeVisible=false;
+      tabs.forEach(function(t){
+        var show = (c==='all') || (t.dataset.cat===c);
+        t.classList.toggle('hide',!show);
+        if(show && !firstVisible) firstVisible=t;
+        if(show && t.getAttribute('aria-selected')==='true') activeVisible=true;
+      });
+      if(!activeVisible && firstVisible) activate(firstVisible);
     });
   });
-});
-document.getElementById('bID').addEventListener('click',function(){setLang('id');});
-document.getElementById('bEN').addEventListener('click',function(){setLang('en');});
+
+  /* dwibahasa */
+  function setLang(l){
+    document.body.classList.toggle('en', l==='en');
+    document.getElementById('bID').classList.toggle('active', l==='id');
+    document.getElementById('bEN').classList.toggle('active', l==='en');
+    document.documentElement.lang = l;
+  }
+  document.getElementById('bID').addEventListener('click',function(){setLang('id');});
+  document.getElementById('bEN').addEventListener('click',function(){setLang('en');});
+})();
 </script>
 </body>
 </html>

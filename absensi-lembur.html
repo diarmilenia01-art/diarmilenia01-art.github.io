@@ -8,41 +8,19 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 <style>
 :root{
-  --ground:#E8ECF6; --card:#FFFFFF; --card-2:#F4F6FC; --ink:#101838; --ink-2:#3D4769; --muted:#6A7596;
-  --line:#DDE3F1; --line-2:#C9D2E8;
-  --navy:#14215A; --navy-2:#1E3182; --navy-ink:#FFFFFF; --navy-muted:#AFC0F2; --navy-line:rgba(255,255,255,.14);
-  --accent:#2F55D4; --accent-ink:#FFFFFF; --accent-soft:#E3EAFD;
-  --ok:#17875F; --ok-soft:#DDF3EA; --warn:#B86E00; --warn-soft:#FDF0D8; --bad:#C43B36; --bad-soft:#FBE3E1;
-  --info:#2C6FB0; --info-soft:#E1EDF9; --flag:#6D4BD8; --flag-soft:#ECE6FD; --off:#8B94AE; --off-soft:#EEF0F5;
-  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
-  --heat-h:#CFDCF7;
-  --shadow:0 1px 2px rgba(16,24,56,.06),0 8px 24px -12px rgba(16,24,56,.18);
+  --ground:#06101D; --card:#0C1A2E; --card-2:#122440; --ink:#EAF0F7; --ink-2:#C0CBDE; --muted:#8EA3BC;
+  --line:#1E3049; --line-2:#2A3E5E;
+  --navy:#081527; --navy-2:#13294A; --navy-ink:#FFFFFF; --navy-muted:#9FB6D6; --navy-line:rgba(255,255,255,.14);
+  --accent:#6E8CFF; --accent-ink:#0A1030; --accent-soft:#1D2E55;
+  --ok:#45C28F; --ok-soft:#123A2C; --warn:#F0AE45; --warn-soft:#3B2B0E; --bad:#F07A73; --bad-soft:#431A1A;
+  --info:#7FB2EA; --info-soft:#15304D; --flag:#A792FF; --flag-soft:#2A2152; --off:#6F7A9E; --off-soft:#192643;
+  --s1:#5FA8E8; --s2:#F08A4E; --s3:#3FC98E; --s4:#F0B43F;
+  --heat-h:#24406B;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -14px rgba(0,0,0,.6);
   --radius:18px;
   --font:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  color-scheme:light; box-sizing:border-box;
+  color-scheme:dark; box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
-}
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
-  color-scheme:dark;
-  --ground:#090E20; --card:#111934; --card-2:#172142; --ink:#E9EDFB; --ink-2:#C0C8E4; --muted:#8F9AC0;
-  --line:#233058; --line-2:#2E3D6B;
-  --navy:#0F1A4A; --navy-2:#1A2C77; --navy-muted:#9FB2EE;
-  --accent:#6E8CFF; --accent-ink:#0A1030; --accent-soft:#1D2A5C;
-  --ok:#45C28F; --ok-soft:#123A2C; --warn:#F0AE45; --warn-soft:#3B2B0E; --bad:#F07A73; --bad-soft:#431A1A;
-  --info:#7FB2EA; --info-soft:#15304D; --flag:#A792FF; --flag-soft:#2A2152; --off:#6F7A9E; --off-soft:#1B2446;
-  --heat-h:#2A3F7A;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -14px rgba(0,0,0,.6);
-}}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --ground:#090E20; --card:#111934; --card-2:#172142; --ink:#E9EDFB; --ink-2:#C0C8E4; --muted:#8F9AC0;
-  --line:#233058; --line-2:#2E3D6B;
-  --navy:#0F1A4A; --navy-2:#1A2C77; --navy-muted:#9FB2EE;
-  --accent:#6E8CFF; --accent-ink:#0A1030; --accent-soft:#1D2A5C;
-  --ok:#45C28F; --ok-soft:#123A2C; --warn:#F0AE45; --warn-soft:#3B2B0E; --bad:#F07A73; --bad-soft:#431A1A;
-  --info:#7FB2EA; --info-soft:#15304D; --flag:#A792FF; --flag-soft:#2A2152; --off:#6F7A9E; --off-soft:#1B2446;
-  --heat-h:#2A3F7A;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -14px rgba(0,0,0,.6);
 }
 *{box-sizing:border-box}
 :where(svg[viewBox="0 0 24 24"]:not([width])){width:18px;height:18px;flex:none}
@@ -1019,7 +997,7 @@ function render(){
       '<div class="brand"><div class="brand-mark" aria-hidden="true">'+fpSvg(24)+'</div><div>'+
         '<h1>Absensi &amp; Lembur</h1><p>HR Department · periode 26 s.d. 25</p></div></div>'+
       '<div class="top-actions">'+
-        '<button class="btn sm" id="btnTheme" title="Ganti terang/gelap">'+icon('sun')+'</button>'+
+        
 
         '<span class="who"><span class="role-chip">'+esc(roleLbl)+'</span>'+
           (S.db?'':'<span class="muted">· mode lokal</span>')+'</span>'+
@@ -1039,12 +1017,7 @@ function render(){
   '</div>';
   $$('[data-tab]').forEach(function(b){b.onclick=function(){S.tab=b.dataset.tab;render();
     window.scrollTo({top:0,behavior:'instant'});};});
-  $('#btnTheme').onclick=function(){
-    var cur=document.documentElement.getAttribute('data-theme');
-    var next=cur==='dark'?'light':(cur==='light'?'dark':
-      (window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'light':'dark'));
-    document.documentElement.setAttribute('data-theme',next);};
-  /* demo publik: tombol kunci dihapus */
+    /* demo publik: tombol kunci dihapus */
   bindSide();
   var host=$('#view');
   try{({dash:vDash,absensi:vAbsensi,cek:vCek,lembur:vLembur,laporan:vLaporan,
@@ -3505,5 +3478,29 @@ function boot(){ hapusJejakLama(); mulai(); }  /* demo publik: tanpa gerbang pas
 /* Kembali ke halaman ini lewat tombol Back (cache browser) juga harus minta password lagi */
 /* demo publik: tidak mengunci ulang saat kembali dari cache */
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+</script>
+
+<style>
+#nebula{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.tw{transform-box:fill-box;transform-origin:center;animation:tw var(--dur) ease-in-out infinite both;animation-delay:var(--dly)}
+@keyframes tw{0%{opacity:.08;transform:scale(.5)}40%{opacity:.95;transform:scale(1)}62%{opacity:.22;transform:scale(.66)}80%{opacity:.7;transform:scale(.92)}100%{opacity:.08;transform:scale(.5)}}
+@media (prefers-reduced-motion:reduce){.tw{animation:none;opacity:.6;transform:scale(.85)}}
+</style>
+<div id="nebula" aria-hidden="true"></div>
+<script>
+(function(){
+function __rnd(seed){return function(){seed=(seed*1664525+1013904223)%4294967296;return seed/4294967296;};}
+function __spark(s){var a=(s*0.2).toFixed(1),h=(s*0.11).toFixed(1);
+ return 'M0,-'+s+' C'+h+',-'+a+' '+a+',-'+h+' '+s+',0 C'+a+','+h+' '+h+','+a+' 0,'+s+' C-'+h+','+a+' -'+a+','+h+' -'+s+',0 C-'+a+',-'+h+' -'+h+',-'+a+' 0,-'+s+' Z';}
+function __starSvg(n,seed,W,H,id){var r=__rnd(seed),p='';
+ for(var i=0;i<n;i++){var x=(r()*W).toFixed(1),y=(r()*H).toFixed(1),dur=(6+r()*6).toFixed(2),dly=(r()*9).toFixed(2);
+  var inner=r()<0.38?'<path d="'+__spark((2.4+r()*2.4).toFixed(1))+'" fill="#fff"/>':'<circle r="'+(0.6+r()*0.8).toFixed(2)+'" fill="#fff"/>';
+  p+='<g transform="translate('+x+' '+y+')"><g class="tw" style="--dur:'+dur+'s;--dly:'+dly+'s">'+inner+'</g></g>';}
+ return '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="width:100%;height:100%">'+
+  '<defs><filter id="'+id+'" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="0.8" result="b"/>'+
+  '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'+
+  '<g filter="url(#'+id+')" opacity=".85">'+p+'</g></svg>';}
+document.getElementById('nebula').innerHTML=__starSvg(44,20261008,1600,900,'nebg');
+})();
 </script>
 </body></html>
