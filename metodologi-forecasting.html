@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metodologi Forecasting - Diar Azari</title>
+<meta name="description" content="Metodologi lengkap sistem target dan forecasting GMV: validasi data, 22 model kandidat, rolling-origin backtest, sanity gate, skenario, dan keterbatasannya.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>&#128200;</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0E2A47;--navy2:#13385E;--blue:#3B82F6;--blue-soft:#60A5FA;
+    --ink:#1A2B3C;--muted:#5B6B7B;--line:#E3E9F0;--bg:#F6F8FB;--card:#FFFFFF;--warn:#B45309;--warn-bg:#FEF6E7}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  a{color:var(--blue)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:8px}
+
+  .hero{background:linear-gradient(160deg,var(--navy),var(--navy2));color:#EAF2FB;padding:54px 0 46px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-120px;top:-120px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.35),transparent 70%);pointer-events:none;z-index:0}
+  .hero .wrap{position:relative;z-index:2}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:34px;flex-wrap:wrap}
+  .back{color:#C6D6EA;text-decoration:none;font-size:13.5px;font-weight:700}
+  .toggle{display:flex;gap:4px;background:rgba(255,255,255,.08);padding:4px;border-radius:999px;border:1px solid rgba(255,255,255,.15)}
+  .toggle button{background:none;border:none;color:#cfe0f5;padding:9px 18px;min-height:44px;border-radius:999px;cursor:pointer;font-size:14px;font-weight:700;font-family:inherit;display:flex;align-items:center}
+  .toggle button.active{background:var(--blue);color:#fff}
+  .eyebrow{color:var(--blue-soft);font-weight:800;font-size:12.5px;letter-spacing:1.2px;margin-bottom:10px}
+  h1{font-size:34px;line-height:1.15;font-weight:800;letter-spacing:-.02em;margin-bottom:14px}
+  .hero p{color:#C6D6EA;font-size:16px;max-width:620px}
+  .demo-note{margin-top:20px;display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:10px 15px;font-size:13px;color:#D7E5F5}
+
+  section{padding:46px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:23px;letter-spacing:-.01em;margin-bottom:6px}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:24px}
+  h3{font-size:16px;margin:22px 0 6px}
+  p{margin-bottom:12px}
+
+  .flow{display:flex;flex-direction:column;gap:0}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;gap:14px;align-items:flex-start;box-shadow:0 1px 2px rgba(16,42,71,.04)}
+  .step .no{flex:0 0 28px;height:28px;border-radius:50%;background:#EAF2FF;color:var(--blue);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .step .t{font-weight:700;font-size:15.5px;margin-bottom:3px}
+  .step .d{font-size:14px;color:#33475B}
+  .arrow{height:18px;width:2px;background:var(--line);margin:0 auto}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)}
+  th{background:#F0F4FA;font-weight:700;font-size:12.5px}
+  tr:last-child td{border-bottom:none}
+  .scroll{overflow-x:auto}
+
+  .box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:14px}
+  .limit{background:var(--warn-bg);border:1px solid #F2DFB8}
+  .limit h3{color:var(--warn);margin-top:0}
+  ul{margin:0 0 4px 20px}
+  li{margin-bottom:7px;font-size:14.5px;color:#33475B}
+  .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .btns a{background:var(--blue);color:#fff;text-decoration:none;padding:12px 22px;min-height:44px;display:inline-flex;align-items:center;border-radius:999px;font-size:14px;font-weight:700}
+  .btns a.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+  footer{background:var(--navy);color:#B9CDE6;padding:34px 0;font-size:13.5px;text-align:center}
+
+  [data-en]{display:none}
+  body.en [data-id]{display:none}
+  body.en [data-en]{display:block}
+  body.en .inln[data-en]{display:inline}
+  li[data-en]{display:none}
+  body.en li[data-id]{display:none}
+  body.en li[data-en]{display:list-item}
+  @media(max-width:680px){h1{font-size:26px}.hero{padding:44px 0 38px}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="topbar">
+      <a class="back" href="index.html">&larr; <span class="inln" data-id>Kembali ke portofolio</span><span class="inln" data-en>Back to portfolio</span></a>
+      <div class="toggle">
+        <button id="bID" class="active" type="button">ID</button>
+        <button id="bEN" type="button">EN</button>
+      </div>
+    </div>
+    <div class="eyebrow"><span class="inln" data-id>METODOLOGI</span><span class="inln" data-en>METHODOLOGY</span></div>
+    <h1><span data-id>Bagaimana angka target itu dibentuk</span><span data-en>How the target figure is formed</span></h1>
+    <p>
+      <span data-id>Halaman ini membuka isi sistem target dan forecasting GMV: dari data harian mentah sampai angka target yang dipakai manajemen, termasuk aturan penolakan model dan hal-hal yang belum tertangani.</span>
+      <span data-en>This page opens up the GMV target and forecasting system: from raw daily data to the target management uses, including the model rejection rules and what it still does not handle.</span>
+    </p>
+    <div class="demo-note">
+      <span data-id>Angka pada demo publik bersifat ilustratif. Yang ditampilkan di sini adalah metodologinya, yang tidak berubah.</span>
+      <span data-en>Figures in the public demo are illustrative. What is shown here is the methodology, which does not change.</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2><span data-id>Alur kerja</span><span data-en>The pipeline</span></h2>
+    <p class="sub"><span data-id>Sembilan tahap, dari data mentah sampai target bisnis.</span><span data-en>Nine stages, from raw data to a business target.</span></p>
+    <div class="flow">
+      <div class="step"><div class="no">1</div><div><div class="t"><span data-id>Data harian per marketplace</span><span data-en>Daily data per marketplace</span></div><div class="d"><span data-id>Ekspor harian tiap kanal dibaca apa adanya: GMV, pesanan, pengunjung, retur, dan pembatalan. Tidak ada angka yang diketik ulang manual.</span><span data-en>Each channel's daily export is read as-is: GMV, orders, visitors, returns, and cancellations. No figure is retyped by hand.</span></div></div></div>
+      <div class="arrow"></div>
+      <div class="step"><div class="no">2</div><div><div class="t"><span data-id>Validasi dan pembersihan</span><span data-en>Validation and cleaning</span></div><div class="d"><span data-id>Baris tanpa tanggal valid dibuang, nilai per pesanan digabung ke tingkat order, lalu GMV bersih dihitung setelah retur dan pembatalan. Bulan berjalan yang belum lengkap tidak dipakai sebagai bahan latih.</span><span data-en>Rows without a valid date are dropped, per-item values are rolled up to order level, then net GMV is computed after returns and cancellations. The incomplete current month is never used as training material.</span></div></div></div>
+      <div class="arrow"></div>
+      <div class="step"><div class="no">3</div><div><div class="t"><span data-id>Dua granularitas diuji berdampingan</span><span data-en>Two granularities tested side by side</span></div><div class="d"><span data-id>Forecast bulanan langsung dibandingkan dengan forecast mingguan yang diagregasi ke bulan, pada bulan target yang sama persis. Tidak ada granularitas yang dipaksakan di depan.</span><span data-en>A direct monthly forecast is compared against a weekly forecast aggregated to the month, on exactly the same target month. No granularity is forced up front.</span></div></div></div>
+      <div class="arrow"></div>
+      <div class="step"><div class="no">4</div><div><div class="t"><span data-id>22 model kandidat</span><span data-en>22 candidate models</span></div><div class="d"><span data-id>12 model bulanan dan 10 model mingguan dijalankan untuk tiap marketplace, dari baseline paling sederhana sampai keluarga Holt dan Theta.</span><span data-en>12 monthly and 10 weekly models are run for each marketplace, from the simplest baselines to the Holt and Theta families.</span></div></div></div>
+      <div class="arrow"></div>
+      <div class="step"><div class="no">5</div><div><div class="t"><span data-id>Rolling-origin backtest</span><span data-en>Rolling-origin backtest</span></div><div class="d"><span data-id>Setiap model diuji berulang kali ke depan: dilatih sampai satu titik waktu, diminta meramal bulan berikutnya, lalu titik itu digeser maju. Model tidak pernah melihat bulan yang sedang diramalnya.</span><span data-en>Each model is tested repeatedly going forward: trained up to a point in time, asked to forecast the next month, then the point moves forward. A model never sees the month it is forecasting.</span></div></div></div>
+      <div class="arrow"></div>
+      <div class="step"><div class="no">6</div><div><div class="t"><span data-id>Pemilihan champion lewat MAPE</span><span data-en>Champion selection via MAPE</span></div><div class="d"><span data-id>Kandidat diperingkat memakai MAPE lintas seluruh fold. Pemenang adalah yang paling akurat sekaligus paling stabil, bukan yang kebetulan bagus di satu periode. Hasilnya berbeda antar marketplace.</span><span data-en>Candidates are ranked by MAPE across all folds. The winner is the one that is both most accurate and most stable, not one that happened to do well in a single period. The result differs per marketplace.</span></div></div></div>
+      <div class="arrow"></div>
+      <div class="step"><div class="no">7</div><div><div class="t"><span data-id>Sanity gate</span><span data-en>Sanity gate</span></div><div class="d"><span data-id>Champion hanya diterima bila titik forecast-nya jatuh di dalam rentang persentil 10 sampai 90 perubahan bulanan yang pernah benar-benar terjadi di kanal itu. Model yang menang pada error rata-rata tetapi menghasilkan angka di luar rentang itu ditolak, dan penolakannya dicatat agar bisa diperiksa.</span><span data-en>A champion is accepted only if its forecast point falls inside the 10th to 90th percentile of month-on-month changes that have actually occurred on that channel. A model that wins on average error but produces a figure outside that range is rejected, and the rejection is logged so it can be inspected.</span></div></div></div>
+      <div class="arrow"></div>
+      <div class="step"><div class="no">8</div><div><div class="t"><span data-id>Koreksi bias dan skenario</span><span data-en>Bias correction and scenarios</span></div><div class="d"><span data-id>Rasio aktual dibagi forecast dikumpulkan dari seluruh fold backtest. Conservative, Base, dan Stretch adalah persentil 20, 50, dan 80 dari sebaran rasio itu. Tidak ada persentase yang ditetapkan manual.</span><span data-en>The ratio of actual to forecast is collected across every backtest fold. Conservative, Base, and Stretch are the 20th, 50th, and 80th percentiles of that ratio distribution. No percentage is set by hand.</span></div></div></div>
+      <div class="arrow"></div>
+      <div class="step"><div class="no">9</div><div><div class="t"><span data-id>Target yang direkomendasikan</span><span data-en>Recommended target</span></div><div class="d"><span data-id>Base Case, diangkat minimal ke level penutupan bulan berjalan selama masih di bawah Stretch, lalu dibatasi pada pertumbuhan bulanan persentil 75 historis kanal tersebut agar target tetap menantang tanpa menjadi mustahil.</span><span data-en>The Base Case, lifted at least to the current month's run rate while still below Stretch, then capped at the channel's historical 75th-percentile monthly growth so the target stays demanding without becoming unreachable.</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span data-id>Model kandidat</span><span data-en>Candidate models</span></h2>
+    <p class="sub"><span data-id>Baseline sederhana sengaja diikutkan. Model rumit yang tidak mengalahkan baseline tidak layak dipakai.</span><span data-en>Simple baselines are deliberately included. A complex model that cannot beat a baseline does not deserve to be used.</span></p>
+    <div class="scroll"><table>
+      <thead><tr>
+        <th><span class="inln" data-id>Keluarga</span><span class="inln" data-en>Family</span></th>
+        <th><span class="inln" data-id>Bulanan</span><span class="inln" data-en>Monthly</span></th>
+        <th><span class="inln" data-id>Mingguan</span><span class="inln" data-en>Weekly</span></th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Baseline</td><td>Naive (raw), Naive (cal-adj), Seasonal Naive (12)</td><td>W-Naive</td></tr>
+        <tr><td><span class="inln" data-id>Rata-rata bergerak</span><span class="inln" data-en>Moving average</span></td><td>MA3, MA6</td><td>W-MA4, W-MA8, W-MA13</td></tr>
+        <tr><td><span class="inln" data-id>Tren</span><span class="inln" data-en>Trend</span></td><td>Drift, Linear Trend 6M</td><td>W-Drift8, W-Growth13</td></tr>
+        <tr><td>Exponential smoothing</td><td>SES, Holt Trend, Holt Damped, Seasonal + Damped (12)</td><td>W-SES, W-Holt Trend, W-Holt Damped</td></tr>
+        <tr><td>Theta</td><td>Theta</td><td>W-Theta</td></tr>
+      </tbody>
+    </table></div>
+    <p style="margin-top:14px;font-size:14px;color:var(--muted)"><span data-id>Penanda cal-adj berarti model disesuaikan terhadap jumlah hari dan komposisi hari dalam bulan, supaya Februari tidak terlihat buruk hanya karena lebih pendek.</span><span data-en>The cal-adj marker means the model is adjusted for the number and composition of days in a month, so February does not look weak merely because it is shorter.</span></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span data-id>Mengapa MAPE saja</span><span data-en>Why MAPE only</span></h2>
+    <div class="box">
+      <p data-id>Sistem ini melaporkan satu metrik akurasi, yaitu MAPE, dan sengaja tidak menampilkan metrik lain di muka. Alasannya praktis: target ini dibaca oleh orang non-teknis, dan satu metrik yang dipahami semua pihak lebih berguna daripada lima metrik yang tidak ada yang memeriksanya. MAPE dipilih karena berbentuk persentase, sehingga bisa dibandingkan antar marketplace yang skalanya jauh berbeda.</p>
+      <p data-en>The system reports a single accuracy metric, MAPE, and deliberately does not surface others. The reason is practical: this target is read by non-technical people, and one metric everyone understands is more useful than five that nobody checks. MAPE was chosen because it is a percentage, so it is comparable across marketplaces of very different sizes.</p>
+      <p data-id>Konsekuensinya diakui terbuka: MAPE memperlakukan ramalan yang terlalu rendah dan terlalu tinggi secara tidak simetris, dan menjadi tidak stabil ketika nilai aktual mendekati nol. Untuk GMV marketplace harian yang jarang menyentuh nol, keterbatasan itu bisa diterima.</p>
+      <p data-en>The trade-off is acknowledged openly: MAPE treats under-forecasts and over-forecasts asymmetrically, and becomes unstable when actuals approach zero. For daily marketplace GMV, which rarely approaches zero, that limitation is acceptable.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span data-id>Keterbatasan</span><span data-en>Limitations</span></h2>
+    <p class="sub"><span data-id>Bagian yang biasanya tidak ditulis orang. Model ini punya batas, dan batas itu memengaruhi cara angkanya harus dibaca.</span><span data-en>The part people usually leave out. This model has limits, and those limits shape how its numbers should be read.</span></p>
+    <div class="box limit">
+      <h3><span class="inln" data-id>Yang belum tertangani</span><span class="inln" data-en>Not yet handled</span></h3>
+      <ul>
+        <li data-id>Ketersediaan stok tidak dimodelkan. Kalau produk terlaris kosong, aktual bisa jatuh di bawah forecast tanpa ada sinyal apa pun di model.</li>
+        <li data-en>Stock availability is not modelled. If a top seller runs out, actuals can fall below the forecast with no signal in the model at all.</li>
+        <li data-id>Kampanye besar di luar pola tanggal kembar, misalnya perubahan mendadak pada subsidi ongkos kirim atau promo platform yang baru diumumkan, tidak diketahui model sampai dampaknya masuk data historis.</li>
+        <li data-en>Large campaigns outside the twin-date pattern, such as a sudden change in shipping subsidy or a newly announced platform promo, are invisible to the model until their effect enters the historical data.</li>
+        <li data-id>Belanja iklan tidak menjadi variabel penjelas. Forecast membaca hasil penjualan, bukan penyebabnya, sehingga kenaikan atau pemotongan anggaran iklan yang drastis tidak langsung tercermin.</li>
+        <li data-en>Ad spend is not an explanatory variable. The forecast reads the sales outcome, not its cause, so a sharp increase or cut in ad budget is not reflected immediately.</li>
+        <li data-id>Model hanya melihat riwayatnya sendiri per kanal. Perpindahan permintaan antar marketplace tidak ditangkap sebagai hubungan sebab akibat.</li>
+        <li data-en>Each model only sees its own channel's history. Demand shifting between marketplaces is not captured as a causal relationship.</li>
+        <li data-id>Akurasi menurun untuk kanal yang riwayatnya pendek. Semakin sedikit bulan yang tersedia, semakin sedikit fold yang bisa diuji, dan semakin lemah dasar pemilihan modelnya.</li>
+        <li data-en>Accuracy degrades for channels with short histories. The fewer months available, the fewer folds can be tested, and the weaker the basis for model selection.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3><span class="inln" data-id>Cara membaca angka MAPE</span><span class="inln" data-en>How to read the MAPE figure</span></h3>
+      <p data-id>MAPE sekitar 9% pada demo ini adalah rata-rata tertimbang lintas tiga marketplace dari seluruh fold backtest, bukan angka terbaik yang dipetik dari satu periode. Angka itu dihitung ulang oleh mesin setiap kali data diperbarui, bukan ditulis permanen di halaman.</p>
+      <p data-en>The roughly 9% MAPE in this demo is a weighted average across three marketplaces over all backtest folds, not a best figure picked from a single period. It is recomputed by the engine whenever the data is refreshed, not hard-coded into the page.</p>
+      <p data-id>Perlu kejujuran tambahan: angka MAPE sangat bergantung pada seberapa stabil datanya. Deret yang mulus menghasilkan MAPE rendah tanpa model yang canggih. Karena itu baseline sederhana selalu diikutkan sebagai pembanding, supaya terlihat apakah model yang menang benar-benar memberi nilai tambah atau hanya menumpang pada data yang memang mudah diramal.</p>
+      <p data-en>One more piece of honesty: a MAPE figure depends heavily on how stable the data is. A smooth series yields a low MAPE without any sophisticated model. That is why simple baselines are always included as a yardstick, to show whether the winning model genuinely adds value or is merely riding on data that was easy to forecast.</p>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:none">
+  <div class="wrap">
+    <h2><span data-id>Periksa sendiri</span><span data-en>Check it yourself</span></h2>
+    <p class="sub"><span data-id>Dashboard demo menjalankan mesin yang sama. Tampilan Analis menunjukkan tabel perbandingan seluruh model, jumlah fold, dan model yang ditolak sanity gate.</span><span data-en>The demo dashboard runs the same engine. The Analyst view shows the full model comparison table, the fold count, and the models rejected by the sanity gate.</span></p>
+    <div class="btns">
+      <a href="forecasting-dashboard.html"><span class="inln" data-id>Buka dashboard demo</span><span class="inln" data-en>Open the demo dashboard</span></a>
+      <a class="ghost" href="https://github.com/diarmilenia01-art/claude-skills/tree/main/defensible-forecasting" target="_blank" rel="noopener"><span class="inln" data-id>Lihat skill di GitHub</span><span class="inln" data-en>View the skill on GitHub</span></a>
+      <a class="ghost" href="index.html"><span class="inln" data-id>Kembali ke portofolio</span><span class="inln" data-en>Back to portfolio</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span data-id>Metodologi dirancang oleh Diar Azari. Angka pada demo bersifat ilustratif, bukan data perusahaan.</span>
+    <span data-en>Methodology designed by Diar Azari. Figures in the demo are illustrative, not company data.</span>
+  </div>
+</footer>
+
+<script>
+function setLang(l){
+  document.body.classList.toggle('en', l==='en');
+  document.getElementById('bID').classList.toggle('active', l==='id');
+  document.getElementById('bEN').classList.toggle('active', l==='en');
+  document.documentElement.lang = l;
+}
+document.getElementById('bID').addEventListener('click',function(){setLang('id');});
+document.getElementById('bEN').addEventListener('click',function(){setLang('en');});
+</script>
+</body>
+</html>
