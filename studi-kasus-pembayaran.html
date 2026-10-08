@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studi Kasus: Pembayaran Supplier - Diar Azari</title>
+<meta name="description" content="Studi kasus sistem kendali pembayaran supplier lintas tiga mata uang.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>&#128200;</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#04080F;--navy2:#0B2240;--blue:#3B82F6;--blue-soft:#60A5FA;
+    --ink:#1A2B3C;--muted:#5B6B7B;--line:#E3E9F0;--bg:#F6F8FB;--card:#FFFFFF;--warn:#B45309;--warn-bg:#FEF6E7;
+    --good:#15803D;--good-bg:#E8F6EE}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  a{color:var(--blue)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:8px}
+
+  .hero{background:linear-gradient(160deg,var(--navy),var(--navy2));color:#EAF2FB;padding:54px 0 46px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-120px;top:-120px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.35),transparent 70%);pointer-events:none;z-index:0}
+  .hero .wrap{position:relative;z-index:2}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:34px;flex-wrap:wrap}
+  .back{color:#C6D6EA;text-decoration:none;font-size:13.5px;font-weight:700}
+  .toggle{display:flex;gap:4px;background:rgba(255,255,255,.08);padding:4px;border-radius:999px;border:1px solid rgba(255,255,255,.15)}
+  .toggle button{background:none;border:none;color:#cfe0f5;padding:9px 18px;min-height:44px;border-radius:999px;cursor:pointer;font-size:14px;font-weight:700;font-family:inherit;display:flex;align-items:center}
+  .toggle button.active{background:var(--blue);color:#fff}
+  .eyebrow{color:var(--blue-soft);font-weight:800;font-size:12.5px;letter-spacing:1.2px;margin-bottom:10px}
+  h1{font-size:34px;line-height:1.15;font-weight:800;letter-spacing:-.02em;margin-bottom:14px}
+  .hero p.intro{color:#C6D6EA;font-size:16px;max-width:640px}
+  .demo-note{margin-top:20px;display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:10px 15px;font-size:13px;color:#D7E5F5}
+
+  section{padding:42px 0;border-bottom:1px solid var(--line)}
+  .lbl{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:1px;color:var(--blue);background:#EAF2FF;padding:5px 11px;border-radius:999px;margin-bottom:12px}
+  h2{font-size:23px;letter-spacing:-.01em;margin-bottom:10px}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:14px;box-shadow:0 1px 2px rgba(16,42,71,.04)}
+  .box p{margin-bottom:12px}.box p:last-child{margin-bottom:0}
+  .box h3{font-size:15.5px;margin:0 0 8px}
+  .good{background:var(--good-bg);border:1px solid #BFE4CC}.good h3{color:var(--good)}
+  .limit{background:var(--warn-bg);border:1px solid #F2DFB8}.limit h3{color:var(--warn)}
+  ul{margin:6px 0 0 20px}
+  li{margin-bottom:7px;font-size:14.5px;color:#33475B}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:620px){.grid2{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line)}
+  th{background:#F0F4FA;font-weight:700;font-size:12.5px}
+  tr:last-child td{border-bottom:none}
+
+  .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .btns a{background:var(--blue);color:#fff;text-decoration:none;padding:12px 22px;min-height:44px;display:inline-flex;align-items:center;border-radius:999px;font-size:14px;font-weight:700}
+  .btns a.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+  footer{background:var(--navy);color:#B9CDE6;padding:34px 0;font-size:13.5px;text-align:center}
+
+  [data-en]{display:none}
+  body.en [data-id]{display:none}
+  body.en [data-en]{display:block}
+  body.en .inln[data-en]{display:inline}
+  body.en li[data-id]{display:none}
+  li[data-en]{display:none}
+  body.en li[data-en]{display:list-item}
+  @media(max-width:680px){h1{font-size:26px}.hero{padding:44px 0 38px}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="topbar">
+      <a class="back" href="index.html">&larr; <span class="inln" data-id>Kembali ke portofolio</span><span class="inln" data-en>Back to portfolio</span></a>
+      <div class="toggle">
+        <button id="bID" class="active" type="button">ID</button>
+        <button id="bEN" type="button">EN</button>
+      </div>
+    </div>
+    <div class="eyebrow"><span class="inln" data-id>STUDI KASUS</span><span class="inln" data-en>CASE STUDY</span></div>
+    <h1><span data-id>Dari dokumen yang kececer ke posisi utang yang terbuka kapan saja</span><span data-en>From a lost document to a debt position open at any time</span></h1>
+    <p class="intro"><span data-id>Bagaimana pemantauan PO, pembayaran, dan pengiriman lintas banyak supplier dan tiga mata uang berpindah dari Excel yang dioper tangan ke satu sistem yang terhubung.</span><span data-en>How PO, payment, and shipment tracking across many suppliers and three currencies moved from a hand-passed Excel file to one connected system.</span></p>
+    <div class="demo-note">
+      <span data-id>Angka pada demo publik bersifat ilustratif, bukan data perusahaan. Yang ditunjukkan di sini adalah cara berpikir dan sistemnya.</span>
+      <span data-en>Figures in the public demo are illustrative, not company data. What is shown here is the thinking and the system.</span>
+    </div>
+  </div>
+</header>
+
+<section><div class="wrap"><span class="lbl"><span class="inln" data-id>Masalah bisnis</span><span class="inln" data-en>Business problem</span></span><h2><span data-id>Dokumen yang entah berhenti di siapa</span><span data-en>A document stuck with who knows whom</span></h2><div class="box"><p data-id>Pemantauan PO, pembayaran bertermin, dan pengiriman berbasis Excel yang dioper banyak pihak: kepala toko, supply chain, dept head, dan keuangan. Tanpa kabar di grup, tidak ada yang tahu dokumen itu sekarang berhenti di siapa dan siapa yang belum memperbarui.</p><p data-en>PO, staged-payment, and shipment tracking ran on an Excel file passed among many parties: store heads, supply chain, dept head, and finance. Without a note in the group, no one knew who was holding the document or who had not updated it yet.</p><p data-id>Tiap input PO menuntut rumus dibuat ulang, dan konversi tiga mata uang (RMB, USD, IDR) tidak real time terhadap kurs saat PO dimasukkan.</p><p data-en>Each PO entry demanded formulas be rebuilt, and the three-currency conversion (RMB, USD, IDR) was not real time against the rate at the moment the PO was entered.</p></div></div></section>
+<section><div class="wrap"><span class="lbl"><span class="inln" data-id>Pendekatan</span><span class="inln" data-en>Approach</span></span><h2><span data-id>Satu sistem yang terhubung</span><span data-en>One connected system</span></h2><div class="box"><p data-id>Dibangun satu sistem purchasing: status PO, pembayaran, dan pengiriman dalam satu tampilan, dengan konversi mata uang dan rekap otomatis. Data terhubung langsung ke sumbernya, ada tombol refresh, sehingga terlihat siapa yang terakhir memperbarui dan data tidak saling menabrak.</p><p data-en>A single purchasing system was built: PO, payment, and shipment status in one view, with automatic currency conversion and recap. Data connects straight to its source, with a refresh button, so it is clear who last updated and entries do not collide.</p></div></div></section>
+<section><div class="wrap"><span class="lbl"><span class="inln" data-id>Dampak</span><span class="inln" data-en>Impact</span></span><h2><span data-id>Semua pihak terbantu</span><span data-en>Everyone is unblocked</span></h2><div class="box"><p data-id>Dept head tidak lagi menunggu tiap kepala toko memperbarui satu per satu. Supply chain bisa melihat posisi pengiriman tanpa dokumen tertahan di pihak lain. Keuangan tahu nominalnya sudah final atau belum sebelum membayar.</p><p data-en>The dept head no longer waits for each store head to update one by one. Supply chain can see shipment status without the document being stuck elsewhere. Finance knows whether an amount is final before paying.</p><p data-id>Ketika founder bertanya berapa utang ke seorang supplier, jawabannya langsung terbuka dari kartu pembayaran, tanpa merekap PO satu per satu.</p><p data-en>When the founder asks how much is owed to a supplier, the answer opens straight from the payment cards, without recapping POs one by one.</p></div></div></section>
+<section><div class="wrap"><span class="lbl"><span class="inln" data-id>Keterbatasan</span><span class="inln" data-en>Limitations</span></span><h2><span data-id>Apa adanya</span><span data-en>As it is</span></h2><div class="box"><p data-id>Ini alat internal yang berjalan di balik password dan dirawat satu orang, bukan produk berskala enterprise. Hosting-nya ringan dan versi demo publik ini sudah dilepas passwordnya dengan data sepenuhnya dummy.</p><p data-en>This is an internal tool that runs behind a password and is maintained by one person, not an enterprise-scale product. The hosting is lightweight, and this public demo has had its password removed with fully dummy data.</p><p data-id>Kekuatannya sekaligus batasnya: satu orang yang merancang dari logika sampai rilis membuatnya cepat berubah sesuai kebutuhan, tetapi juga berarti sistem ini bergantung pada satu perancang.</p><p data-en>Its strength is also its limit: one person designing from logic to release makes it change quickly as needs shift, but it also means the system depends on a single designer.</p></div></div></section>
+
+<section style="border-bottom:none">
+  <div class="wrap">
+    <div class="btns">
+      <a href="cycling-payment.html"><span class="inln" data-id>Buka dashboard demo</span><span class="inln" data-en>Open the demo dashboard</span></a>
+      <a class="ghost" href="index.html"><span class="inln" data-id>Kembali ke portofolio</span><span class="inln" data-en>Back to portfolio</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span data-id>Sistem dan metodologi dirancang oleh Diar Azari. Angka pada demo bersifat ilustratif, bukan data perusahaan.</span>
+    <span data-en>System and methodology designed by Diar Azari. Figures in the demo are illustrative, not company data.</span>
+  </div>
+</footer>
+
+<script>
+function setLang(l){
+  document.body.classList.toggle('en', l==='en');
+  document.getElementById('bID').classList.toggle('active', l==='id');
+  document.getElementById('bEN').classList.toggle('active', l==='en');
+  document.documentElement.lang = l;
+}
+document.getElementById('bID').addEventListener('click',function(){setLang('id');});
+document.getElementById('bEN').addEventListener('click',function(){setLang('en');});
+</script>
+
+<style>
+.hero>.stars{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.tw{transform-box:fill-box;transform-origin:center;animation:tw var(--dur) ease-in-out infinite both;animation-delay:var(--dly)}
+@keyframes tw{0%{opacity:.08;transform:scale(.5)}40%{opacity:.95;transform:scale(1)}62%{opacity:.22;transform:scale(.66)}80%{opacity:.7;transform:scale(.92)}100%{opacity:.08;transform:scale(.5)}}
+@media (prefers-reduced-motion:reduce){.tw{animation:none;opacity:.6;transform:scale(.85)}}
+</style>
+<script>
+(function(){
+function __rnd(seed){return function(){seed=(seed*1664525+1013904223)%4294967296;return seed/4294967296;};}
+function __spark(s){var a=(s*0.2).toFixed(1),h=(s*0.11).toFixed(1);
+ return 'M0,-'+s+' C'+h+',-'+a+' '+a+',-'+h+' '+s+',0 C'+a+','+h+' '+h+','+a+' 0,'+s+' C-'+h+','+a+' -'+a+','+h+' -'+s+',0 C-'+a+',-'+h+' -'+h+',-'+a+' 0,-'+s+' Z';}
+function __starSvg(n,seed,W,H,id){var r=__rnd(seed),p='';
+ for(var i=0;i<n;i++){var x=(r()*W).toFixed(1),y=(r()*H).toFixed(1),dur=(6+r()*6).toFixed(2),dly=(r()*9).toFixed(2);
+  var inner=r()<0.38?'<path d="'+__spark((2.4+r()*2.4).toFixed(1))+'" fill="#fff"/>':'<circle r="'+(0.6+r()*0.8).toFixed(2)+'" fill="#fff"/>';
+  p+='<g transform="translate('+x+' '+y+')"><g class="tw" style="--dur:'+dur+'s;--dly:'+dly+'s">'+inner+'</g></g>';}
+ return '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="width:100%;height:100%">'+
+  '<defs><filter id="'+id+'" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="0.8" result="b"/>'+
+  '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'+
+  '<g filter="url(#'+id+')" opacity=".85">'+p+'</g></svg>';}
+var h=document.querySelector('.hero');
+if(h) h.insertAdjacentHTML('afterbegin','<div class="stars" aria-hidden="true">'+__starSvg(22,772026,1200,420,'herog')+'</div>');
+})();
+</script>
+</body>
+</html>

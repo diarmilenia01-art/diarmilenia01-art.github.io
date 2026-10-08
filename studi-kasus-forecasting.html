@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studi Kasus: Forecasting GMV - Diar Azari</title>
+<meta name="description" content="Studi kasus sistem target dan forecasting GMV: dari target yang ditebak menjadi target yang bisa dipertanggungjawabkan.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>&#128200;</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#04080F;--navy2:#0B2240;--blue:#3B82F6;--blue-soft:#60A5FA;
+    --ink:#1A2B3C;--muted:#5B6B7B;--line:#E3E9F0;--bg:#F6F8FB;--card:#FFFFFF;--warn:#B45309;--warn-bg:#FEF6E7;
+    --good:#15803D;--good-bg:#E8F6EE}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  a{color:var(--blue)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:8px}
+
+  .hero{background:linear-gradient(160deg,var(--navy),var(--navy2));color:#EAF2FB;padding:54px 0 46px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-120px;top:-120px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.35),transparent 70%);pointer-events:none;z-index:0}
+  .hero .wrap{position:relative;z-index:2}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:34px;flex-wrap:wrap}
+  .back{color:#C6D6EA;text-decoration:none;font-size:13.5px;font-weight:700}
+  .toggle{display:flex;gap:4px;background:rgba(255,255,255,.08);padding:4px;border-radius:999px;border:1px solid rgba(255,255,255,.15)}
+  .toggle button{background:none;border:none;color:#cfe0f5;padding:9px 18px;min-height:44px;border-radius:999px;cursor:pointer;font-size:14px;font-weight:700;font-family:inherit;display:flex;align-items:center}
+  .toggle button.active{background:var(--blue);color:#fff}
+  .eyebrow{color:var(--blue-soft);font-weight:800;font-size:12.5px;letter-spacing:1.2px;margin-bottom:10px}
+  h1{font-size:34px;line-height:1.15;font-weight:800;letter-spacing:-.02em;margin-bottom:14px}
+  .hero p.intro{color:#C6D6EA;font-size:16px;max-width:640px}
+  .demo-note{margin-top:20px;display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:10px 15px;font-size:13px;color:#D7E5F5}
+
+  section{padding:42px 0;border-bottom:1px solid var(--line)}
+  .lbl{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:1px;color:var(--blue);background:#EAF2FF;padding:5px 11px;border-radius:999px;margin-bottom:12px}
+  h2{font-size:23px;letter-spacing:-.01em;margin-bottom:10px}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:14px;box-shadow:0 1px 2px rgba(16,42,71,.04)}
+  .box p{margin-bottom:12px}.box p:last-child{margin-bottom:0}
+  .box h3{font-size:15.5px;margin:0 0 8px}
+  .good{background:var(--good-bg);border:1px solid #BFE4CC}.good h3{color:var(--good)}
+  .limit{background:var(--warn-bg);border:1px solid #F2DFB8}.limit h3{color:var(--warn)}
+  ul{margin:6px 0 0 20px}
+  li{margin-bottom:7px;font-size:14.5px;color:#33475B}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:620px){.grid2{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line)}
+  th{background:#F0F4FA;font-weight:700;font-size:12.5px}
+  tr:last-child td{border-bottom:none}
+
+  .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .btns a{background:var(--blue);color:#fff;text-decoration:none;padding:12px 22px;min-height:44px;display:inline-flex;align-items:center;border-radius:999px;font-size:14px;font-weight:700}
+  .btns a.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+  footer{background:var(--navy);color:#B9CDE6;padding:34px 0;font-size:13.5px;text-align:center}
+
+  [data-en]{display:none}
+  body.en [data-id]{display:none}
+  body.en [data-en]{display:block}
+  body.en .inln[data-en]{display:inline}
+  body.en li[data-id]{display:none}
+  li[data-en]{display:none}
+  body.en li[data-en]{display:list-item}
+  @media(max-width:680px){h1{font-size:26px}.hero{padding:44px 0 38px}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="topbar">
+      <a class="back" href="index.html">&larr; <span class="inln" data-id>Kembali ke portofolio</span><span class="inln" data-en>Back to portfolio</span></a>
+      <div class="toggle">
+        <button id="bID" class="active" type="button">ID</button>
+        <button id="bEN" type="button">EN</button>
+      </div>
+    </div>
+    <div class="eyebrow"><span class="inln" data-id>STUDI KASUS</span><span class="inln" data-en>CASE STUDY</span></div>
+    <h1><span data-id>Dari target yang ditebak ke target yang bisa dipertanggungjawabkan</span><span data-en>From a guessed target to a defensible one</span></h1>
+    <p class="intro"><span data-id>Bagaimana target GMV bulanan berubah dari insting musiman menjadi angka yang bisa diadu, dipakai manajemen, dan dikalibrasi dengan kondisi stok di lapangan.</span><span data-en>How the monthly GMV target went from seasonal intuition to a figure that can be contested, used by management, and calibrated against stock conditions on the ground.</span></p>
+    <div class="demo-note">
+      <span data-id>Angka pada demo publik bersifat ilustratif, bukan data perusahaan. Yang ditunjukkan di sini adalah cara berpikir dan sistemnya.</span>
+      <span data-en>Figures in the public demo are illustrative, not company data. What is shown here is the thinking and the system.</span>
+    </div>
+  </div>
+</header>
+
+<section><div class="wrap"><span class="lbl"><span class="inln" data-id>Masalah bisnis</span><span class="inln" data-en>Business problem</span></span><h2><span data-id>Target yang ditebak</span><span data-en>A target that was guessed</span></h2><div class="box"><p data-id>Dulu target GMV bulanan ditentukan dari insting musiman. Tim tahu polanya: saat musim masuk sekolah belanja bergeser ke kebutuhan sekolah dan penjualan sepeda turun, lalu bulan berikutnya pulih. Dari situ target dinaikkan sekian persen, tanpa dihitung dari GMV periode sebelumnya sebagai dasar.</p><p data-en>Monthly GMV targets used to be set from seasonal intuition. The team knew the pattern: in the back-to-school season spending shifts to school needs and bike sales drop, then recover the next month. The target was then bumped up by some percent, without being computed from the prior period's GMV as a basis.</p><p data-id>Arahnya sering benar, tapi angkanya menebak. Dan target yang menebak susah dipertanggungjawabkan saat ditanya kenapa segitu.</p><p data-en>The direction was often right, but the number was a guess. A guessed target is hard to defend when someone asks why it is that figure.</p></div></div></section>
+<section><div class="wrap"><span class="lbl"><span class="inln" data-id>Keputusan yang dijawab</span><span class="inln" data-en>The decision it answers</span></span><h2><span data-id>Siapa yang pakai angka ini</span><span data-en>Who uses this number</span></h2><div class="box"><p data-id>Target GMV jadi patokan untuk tiap kepala toko: berapa yang harus dikejar bulan ini. Dari satu angka itu manajemen otomatis menimbang dua hal berikutnya: stoknya cukup atau tidak untuk mengejar target, dan campaign marketplace mana yang harus diikuti agar tercapai.</p><p data-en>The GMV target becomes the benchmark for each store head: how much to chase this month. From that single number, management weighs two follow-on questions: is stock enough to reach it, and which marketplace campaigns to join to get there.</p><p data-id>Jadi satu angka target menyentuh keputusan stok dan keputusan promosi sekaligus, bukan sekadar isi laporan.</p><p data-en>So one target number touches both the stock decision and the promotion decision, not just a line in a report.</p></div></div></section>
+<section><div class="wrap"><span class="lbl"><span class="inln" data-id>Pendekatan</span><span class="inln" data-en>Approach</span></span><h2><span data-id>Angka yang bisa diadu</span><span data-en>A number that can be contested</span></h2><div class="box"><p data-id>Untuk tiap marketplace, 22 model kandidat diadu, dari baseline paling sederhana sampai keluarga Holt dan Theta. Pemenang dipilih murni dari MAPE terkecil lintas seluruh fold backtest. Kalau model sederhana seperti moving average justru paling akurat, itu yang dipakai. Model yang rumit belum tentu menang.</p><p data-en>For each marketplace, 22 candidate models are run, from the simplest baseline to the Holt and Theta families. The winner is chosen purely by the smallest MAPE across all backtest folds. If a simple model like moving average is the most accurate, that is what gets used. A complex model does not necessarily win.</p></div><div class="box"><h3><span class="inln" data-id>Kenapa MAPE, bukan RMSE</span><span class="inln" data-en>Why MAPE, not RMSE</span></h3><p data-id>MAPE dipilih karena berbentuk persen, jadi kebaca oleh manajemen yang non-teknis dan bisa dibandingkan antar toko yang skalanya jauh berbeda. RMSE menempel ke angka absolut: error 200 juta pada GMV 5 miliar tidak informatif saat GMV-nya 3 miliar.</p><p data-en>MAPE is chosen because it is a percentage, so non-technical management can read it and it is comparable across stores of very different sizes. RMSE sticks to absolute figures: a 200-million error on 5-billion GMV is not informative when GMV is 3 billion.</p></div><p style="font-size:14px;color:var(--muted)"><span data-id>Rincian lengkap mesinnya ada di halaman metodologi.</span><span data-en>The full engine detail is on the methodology page.</span></p></div></section>
+<section><div class="wrap"><span class="lbl"><span class="inln" data-id>Hasil dan bukti</span><span class="inln" data-en>Result and evidence</span></span><h2><span data-id>Cara membaca akurasinya</span><span data-en>How to read the accuracy</span></h2><div class="box"><p data-id>Pada satu bulan contoh, target yang ditetapkan sekitar Rp 4,6 M dan realisasinya sekitar Rp 4,5 M, dengan MAPE sekitar 9%. Selisih setipis itu memberi titik acuan bahwa angkanya sejalan dengan keadaan data dan kapasitas stok.</p><p data-en>In one example month, the target set was about Rp 4.6 B and the actual came in around Rp 4.5 B, with MAPE around 9%. A gap that small gives a reference point that the figure is in line with the data and stock capacity.</p></div><div class="scroll"><table><thead><tr><th>MAPE</th><th><span class="inln" data-id>Pembacaan</span><span class="inln" data-en>Reading</span></th></tr></thead><tbody><tr><td>&lt; 10%</td><td><span class="inln" data-id>Sangat akurat</span><span class="inln" data-en>Very accurate</span></td></tr><tr><td>10 - 15%</td><td><span class="inln" data-id>Cukup akurat</span><span class="inln" data-en>Fairly accurate</span></td></tr><tr><td>15 - 20%</td><td><span class="inln" data-id>Perlu dipertimbangkan</span><span class="inln" data-en>Needs consideration</span></td></tr><tr><td>&gt; 20%</td><td><span class="inln" data-id>Tidak dipakai, terlalu berisiko</span><span class="inln" data-en>Not used, too risky</span></td></tr></tbody></table></div><div class="box"><p data-id>Tidak semua kanal sama. Shopee biasanya di bawah 10%. TikTok hampir selalu di atas 10% dan bisa lewat 15%, karena penjualannya digerakkan konten (video, live, affiliate), bukan niat beli langsung seperti marketplace murni. Untuk kanal yang liar, kadang GMV tiga marketplace digabung agar deretnya lebih stabil, bukan dengan mengubah angka, tapi lewat agregasi.</p><p data-en>Not every channel is equal. Shopee is usually below 10%. TikTok is almost always above 10% and can exceed 15%, because its sales are content-driven (video, live, affiliate), not direct purchase intent like a pure marketplace. For a volatile channel, the three marketplaces' GMV is sometimes combined to stabilise the series, not by changing numbers but through aggregation.</p></div></div></section>
+<section><div class="wrap"><span class="lbl"><span class="inln" data-id>Dampak</span><span class="inln" data-en>Impact</span></span><h2><span data-id>Dari angka ke tindakan</span><span data-en>From number to action</span></h2><div class="box"><p data-id>Pada satu bulan, minggu pertama GMV jatuh jauh di bawah laju harian (dipantau dari GMV sebulan dibagi jumlah hari). Penyebabnya dicek langsung, ternyata stok produk kunci kosong. Rekomendasinya: percepat kedatangan stok lewat jalur dept head, agar perolehan akhir bulan tidak jauh dari target.</p><p data-en>In one month, the first week's GMV fell well below the daily run rate (monitored as monthly GMV divided by the number of days). The cause was checked directly: a key product was out of stock. The recommendation: speed up the restock through the dept head, so the month-end result would not drift far from target.</p></div><div class="box"><p data-id>Sejak metode ini terbukti, manajemen bergeser dari menebak ke memakai forecasting untuk menetapkan target bulan depan, dengan kalibrasi manusia: bila stok bulan depan diperkirakan tipis, target diturunkan sesuai kondisi lapangan. Sistemnya jadi titik awal keputusan, bukan kotak hitam yang dipercaya buta.</p><p data-en>Since the method proved itself, management shifted from guessing to using the forecast to set next month's target, with human calibration: if next month's stock looks thin, the target is lowered to match field conditions. The system is a starting point for the decision, not a black box trusted blindly.</p></div></div></section>
+<section><div class="wrap"><span class="lbl"><span class="inln" data-id>Keterbatasan</span><span class="inln" data-en>Limitations</span></span><h2><span data-id>Kapan angkanya tidak boleh dipercaya</span><span data-en>When the number should not be trusted</span></h2><div class="box limit"><h3><span class="inln" data-id>Batas yang diakui terbuka</span><span class="inln" data-en>Limits stated openly</span></h3><ul><li data-id>Kalau riwayat datanya terlalu pendek, forecasting tidak dipaksakan. Lebih aman memakai pendekatan growth dulu sampai periodenya cukup panjang untuk diuji.</li><li data-en>If the data history is too short, forecasting is not forced. It is safer to use a growth approach first until the period is long enough to be tested.</li><li data-id>Faktor musiman besar seperti masa sekolah, puasa, dan Lebaran berada di luar kendali model dan harus dibaca bersama konteksnya.</li><li data-en>Large seasonal factors such as the school season, the fasting month, and Lebaran sit outside the model's control and must be read alongside their context.</li><li data-id>Ketersediaan stok, campaign dadakan, dan belanja iklan tidak menjadi variabel penjelas. Forecast membaca hasil penjualan, bukan penyebabnya.</li><li data-en>Stock availability, sudden campaigns, and ad spend are not explanatory variables. The forecast reads the sales outcome, not its cause.</li><li data-id>Forecasting yang tiba-tiba terlihat sempurna justru dicurigai. Dalam analisis data, kesalahan selalu ada, dan angka yang mulus biasanya berarti datanya memang mudah, bukan modelnya hebat.</li><li data-en>A forecast that suddenly looks perfect is treated with suspicion. In data analysis, error is always present, and a smooth number usually means the data was easy, not that the model was brilliant.</li></ul></div></div></section>
+
+<section style="border-bottom:none">
+  <div class="wrap">
+    <div class="btns">
+      <a href="forecasting-dashboard.html"><span class="inln" data-id>Buka dashboard demo</span><span class="inln" data-en>Open the demo dashboard</span></a><a class="ghost" href="metodologi-forecasting.html"><span class="inln" data-id>Metodologi lengkap</span><span class="inln" data-en>Full methodology</span></a>
+      <a class="ghost" href="index.html"><span class="inln" data-id>Kembali ke portofolio</span><span class="inln" data-en>Back to portfolio</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span data-id>Sistem dan metodologi dirancang oleh Diar Azari. Angka pada demo bersifat ilustratif, bukan data perusahaan.</span>
+    <span data-en>System and methodology designed by Diar Azari. Figures in the demo are illustrative, not company data.</span>
+  </div>
+</footer>
+
+<script>
+function setLang(l){
+  document.body.classList.toggle('en', l==='en');
+  document.getElementById('bID').classList.toggle('active', l==='id');
+  document.getElementById('bEN').classList.toggle('active', l==='en');
+  document.documentElement.lang = l;
+}
+document.getElementById('bID').addEventListener('click',function(){setLang('id');});
+document.getElementById('bEN').addEventListener('click',function(){setLang('en');});
+</script>
+
+<style>
+.hero>.stars{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.tw{transform-box:fill-box;transform-origin:center;animation:tw var(--dur) ease-in-out infinite both;animation-delay:var(--dly)}
+@keyframes tw{0%{opacity:.08;transform:scale(.5)}40%{opacity:.95;transform:scale(1)}62%{opacity:.22;transform:scale(.66)}80%{opacity:.7;transform:scale(.92)}100%{opacity:.08;transform:scale(.5)}}
+@media (prefers-reduced-motion:reduce){.tw{animation:none;opacity:.6;transform:scale(.85)}}
+</style>
+<script>
+(function(){
+function __rnd(seed){return function(){seed=(seed*1664525+1013904223)%4294967296;return seed/4294967296;};}
+function __spark(s){var a=(s*0.2).toFixed(1),h=(s*0.11).toFixed(1);
+ return 'M0,-'+s+' C'+h+',-'+a+' '+a+',-'+h+' '+s+',0 C'+a+','+h+' '+h+','+a+' 0,'+s+' C-'+h+','+a+' -'+a+','+h+' -'+s+',0 C-'+a+',-'+h+' -'+h+',-'+a+' 0,-'+s+' Z';}
+function __starSvg(n,seed,W,H,id){var r=__rnd(seed),p='';
+ for(var i=0;i<n;i++){var x=(r()*W).toFixed(1),y=(r()*H).toFixed(1),dur=(6+r()*6).toFixed(2),dly=(r()*9).toFixed(2);
+  var inner=r()<0.38?'<path d="'+__spark((2.4+r()*2.4).toFixed(1))+'" fill="#fff"/>':'<circle r="'+(0.6+r()*0.8).toFixed(2)+'" fill="#fff"/>';
+  p+='<g transform="translate('+x+' '+y+')"><g class="tw" style="--dur:'+dur+'s;--dly:'+dly+'s">'+inner+'</g></g>';}
+ return '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="width:100%;height:100%">'+
+  '<defs><filter id="'+id+'" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="0.8" result="b"/>'+
+  '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'+
+  '<g filter="url(#'+id+')" opacity=".85">'+p+'</g></svg>';}
+var h=document.querySelector('.hero');
+if(h) h.insertAdjacentHTML('afterbegin','<div class="stars" aria-hidden="true">'+__starSvg(22,772026,1200,420,'herog')+'</div>');
+})();
+</script>
+</body>
+</html>

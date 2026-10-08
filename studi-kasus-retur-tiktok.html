@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studi Kasus: Rekonsiliasi Retur TikTok - Diar Azari</title>
+<meta name="description" content="Studi kasus alat rekonsiliasi retur TikTok Shop: dari rekap manual menjadi laporan siap pakai.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>&#128200;</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#04080F;--navy2:#0B2240;--blue:#3B82F6;--blue-soft:#60A5FA;
+    --ink:#1A2B3C;--muted:#5B6B7B;--line:#E3E9F0;--bg:#F6F8FB;--card:#FFFFFF;--warn:#B45309;--warn-bg:#FEF6E7;
+    --good:#15803D;--good-bg:#E8F6EE}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px}
+  a{color:var(--blue)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:8px}
+
+  .hero{background:linear-gradient(160deg,var(--navy),var(--navy2));color:#EAF2FB;padding:54px 0 46px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-120px;top:-120px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.35),transparent 70%);pointer-events:none;z-index:0}
+  .hero .wrap{position:relative;z-index:2}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:34px;flex-wrap:wrap}
+  .back{color:#C6D6EA;text-decoration:none;font-size:13.5px;font-weight:700}
+  .toggle{display:flex;gap:4px;background:rgba(255,255,255,.08);padding:4px;border-radius:999px;border:1px solid rgba(255,255,255,.15)}
+  .toggle button{background:none;border:none;color:#cfe0f5;padding:9px 18px;min-height:44px;border-radius:999px;cursor:pointer;font-size:14px;font-weight:700;font-family:inherit;display:flex;align-items:center}
+  .toggle button.active{background:var(--blue);color:#fff}
+  .eyebrow{color:var(--blue-soft);font-weight:800;font-size:12.5px;letter-spacing:1.2px;margin-bottom:10px}
+  h1{font-size:34px;line-height:1.15;font-weight:800;letter-spacing:-.02em;margin-bottom:14px}
+  .hero p.intro{color:#C6D6EA;font-size:16px;max-width:640px}
+  .demo-note{margin-top:20px;display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:10px 15px;font-size:13px;color:#D7E5F5}
+
+  section{padding:42px 0;border-bottom:1px solid var(--line)}
+  .lbl{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:1px;color:var(--blue);background:#EAF2FF;padding:5px 11px;border-radius:999px;margin-bottom:12px}
+  h2{font-size:23px;letter-spacing:-.01em;margin-bottom:10px}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:14px;box-shadow:0 1px 2px rgba(16,42,71,.04)}
+  .box p{margin-bottom:12px}.box p:last-child{margin-bottom:0}
+  .box h3{font-size:15.5px;margin:0 0 8px}
+  .good{background:var(--good-bg);border:1px solid #BFE4CC}.good h3{color:var(--good)}
+  .limit{background:var(--warn-bg);border:1px solid #F2DFB8}.limit h3{color:var(--warn)}
+  ul{margin:6px 0 0 20px}
+  li{margin-bottom:7px;font-size:14.5px;color:#33475B}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:620px){.grid2{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line)}
+  th{background:#F0F4FA;font-weight:700;font-size:12.5px}
+  tr:last-child td{border-bottom:none}
+
+  .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .btns a{background:var(--blue);color:#fff;text-decoration:none;padding:12px 22px;min-height:44px;display:inline-flex;align-items:center;border-radius:999px;font-size:14px;font-weight:700}
+  .btns a.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+  footer{background:var(--navy);color:#B9CDE6;padding:34px 0;font-size:13.5px;text-align:center}
+
+  [data-en]{display:none}
+  body.en [data-id]{display:none}
+  body.en [data-en]{display:block}
+  body.en .inln[data-en]{display:inline}
+  body.en li[data-id]{display:none}
+  li[data-en]{display:none}
+  body.en li[data-en]{display:list-item}
+  @media(max-width:680px){h1{font-size:26px}.hero{padding:44px 0 38px}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="topbar">
+      <a class="back" href="index.html">&larr; <span class="inln" data-id>Kembali ke portofolio</span><span class="inln" data-en>Back to portfolio</span></a>
+      <div class="toggle">
+        <button id="bID" class="active" type="button">ID</button>
+        <button id="bEN" type="button">EN</button>
+      </div>
+    </div>
+    <div class="eyebrow"><span class="inln" data-id>STUDI KASUS</span><span class="inln" data-en>CASE STUDY</span></div>
+    <h1><span data-id>Menahan kerugian retur yang sebenarnya tidak perlu</span><span data-en>Stopping return losses that should never happen</span></h1>
+    <p class="intro"><span data-id>Bagaimana rekap retur TikTok Shop yang makan 15 menit per toko berubah menjadi laporan seketika, dan bagaimana laporan itu mendorong keputusan mengejar barang yang belum kembali.</span><span data-en>How a TikTok Shop returns recap that took 15 minutes per store becomes an instant report, and how that report drives the decision to chase goods that have not come back.</span></p>
+    <div class="demo-note">
+      <span data-id>Angka pada demo publik bersifat ilustratif, bukan data perusahaan. Yang ditunjukkan di sini adalah cara berpikir dan sistemnya.</span>
+      <span data-en>Figures in the public demo are illustrative, not company data. What is shown here is the thinking and the system.</span>
+    </div>
+  </div>
+</header>
+
+<section><div class="wrap"><span class="lbl"><span class="inln" data-id>Masalah bisnis</span><span class="inln" data-en>Business problem</span></span><h2><span data-id>Rekap retur yang makan waktu</span><span data-en>A returns recap that ate time</span></h2><div class="box"><p data-id>Menghitung nilai barang retur dari ekspor TikTok Shop dulu sepenuhnya manual: unduh raw data, gabungkan, bersihkan, lalu cocokkan SKU induk dan SKU varian dengan rumus tambahan. Datanya besar dan laptop admin berspesifikasi rendah, sehingga loading dan proses lambat.</p><p data-en>Computing returned-item value from TikTok Shop exports used to be fully manual: download raw data, merge, clean, then match parent and variant SKUs with extra formulas. The data was large and admin laptops low-spec, so loading and processing were slow.</p><p data-id>TikTok relatif lebih mudah karena raw datanya tergabung untuk seluruh tanggal dalam satu unduhan.</p><p data-en>TikTok is relatively easier because its raw data comes combined for all dates in a single download.</p><p data-id>Mengolah satu toko satu marketplace memakan sekitar 15 menit. Dengan enam toko di dua marketplace, waktunya habis untuk pekerjaan yang tidak efektif.</p><p data-en>Processing one store on one marketplace took about 15 minutes. With six stores across two marketplaces, time drained into ineffective work.</p></div></div></section>
+<section><div class="wrap"><span class="lbl"><span class="inln" data-id>Pendekatan</span><span class="inln" data-en>Approach</span></span><h2><span data-id>Dua file, satu laporan</span><span data-en>Two files, one report</span></h2><div class="box"><p data-id>Alat ini mengolah dua file ekspor langsung di browser menjadi laporan retur siap unduh. Ada data contoh, jadi alatnya bisa langsung dicoba tanpa file asli. Pekerjaan 15 menit yang berulang berubah menjadi hampir seketika.</p><p data-en>The tool processes two export files directly in the browser into a ready-to-download returns report. Sample data is included, so it can be tried right away without real files. The repeated 15-minute task becomes almost instant.</p></div></div></section>
+<section><div class="wrap"><span class="lbl"><span class="inln" data-id>Keputusan yang dijawab</span><span class="inln" data-en>The decision it answers</span></span><h2><span data-id>Barang balik sampai mana, dan uang mana yang nyangkut</span><span data-en>Where the goods are, and which money is stuck</span></h2><div class="box"><p data-id>Laporan menunjukkan posisi paket retur: sudah kembali ke kita atau ke gudang atau belum, dan berapa nilai yang belum kembali. Dept head membaca lebih dulu dan melihat nilai retur yang masih tertahan, lalu tim admin mendorongnya ke jasa kirim yang bersangkutan.</p><p data-en>The report shows the return package's position: whether it is back with us or the warehouse yet, and how much value has not returned. The dept head reads it first and sees the value still held, then the admin team pushes it to the relevant courier.</p><p data-id>Keputusannya jelas: kejar retur yang belum kembali. Retur yang tidak didorong sering tidak sampai, dan kerugian itu ditanggung perusahaan sendiri.</p><p data-en>The decision is clear: chase the returns that have not come back. Returns that are not pushed often never arrive, and that loss is borne by the company itself.</p></div></div></section>
+<section><div class="wrap"><span class="lbl"><span class="inln" data-id>Keterbatasan</span><span class="inln" data-en>Limitations</span></span><h2><span data-id>Yang tetap perlu tangan manusia</span><span data-en>What still needs a human hand</span></h2><div class="box limit"><h3><span class="inln" data-id>Batasnya</span><span class="inln" data-en>Its limits</span></h3><ul><li data-id>Barang yang kembali belum tentu bisa dijual lagi. Perkiraannya sekitar separuh, karena kardus bisa sobek atau lecet, sehingga kelayakan jual ulang tetap perlu cek fisik.</li><li data-en>Returned goods cannot always be resold. Roughly half, since boxes can tear or scuff, so resale fitness still needs a physical check.</li><li data-id>Alat ini menghitung dan menyoroti nilai yang nyangkut. Penagihan ke jasa kirim tetap dilakukan manual oleh tim admin.</li><li data-en>The tool computes and highlights the stuck value. Chasing the courier is still done manually by the admin team.</li></ul></div></div></section>
+
+<section style="border-bottom:none">
+  <div class="wrap">
+    <div class="btns">
+      <a href="tiktok-pengembalian.html"><span class="inln" data-id>Buka alat demo</span><span class="inln" data-en>Open the demo tool</span></a>
+      <a class="ghost" href="index.html"><span class="inln" data-id>Kembali ke portofolio</span><span class="inln" data-en>Back to portfolio</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span data-id>Sistem dan metodologi dirancang oleh Diar Azari. Angka pada demo bersifat ilustratif, bukan data perusahaan.</span>
+    <span data-en>System and methodology designed by Diar Azari. Figures in the demo are illustrative, not company data.</span>
+  </div>
+</footer>
+
+<script>
+function setLang(l){
+  document.body.classList.toggle('en', l==='en');
+  document.getElementById('bID').classList.toggle('active', l==='id');
+  document.getElementById('bEN').classList.toggle('active', l==='en');
+  document.documentElement.lang = l;
+}
+document.getElementById('bID').addEventListener('click',function(){setLang('id');});
+document.getElementById('bEN').addEventListener('click',function(){setLang('en');});
+</script>
+
+<style>
+.hero>.stars{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.tw{transform-box:fill-box;transform-origin:center;animation:tw var(--dur) ease-in-out infinite both;animation-delay:var(--dly)}
+@keyframes tw{0%{opacity:.08;transform:scale(.5)}40%{opacity:.95;transform:scale(1)}62%{opacity:.22;transform:scale(.66)}80%{opacity:.7;transform:scale(.92)}100%{opacity:.08;transform:scale(.5)}}
+@media (prefers-reduced-motion:reduce){.tw{animation:none;opacity:.6;transform:scale(.85)}}
+</style>
+<script>
+(function(){
+function __rnd(seed){return function(){seed=(seed*1664525+1013904223)%4294967296;return seed/4294967296;};}
+function __spark(s){var a=(s*0.2).toFixed(1),h=(s*0.11).toFixed(1);
+ return 'M0,-'+s+' C'+h+',-'+a+' '+a+',-'+h+' '+s+',0 C'+a+','+h+' '+h+','+a+' 0,'+s+' C-'+h+','+a+' -'+a+','+h+' -'+s+',0 C-'+a+',-'+h+' -'+h+',-'+a+' 0,-'+s+' Z';}
+function __starSvg(n,seed,W,H,id){var r=__rnd(seed),p='';
+ for(var i=0;i<n;i++){var x=(r()*W).toFixed(1),y=(r()*H).toFixed(1),dur=(6+r()*6).toFixed(2),dly=(r()*9).toFixed(2);
+  var inner=r()<0.38?'<path d="'+__spark((2.4+r()*2.4).toFixed(1))+'" fill="#fff"/>':'<circle r="'+(0.6+r()*0.8).toFixed(2)+'" fill="#fff"/>';
+  p+='<g transform="translate('+x+' '+y+')"><g class="tw" style="--dur:'+dur+'s;--dly:'+dly+'s">'+inner+'</g></g>';}
+ return '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="width:100%;height:100%">'+
+  '<defs><filter id="'+id+'" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="0.8" result="b"/>'+
+  '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'+
+  '<g filter="url(#'+id+')" opacity=".85">'+p+'</g></svg>';}
+var h=document.querySelector('.hero');
+if(h) h.insertAdjacentHTML('afterbegin','<div class="stars" aria-hidden="true">'+__starSvg(22,772026,1200,420,'herog')+'</div>');
+})();
+</script>
+</body>
+</html>
