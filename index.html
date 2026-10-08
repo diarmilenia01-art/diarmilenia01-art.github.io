@@ -81,12 +81,13 @@
 
   /* ---------- pita angka ---------- */
   .figures{background:#04080F;padding:6px 0 64px}
-  .figrow{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #15283C}
+  .figrow{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #15283C}
   .figrow > div{padding:26px 20px;border-right:1px solid #15283C}
   .figrow > div:last-child{border-right:0}
   .figrow b{display:block;font-size:clamp(26px,3.4vw,40px);font-weight:600;letter-spacing:-.025em;color:#fff;line-height:1}
   .figrow .lbl{display:block;margin-top:9px;font-size:13px;color:#8FA6BC}
   .figrow em{display:block;margin-top:6px;font-style:normal;font-size:12px;color:#E89B5F}
+  .fignote{margin-top:16px;font-size:12.5px;color:#6F86A3}
   @media(max-width:720px){.figrow{grid-template-columns:repeat(2,1fr)}.figrow > div{border-bottom:1px solid #15283C}}
 
   /* ---------- bagian terang ---------- */
@@ -194,10 +195,11 @@
 <div class="figures cosmos" data-stars="20">
   <div class="wrap"><div class="figrow">
     <div><b>9,1%</b><span class="lbl"><span data-id>Backtest MAPE, tertimbang 3 marketplace</span><span data-en>Backtest MAPE, weighted across 3 marketplaces</span></span><em><span data-id>seluruh fold rolling-origin, makin kecil makin baik</span><span data-en>all rolling-origin folds, lower is better</span></em></div>
-    <div><b><span data-id>5.916</span><span data-en>5,916</span></b><span class="lbl"><span data-id>produk terpantau harga dan HPP</span><span data-en>products tracked for price and COGS</span></span><em><span data-id>184 bermargin tipis perlu ditinjau</span><span data-en>184 thin-margin items flagged for review</span></em></div>
-    <div><b>20x</b><span class="lbl"><span data-id>bias ranking produk murah, ditemukan dan diperbaiki</span><span data-en>low-price ranking bias, found and fixed</span></span></div>
+    <div><b><span data-id>5.916</span><span data-en>5,916</span></b><span class="lbl"><span data-id>produk terpantau harga dan HPP</span><span data-en>products tracked for price and COGS</span></span><em><span data-id>yang bermargin tipis otomatis masuk daftar tinjau</span><span data-en>thin-margin items are flagged for review automatically</span></em></div>
     <div><b>22</b><span class="lbl"><span data-id>model dibandingkan tiap siklus</span><span data-en>models compared each cycle</span></span><em><span data-id>yang tak mengalahkan baseline tak dipakai</span><span data-en>none used unless it beats the baseline</span></em></div>
-  </div></div>
+  </div>
+  <p class="fignote"><span data-id>Angka di atas adalah skala pekerjaan nyata. Seluruh demo proyek di bawah memakai data dummy.</span><span data-en>The figures above reflect real work at real scale. Every project demo below runs on dummy data.</span></p>
+  </div>
 </div>
 
 <section>
@@ -228,8 +230,8 @@
         <li data-en>GMV forecasting system across three marketplaces, 9.1% backtest MAPE (weighted, all folds), rolling-origin CV over 22 candidate models with bias correction.</li>
         <li data-id>Pipeline procurement "Lifetime Monitoring" 8 tahap yang menghasilkan rekomendasi reorder per SKU dan PO siap kirim.</li>
         <li data-en>8-stage "Lifetime Monitoring" procurement pipeline producing per-SKU reorder recommendations and ready-to-send POs.</li>
-        <li data-id>Memperbaiki bias ranking yang membuat produk murah 20x lebih mungkin salah dinilai sebagai top performer.</li>
-        <li data-en>Fixed a ranking bias that made low-price products 20x more likely to be misranked as top performers.</li>
+        <li data-id>Memperbaiki bias ranking yang membuat produk murah sekitar 20x lebih mungkin salah dinilai sebagai top performer.</li>
+        <li data-en>Fixed a ranking bias that made low-price products roughly 20x more likely to be misranked as top performers.</li>
         <li data-id>Dashboard harga serta HPP mencakup 5.916 produk di dua toko, plus tracker 194 PO lintas tiga mata uang.</li>
         <li data-en>Pricing and COGS dashboard covering 5,916 products in two stores, plus a 194-PO tracker across three currencies.</li>
       </ul>
