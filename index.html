@@ -47,7 +47,7 @@
     background:linear-gradient(to bottom, rgba(4,8,15,0), #04080F)}
 
   .topbar{position:absolute;top:0;left:0;right:0;z-index:6;
-    display:flex;justify-content:space-between;align-items:center;
+    display:flex;justify-content:flex-end;align-items:center;
     max-width:1120px;margin:0 auto;padding:18px 28px}
   .brand{font-weight:700;letter-spacing:.14em;font-size:14px;color:#DCE8F5}
   .toggle{display:flex;gap:4px;background:rgba(255,255,255,.07);padding:4px;border-radius:999px;border:1px solid rgba(255,255,255,.16)}
@@ -178,7 +178,6 @@
   </svg>
   <div class="veil"></div>
   <div class="topbar">
-    <div class="brand">DIAR AZARI</div>
     <div class="toggle" role="group" aria-label="Bahasa">
       <button id="bID" class="active" type="button">ID</button>
       <button id="bEN" type="button">EN</button>
@@ -188,10 +187,6 @@
     <b>DIAR AZARI</b>
     <span class="role">DATA ANALYST</span>
     <span class="pos"><span data-id>Saya mengubah data operasional dan marketplace menjadi sistem untuk forecasting, harga, procurement, dan keputusan bisnis.</span><span data-en>I turn operational and marketplace data into systems for forecasting, pricing, procurement, and business decisions.</span></span>
-    <span class="note">
-      <span data-id>Garis bergerigi yang bercahaya di belakang ini bukan pemandangan. Itu <i>GMV harian tiga marketplace</i>, dan garis putus-putus yang memanjang ke kanan adalah ramalan bulan depan.</span>
-      <span data-en>The glowing jagged line behind this is not scenery. It is <i>daily GMV across three marketplaces</i>, and the dashed line reaching right is next month's forecast.</span>
-    </span>
   </div>
   <div class="fade"></div>
 </header>
@@ -210,6 +205,8 @@
     <h2><span data-id>Tentang</span><span data-en>About</span></h2>
     <p class="lead"><span data-id>Latar Matematika, minor Statistika.</span><span data-en>Mathematics degree, minor in Statistics.</span></p>
     <div class="body">
+      <p data-id>Garis bergerigi yang bercahaya di hero itu bukan pemandangan. Itu GMV harian tiga marketplace, dan garis putus-putus yang memanjang ke kanan adalah ramalan bulan depan.</p>
+      <p data-en>The glowing jagged line in the hero is not scenery. It is daily GMV across three marketplaces, and the dashed line reaching right is next month's forecast.</p>
       <p data-id>Saya membangun sistem data yang dipakai perusahaan sehari-hari: menetapkan target penjualan, memutuskan kapan barang harus dipesan ulang, dan menjaga harga tetap masuk akal terhadap biayanya.</p>
       <p data-en>I build the data systems a company runs on day to day: setting sales targets, deciding when stock should be reordered, and keeping prices sensible against their costs.</p>
       <p data-id>Setiap sistem dirancang untuk menjawab satu keputusan tertentu: forecast, reorder, klasifikasi, rekonsiliasi, atau harga. Yang saya tentukan bukan hanya hasilnya, tapi cara hasil itu sampai, supaya angkanya tetap berdiri saat dipertanyakan.</p>
