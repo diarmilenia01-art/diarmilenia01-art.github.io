@@ -123,6 +123,10 @@
 
   .duo{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.5fr);gap:clamp(22px,4vw,54px);align-items:center}
   @media(max-width:760px){.duo{grid-template-columns:1fr;gap:26px}}
+  .stage .demo{position:absolute;top:16px;right:18px;z-index:2;font-size:10.5px;letter-spacing:.08em;font-weight:600;
+    color:#8EA3BC;border:1px solid var(--n-line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+  .fig .dec{font-size:12.5px;font-weight:600;color:#8CCBF2;margin-bottom:10px;max-width:40ch}
+  .fig .contrib{font-size:12px;color:#6F86A3;margin-top:14px;max-width:46ch}
   .fig .lab{font-size:12.5px;color:var(--n-mut)}
   .fig .num{font-size:clamp(36px,5.6vw,60px);font-weight:600;letter-spacing:-.035em;line-height:1;margin:7px 0 10px}
   .fig .note{font-size:13.5px;color:var(--n-mut);max-width:38ch}
@@ -191,10 +195,10 @@
 
 <div class="figures cosmos" data-stars="20">
   <div class="wrap"><div class="figrow">
-    <div><b>9,1%</b><span class="lbl"><span data-id>galat rata-rata ramalan</span><span data-en>average forecast error</span></span><em><span data-id>makin kecil makin baik</span><span data-en>lower is better</span></em></div>
-    <div><b><span data-id>5.916</span><span data-en>5,916</span></b><span class="lbl"><span data-id>produk terpantau harga dan HPP</span><span data-en>products tracked for price and COGS</span></span></div>
-    <div><b>194</b><span class="lbl"><span data-id>purchase order, tiga mata uang</span><span data-en>purchase orders, three currencies</span></span></div>
-    <div><b>22</b><span class="lbl"><span data-id>model dibandingkan tiap siklus</span><span data-en>models compared each cycle</span></span></div>
+    <div><b>9,1%</b><span class="lbl"><span data-id>Backtest MAPE, tertimbang 3 marketplace</span><span data-en>Backtest MAPE, weighted across 3 marketplaces</span></span><em><span data-id>seluruh fold rolling-origin, makin kecil makin baik</span><span data-en>all rolling-origin folds, lower is better</span></em></div>
+    <div><b><span data-id>5.916</span><span data-en>5,916</span></b><span class="lbl"><span data-id>produk terpantau harga dan HPP</span><span data-en>products tracked for price and COGS</span></span><em><span data-id>184 bermargin tipis perlu ditinjau</span><span data-en>184 thin-margin items flagged for review</span></em></div>
+    <div><b>20x</b><span class="lbl"><span data-id>bias ranking produk murah, ditemukan dan diperbaiki</span><span data-en>low-price ranking bias, found and fixed</span></span></div>
+    <div><b>22</b><span class="lbl"><span data-id>model dibandingkan tiap siklus</span><span data-en>models compared each cycle</span></span><em><span data-id>yang tak mengalahkan baseline tak dipakai</span><span data-en>none used unless it beats the baseline</span></em></div>
   </div></div>
 </div>
 
@@ -220,8 +224,8 @@
       <div class="when">Apr 2026, <span data-id>sekarang</span><span data-en>present</span></div>
       <h3>Data Analyst</h3><div class="org">Rockbros Cycling Indonesia</div>
       <ul>
-        <li data-id>Sistem forecasting GMV tiga marketplace, galat rata-rata 9,1%, rolling-origin CV pada 22 kandidat model dengan koreksi bias.</li>
-        <li data-en>GMV forecasting system across three marketplaces, 9.1% average error, rolling-origin CV over 22 candidate models with bias correction.</li>
+        <li data-id>Sistem forecasting GMV tiga marketplace, Backtest MAPE 9,1% (tertimbang, seluruh fold), rolling-origin CV pada 22 kandidat model dengan koreksi bias.</li>
+        <li data-en>GMV forecasting system across three marketplaces, 9.1% backtest MAPE (weighted, all folds), rolling-origin CV over 22 candidate models with bias correction.</li>
         <li data-id>Pipeline procurement "Lifetime Monitoring" 8 tahap yang menghasilkan rekomendasi reorder per SKU dan PO siap kirim.</li>
         <li data-en>8-stage "Lifetime Monitoring" procurement pipeline producing per-SKU reorder recommendations and ready-to-send POs.</li>
         <li data-id>Memperbaiki bias ranking yang membuat produk murah 20x lebih mungkin salah dinilai sebagai top performer.</li>
@@ -287,18 +291,21 @@
     </div>
 
     <div class="stage cosmos" data-stars="26">
+      <span class="demo"><span data-id>DEMO · DATA ILUSTRATIF</span><span data-en>DEMO · ILLUSTRATIVE DATA</span></span>
 
       <!-- 1 Forecasting -->
       <div class="pane" id="p1" role="tabpanel" aria-labelledby="t1"><div class="duo">
         <div class="fig">
+          <div class="dec"><span data-id>Keputusan yang dijawab: berapa target bulan depan yang bisa dipertanggungjawabkan?</span><span data-en>Decision answered: how much should next month's target be, defensibly?</span></div>
           <div class="lab"><span data-id>Target Oktober 2026</span><span data-en>October 2026 target</span></div>
           <div class="num">Rp 4,68 M</div>
           <div class="note"><span data-id>Realisasi Rp 4,33 M, tercapai 92,6% pada hari ke-21. Dua tampilan: Owner untuk keputusan, Analis untuk metodologi lengkap.</span><span data-en>Realized Rp 4.33 B, 92.6% reached by day 21. Two views: Owner for decisions, Analyst for the full methodology.</span></div>
           <div class="strip">
-            <div><b>9,1%</b><span><span data-id>galat ramalan</span><span data-en>forecast error</span></span></div>
+            <div><b>9,1%</b><span>Backtest MAPE</span></div>
             <div><b>22</b><span><span data-id>model diadu</span><span data-en>models compared</span></span></div>
             <div><b>3</b><span>marketplace</span></div>
           </div>
+          <div class="contrib"><span data-id>Kontribusi saya: seluruh metodologi, seleksi model, sanity gate, dan koreksi bias saya rancang dan validasi; implementasi lewat Python.</span><span data-en>My contribution: I designed and validated the full methodology, model selection, sanity gate, and bias correction; implemented via Python.</span></div>
           <span class="golinks">
             <a class="go" href="forecasting-dashboard.html" target="_blank" rel="noopener"><span data-id>Buka dashboard</span><span data-en>Open dashboard</span></a>
             <a class="go alt" href="metodologi-forecasting.html" target="_blank" rel="noopener"><span data-id>Lihat metodologi</span><span data-en>View methodology</span></a>
@@ -324,6 +331,7 @@
       <!-- 2 Harga & Margin -->
       <div class="pane" id="p2" role="tabpanel" aria-labelledby="t2" hidden><div class="duo">
         <div class="fig">
+          <div class="dec"><span data-id>Keputusan yang dijawab: produk mana yang harganya perlu ditinjau?</span><span data-en>Decision answered: which products need a pricing review?</span></div>
           <div class="lab"><span data-id>Produk terpantau harga dan HPP</span><span data-en>Products tracked for price and COGS</span></div>
           <div class="num"><span data-id>5.916</span><span data-en>5,916</span></div>
           <div class="note"><span data-id>Satu sumber kebenaran untuk dua toko: HPP, harga jual, margin, dan riwayat perubahan harga. 184 produk bermargin di bawah 15% dan perlu ditinjau.</span><span data-en>One source of truth for two stores: COGS, price, margin, and price-change history. 184 products sit below 15% margin and need review.</span></div>
@@ -332,6 +340,7 @@
             <div><b>2</b><span><span data-id>toko</span><span data-en>stores</span></span></div>
             <div><b>9</b><span><span data-id>kategori</span><span data-en>categories</span></span></div>
           </div>
+          <div class="contrib"><span data-id>Kontribusi saya: struktur satu sumber kebenaran, aturan margin, dan validasi angkanya saya rancang; implementasi lewat Python.</span><span data-en>My contribution: I designed the single-source-of-truth structure, margin rules, and number validation; implemented via Python.</span></div>
           <a class="go" href="rockbros-master.html" target="_blank" rel="noopener"><span data-id>Buka dashboard</span><span data-en>Open dashboard</span></a>
         </div>
         <div>
@@ -359,6 +368,7 @@
       <!-- 3 GMV & Iklan -->
       <div class="pane" id="p3" role="tabpanel" aria-labelledby="t3" hidden><div class="duo">
         <div class="fig">
+          <div class="dec"><span data-id>Keputusan yang dijawab: kanal mana yang layak mendapat budget iklan?</span><span data-en>Decision answered: which channel deserves the ad budget?</span></div>
           <div class="lab"><span data-id>GMV bersih 30 hari</span><span data-en>Net GMV, 30 days</span></div>
           <div class="num">Rp 4,33 M</div>
           <div class="note"><span data-id>Laporan harian empat marketplace disatukan: pencapaian terhadap target, ROAS per kanal, dan performa per produk.</span><span data-en>Daily reports from four marketplaces merged: progress against target, ROAS per channel, and per-product performance.</span></div>
@@ -367,6 +377,7 @@
             <div><b>6,0</b><span><span data-id>ROAS gabungan</span><span data-en>blended ROAS</span></span></div>
             <div><b>125</b><span>SKU</span></div>
           </div>
+          <div class="contrib"><span data-id>Kontribusi saya: definisi metrik dan penyatuan empat format laporan marketplace saya rancang; implementasi lewat Python.</span><span data-en>My contribution: I defined the metrics and the merge of four marketplace report formats; implemented via Python.</span></div>
           <a class="go" href="gmv-iklan.html" target="_blank" rel="noopener"><span data-id>Buka dashboard</span><span data-en>Open dashboard</span></a>
         </div>
         <div>
@@ -389,6 +400,7 @@
       <!-- 4 Pembayaran Supplier -->
       <div class="pane" id="p4" role="tabpanel" aria-labelledby="t4" hidden><div class="duo">
         <div class="fig">
+          <div class="dec"><span data-id>Keputusan yang dijawab: tagihan supplier mana yang jatuh tempo berikutnya?</span><span data-en>Decision answered: which supplier bill is due next?</span></div>
           <div class="lab"><span data-id>PO dipantau pada demo</span><span data-en>POs tracked in the demo</span></div>
           <div class="num">46</div>
           <div class="note"><span data-id>Pembayaran bertermin dan pengiriman lintas supplier dalam RMB, USD, dan IDR, dengan konversi mata uang dan ekspor Excel.</span><span data-en>Staged payments and shipments across suppliers in RMB, USD, and IDR, with currency conversion and Excel export.</span></div>
@@ -397,6 +409,7 @@
             <div><b>38</b><span><span data-id>pembayaran</span><span data-en>payments</span></span></div>
             <div><b>41</b><span><span data-id>pengiriman</span><span data-en>shipments</span></span></div>
           </div>
+          <div class="contrib"><span data-id>Kontribusi saya: alur PO, pembayaran bertermin, dan konversi tiga mata uang saya rancang; implementasi lewat Python.</span><span data-en>My contribution: I designed the PO flow, staged payments, and three-currency conversion; implemented via Python.</span></div>
           <a class="go" href="cycling-payment.html" target="_blank" rel="noopener"><span data-id>Buka dashboard</span><span data-en>Open dashboard</span></a>
         </div>
         <div>
@@ -421,6 +434,7 @@
       <!-- 5 Retur TikTok -->
       <div class="pane" id="p5" role="tabpanel" aria-labelledby="t5" hidden><div class="duo">
         <div class="fig">
+          <div class="dec"><span data-id>Keputusan yang dijawab: berapa nilai retur sebenarnya, dan barang mana yang bisa dijual lagi?</span><span data-en>Decision answered: what is the true return value, and which items can be resold?</span></div>
           <div class="lab"><span data-id>Nilai barang retur yang dihitung ulang</span><span data-en>Returned-item value, recalculated</span></div>
           <div class="num">Rp 6,26 jt</div>
           <div class="note"><span data-id>Dua file ekspor TikTok Shop diolah langsung di browser menjadi laporan retur siap unduh. Ada data contoh, bisa langsung dicoba.</span><span data-en>Two TikTok Shop export files processed in-browser into a ready-to-download returns report. Sample data included, try it right away.</span></div>
@@ -429,6 +443,7 @@
             <div><b>22</b><span><span data-id>sudah kembali</span><span data-en>received back</span></span></div>
             <div><b>14</b><span><span data-id>bisa dijual</span><span data-en>resalable</span></span></div>
           </div>
+          <div class="contrib"><span data-id>Kontribusi saya: aturan rekonsiliasi dan format laporannya saya rancang dan uji terhadap ekspor asli; alat berjalan langsung di browser.</span><span data-en>My contribution: I designed the reconciliation rules and report format and tested them against real exports; the tool runs in the browser.</span></div>
           <a class="go" href="tiktok-pengembalian.html" target="_blank" rel="noopener"><span data-id>Buka alat</span><span data-en>Open tool</span></a>
         </div>
         <div>
@@ -455,6 +470,7 @@
       <!-- 6 Retur Shopee -->
       <div class="pane" id="p6" role="tabpanel" aria-labelledby="t6" hidden><div class="duo">
         <div class="fig">
+          <div class="dec"><span data-id>Keputusan yang dijawab: berapa nilai retur sebenarnya di dua format ekspor Shopee?</span><span data-en>Decision answered: what is the true return value across both Shopee export formats?</span></div>
           <div class="lab"><span data-id>Nilai barang retur yang dihitung ulang</span><span data-en>Returned-item value, recalculated</span></div>
           <div class="num">Rp 5,38 jt</div>
           <div class="note"><span data-id>Ekspor Shopee yang terpecah banyak part dan dua format (DS dan Non-DS) disatukan otomatis jadi laporan retur siap unduh.</span><span data-en>Shopee exports split into parts and two formats (DS and Non-DS), merged automatically into a ready-to-download returns report.</span></div>
@@ -463,6 +479,7 @@
             <div><b>20</b><span><span data-id>sudah kembali</span><span data-en>received back</span></span></div>
             <div><b>13</b><span><span data-id>bisa dijual</span><span data-en>resalable</span></span></div>
           </div>
+          <div class="contrib"><span data-id>Kontribusi saya: logika penggabungan part dan pengenalan dua format (DS dan Non-DS) saya rancang; alat berjalan langsung di browser.</span><span data-en>My contribution: I designed the part-merging logic and recognition of both formats (DS and Non-DS); the tool runs in the browser.</span></div>
           <a class="go" href="shopee-pengembalian.html" target="_blank" rel="noopener"><span data-id>Buka alat</span><span data-en>Open tool</span></a>
         </div>
         <div>
@@ -489,6 +506,7 @@
       <!-- 7 Absensi & Lembur -->
       <div class="pane" id="p7" role="tabpanel" aria-labelledby="t7" hidden><div class="duo">
         <div class="fig">
+          <div class="dec"><span data-id>Keputusan yang dijawab: berapa potongan dan upah lembur yang adil dan seragam antar tim?</span><span data-en>Decision answered: what deductions and overtime pay are fair and uniform across teams?</span></div>
           <div class="lab"><span data-id>Baris absensi diproses</span><span data-en>Attendance rows processed</span></div>
           <div class="num">630</div>
           <div class="note"><span data-id>Aturan ditulis sekali lalu diterapkan seragam: jadwal sif, toleransi telat, potongan, uang makan, dan tarif lembur. Nama dan gaji pada demo seluruhnya dummy.</span><span data-en>Rules written once and applied uniformly: shift schedules, lateness tolerance, deductions, meal allowance, and overtime rates. Names and salaries in the demo are entirely dummy.</span></div>
@@ -497,6 +515,7 @@
             <div><b>4</b><span><span data-id>tim</span><span data-en>teams</span></span></div>
             <div><b>4</b><span><span data-id>lokasi</span><span data-en>sites</span></span></div>
           </div>
+          <div class="contrib"><span data-id>Kontribusi saya: seluruh aturan hitung (sif, toleransi telat, potongan, tarif lembur) saya definisikan dan uji; implementasi lewat Python.</span><span data-en>My contribution: I defined and tested every calculation rule (shifts, lateness tolerance, deductions, overtime rates); implemented via Python.</span></div>
           <a class="go" href="absensi-lembur.html" target="_blank" rel="noopener"><span data-id>Buka dashboard</span><span data-en>Open dashboard</span></a>
         </div>
         <div>
