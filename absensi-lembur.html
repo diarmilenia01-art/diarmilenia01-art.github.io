@@ -1505,7 +1505,7 @@ function vLembur(host){
   return vLemburCatatan($('#lmBody'));
 }
 /* ---------- Lembur LIVE: tabel isian seperti Excel ----------
-   HR menerima form pengajuan yang sudah disetujui kepala toko, lalu menginputnya
+   HR menerima form pengajuan yang sudah disetujui manajemen, lalu menginputnya
    di sini. Semua baris langsung berstatus disetujui dan masuk laporan. */
 var liveDraft=[];
 function tarifLive(){return S.rules.lembur.tarif.LIVE||40500;}
@@ -1555,7 +1555,7 @@ function vLemburLive(host){
 
   host.innerHTML=
   '<div class="card"><div class="notice info">'+icon('clock')+'<div>'+
-    'Input form pengajuan lembur LIVE yang sudah disetujui kepala toko. '+
+    'Input form pengajuan lembur LIVE yang sudah disetujui manajemen. '+
     'Tarif '+rp(tarifLive())+' per jam. Semua baris di sini langsung masuk laporan. '+
     'Sesi yang melewati tengah malam ditulis apa adanya, misalnya 23:00 sampai 01:00, dan terhitung 2 jam.'+
   '</div></div></div>'+
